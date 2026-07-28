@@ -257,7 +257,7 @@
       <div class="field">
         <label class="field-label">Kelas</label>
         <div class="select-wrap">
-          <select id="sel-kelas" onchange="validateStart()">
+          <select id="sel-kelas" onchange="loadNamaList(); validateStart();">
             <option value="">— Pilih kelas —</option>
             <option value="XI DKV 1">XI DKV 1</option>
             <option value="XI DKV 2">XI DKV 2</option>
@@ -266,14 +266,14 @@
         </div>
       </div>
 
-      <div class="field">
-        <label class="field-label">Nama Peserta Didik</label>
-        <div class="select-wrap">
-          <select id="sel-nama">
-            <option value="">— Pilih nama —</option>
-          </select>
-        </div>
-      </div>
+<div class="field">
+    <label class="field-label">Nama Peserta Didik</label>
+    <div class="select-wrap">
+      <select id="sel-nama">
+        <option value="">— Pilih kelas dulu —</option>
+      </select>
+    </div>
+  </div>
 
       <div class="field">
         <label class="field-label">Jenis Evaluasi</label>
@@ -439,16 +439,21 @@
 /* =========================================================
    DATA: DAFTAR NAMA (✏️ ganti nanti sesuai kelas masing-masing)
    ========================================================= */
-const NAMA_LIST = [
-"ADE SAHRUL GUNAWAN","AI IMAS","AI NURAWALIAH AL ZAHRA","AI SITI MUSLIMAH","AI TITO",
-"AJENG DWI RAISSA FITRI","AMELIA GENDIS EKA PRATIWI","AMIRA NUR AULIA","AQILA NAZIL FALAQ",
-"AZZAHRA QYASIMAH","CECEP REZA SOEHANDI","DAVA BAGJA NUGRAHA","DEDE APRILIA KARTIKA",
-"DEVINA NAYYRA FITRIANI","DIRA RAHMAWATI","GILAR APGAN MUHAMAD SOLEH","INDAH TRIJAYANTI",
-"M REZA HUAFAH","NADIRA MEGA RIZKIA","NAILA AGUSTIN","NAPSA JAKIYAH","NAZWA KURNIA",
-"NAZWA NUR AISYAH","NENG SRI RAHAYU","RAFI FAUZAN NAJA LUTFIANA","RAIRA PUTRI",
-"RIJAL NURJAMAN","RISMAYANTI","RITA PEBRIYANI","RIZKY KURNIAWAN","SILVY SILVI YANA",
-"SULISTIAWATI","YARA YUNIARSYAH"
-];
+const NAMA_BY_KELAS = {
+  "XI DKV 1": [
+    "ALEN FITRIANI","ALIA ALAIKA NURFADILA","AZIZAH NURUL KAMIL","DAPA MUSTOPA","DEBI LESTARI",
+    "DIFA ASTIA FEBRIANI","ERLYTA PUTRI KURNIAWAN","FAHMI AHMAD RAMDAN ALFIAN","GADNA WIDIATNI",
+    "IMAM PRASETYO","IWAN KURNIAWAN","KAILA AROPATILAH","LUCKY MOCHAMMAD RIVALDI","LUSI NURAENI",
+    "M REZA HUAFAH","M. DENHAN HAPRIJAL","MUHAMAD DANDI NUGRAHA","MUHAMAD DIAZ PIRDAUS",
+    "NENG OKTAVIA PUTRI AGUSTIN","RAISYA ALAWIYAH","RAISYA NURIL MAULIDA","RIANA SANJAYA",
+    "RIZKY MUHAMMAD REGAL SAFARI","SAFINAH SYARA GARINI","SHEILA AWALANI FEBRIA HIDAYAT",
+    "SILVI BUDIA PUTRI","SITI KHOIRIYAH","SITI MULYANI","SITI RAHMA SILPIANA","SUMIYATI",
+    "SYIPA NURAENI","SYIVA WIDIYANA AGUSTIN","WILDA AZKIA","WINDA APRIYANTI","WULAN SUNDARI",
+    "ZAHRATUL AYESA AULIA"
+  ],
+  "XI DKV 2": [],
+  "XI DKV 3": []
+};
 
 const ADMIN_CODE = "guru2026";
 const supabaseUrl = "https://btdrvpdzncmocfvszwdt.supabase.co";
@@ -588,15 +593,23 @@ function backToStart(){
 }
 
 function init(){
+  $("total-soal-info").textContent = SOAL.length;
+  buildPathSVG();
+}
+
+function loadNamaList(){
+  const kelas = $("sel-kelas").value;
   const sel = $("sel-nama");
-  NAMA_LIST.forEach(n=>{
+  sel.innerHTML = '<option value="">— Pilih nama —</option>';
+  sel.disabled = !kelas;
+  if(!kelas) return;
+  const list = NAMA_BY_KELAS[kelas] || [];
+  list.forEach(n=>{
     const o = document.createElement("option");
     o.value = n; o.textContent = titleCase(n);
     sel.appendChild(o);
   });
-  sel.addEventListener("change", validateStart);
-  $("total-soal-info").textContent = SOAL.length;
-  buildPathSVG();
+  sel.value = "";
 }
 
 function titleCase(s){ return s.toLowerCase().split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" "); }
@@ -853,7 +866,8 @@ async function loadAdminData(){
   $("adm-avg-pre").textContent = avg(pre)!==null ? avg(pre) : "–";
   $("adm-avg-post").textContent = avg(post)!==null ? avg(post) : "–";
   const doneNames = new Set(rows.map(r=>r.name));
-  $("adm-belum").textContent = NAMA_LIST.filter(n=>!doneNames.has(n)).length;
+  const allNames = Object.values(NAMA_BY_KELAS).flat();
+  $("adm-belum").textContent = allNames.filter(n=>!doneNames.has(n)).length;
 
   if(rows.length===0){ wrap.innerHTML = `<div class="empty-state">Belum ada data yang masuk.</div>`; return; }
 
