@@ -436,6 +436,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+try {
 /* =========================================================
    DATA: DAFTAR NAMA (✏️ ganti nanti sesuai kelas masing-masing)
    ========================================================= */
@@ -926,7 +927,19 @@ function exportCSV(){
   URL.revokeObjectURL(url);
 }
 
-try { init(); } catch(e) { console.error('Init error:', e); document.body.innerHTML += '<div style="color:var(--coral);padding:20px;font-family:monospace;font-size:14px;">Error: '+e.message+'</div>'; }
+try { init(); } catch(e) { console.error('Init error:', e);
+  var ed=document.createElement('div');
+  ed.style.cssText='color:#ff5c72;padding:24px;margin:20px;font-family:monospace;font-size:15px;background:#121933;border:1px solid #ff5c72;border-radius:12px;';
+  ed.textContent='JS Error: '+(e.message||e)+' (lihat console)';
+  document.body.appendChild(ed);
+}
+} catch(e) {
+  console.error('Fatal:', e);
+  var ed=document.createElement('div');
+  ed.style.cssText='color:#ff5c72;padding:24px;margin:20px;font-family:monospace;font-size:15px;background:#121933;border:1px solid #ff5c72;border-radius:12px;';
+  ed.textContent='FATAL: '+(e.message||e);
+  document.body.appendChild(ed);
+}
 </script>
 </body>
 </html>
