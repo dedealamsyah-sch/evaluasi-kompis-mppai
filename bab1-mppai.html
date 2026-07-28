@@ -334,7 +334,7 @@
 
   <!-- SCREEN: QUIZ -->
   <div id="screen-quiz" class="hidden">
-    <div class="path-progress"><svg id="path-svg" viewBox="0 0 700 50" preserveAspectRatio="none"></svg></div>
+    <div class="path-progress"><div id="path-svg"></div></div>
     <div id="timer-bar" class="timer-bar no-timer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span class="timer-text" id="timer-text">00:00</span>
@@ -690,26 +690,36 @@ function requestFullscreen(){
    PATH / NODE PROGRESS
    ========================================================= */
 function buildPathSVG(){
-  const svg = $("path-svg");
-  const n = SOAL.length, w=700, h=50, pad=18;
-  const step = (w-pad*2)/(n-1);
-  let pts = [];
-  for(let i=0;i<n;i++) pts.push([pad+step*i, 25+Math.sin(i*1.15)*13]);
-  let d = "M"+pts[0][0]+","+pts[0][1];
-  for(let i=1;i<pts.length;i++) d += " L"+pts[i][0]+","+pts[i][1];
-  svg.innerHTML = `<defs><linearGradient id="gradEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#ff3ea5"/></linearGradient></defs><path class="net-edge" d="${d}"/><path class="net-edge-done" id="seg-done" d="${d}"/>` +
-    pts.map((p,i)=>`<circle class="node-fill" id="node-${i}" cx="${p[0]}" cy="${p[1]}" r="4.4"/>`).join("");
-  const segEl = $("seg-done");
-  const len = segEl.getTotalLength();
-  segEl.style.strokeDasharray = len;
-  segEl.style.strokeDashoffset = len;
-  svg.dataset.len = len;
+  try {
+    const n = SOAL.length, w=700, h=50, pad=18;
+    const step = (w-pad*2)/(n-1);
+    var pts = [];
+    for(var i=0;i<n;i++) pts.push([pad+step*i, 25+Math.sin(i*1.15)*13]);
+    var d = "M"+pts[0][0]+","+pts[0][1];
+    for(var i=1;i<pts.length;i++) d += " L"+pts[i][0]+","+pts[i][1];
+    var circles = '';
+    for(var i=0;i<n;i++) circles += '<circle class="node-fill" id="node-'+i+'" cx="'+pts[i][0]+'" cy="'+pts[i][1]+'" r="4.4"/>';
+    var svgHtml = '<svg viewBox="0 0 700 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gradEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#ff3ea5"/></linearGradient></defs><path class="net-edge" d="'+d+'"/><path class="net-edge-done" id="seg-done" d="'+d+'"/>'+circles+'</svg>';
+    $("path-svg").innerHTML = svgHtml;
+    setTimeout(function(){
+      try {
+        var segEl = $("seg-done");
+        if(segEl) {
+          var len = segEl.getTotalLength();
+          segEl.style.strokeDasharray = len;
+          segEl.style.strokeDashoffset = len;
+        }
+      } catch(e){}
+    }, 50);
+  } catch(e){ console.warn('buildPathSVG:', e.message); }
 }
 
 function updatePathProgress(){
   const n = SOAL.length;
   const segEl = $("seg-done");
-  const len = parseFloat($("path-svg").dataset.len);
+  if(!segEl) return;
+  var len = segEl.getTotalLength();
+  if(!len) return;
   const frac = state.currentIdx/(n-1);
   segEl.style.strokeDashoffset = len - len*frac;
   for(let i=0;i<n;i++){
