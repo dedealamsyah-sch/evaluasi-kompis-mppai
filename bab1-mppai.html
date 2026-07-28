@@ -622,7 +622,7 @@ function backToStart(){
 
 function init(){
   $("total-soal-info").textContent = SOAL.length;
-  buildPathSVG();
+  try { buildPathSVG(); } catch(e){ console.warn(e); }
 }
 
 function loadNamaList(){
