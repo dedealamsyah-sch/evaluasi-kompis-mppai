@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluasi Komputer Grafis — Kelas XI DKV 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14151f;
+    --ink-2:#1c1e2b;
+    --ink-3:#252838;
+    --paper:#f7f5f0;
+    --paper-dim:#eceae3;
+    --violet:#7c5cff;
+    --violet-dim:#a894ff;
+    --amber:#ffb627;
+    --teal:#2dd4bf;
+    --coral:#ff6b6b;
+    --line:rgba(247,245,240,0.12);
+    --line-strong:rgba(247,245,240,0.2);
+    --text-dim:rgba(247,245,240,0.6);
+    --text-muted:rgba(247,245,240,0.35);
+    --radius:18px;
+    --radius-sm:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(circle at 12% 8%, rgba(124,92,255,0.14), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(255,182,39,0.10), transparent 45%),
+      var(--ink);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .hidden{display:none!important;}
+
+  /* ---------- TOP NAV ---------- */
+  .top-nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 32px;border-bottom:1px solid var(--line);
+    position:sticky;top:0;z-index:100;background:rgba(20,21,31,0.88);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .top-nav .brand{display:flex;align-items:center;gap:10px;}
+  .top-nav .brand svg{width:30px;height:30px;flex:none;}
+  .top-nav .brand-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;letter-spacing:-0.01em;}
+  .top-nav .brand-sub{font-size:10.5px;color:var(--text-dim);font-family:'Inter',sans-serif;}
+  .nav-right{display:flex;align-items:center;gap:6px;}
+
+  /* Role toggle */
+  .role-toggle{
+    display:flex;background:var(--ink-2);border-radius:12px;
+    border:1px solid var(--line);overflow:hidden;
+  }
+  .role-btn{
+    padding:8px 18px;border:none;background:transparent;color:var(--text-dim);
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:12.5px;
+    cursor:pointer;transition:all .2s ease;white-space:nowrap;
+    display:flex;align-items:center;gap:6px;
+  }
+  .role-btn:hover{color:var(--paper);}
+  .role-btn.active{
+    background:var(--violet);color:#fff;
+    box-shadow:0 4px 12px rgba(124,92,255,0.4);
+  }
+  .role-btn svg{width:16px;height:16px;}
+
+  .role-extra{font-size:10px;color:var(--text-muted);margin-left:12px;padding-left:12px;border-left:1px solid var(--line);font-family:'JetBrains Mono',monospace;}
+  @media(max-width:640px){
+    .top-nav{padding:12px 16px;flex-wrap:wrap;gap:10px;}
+    .role-btn{padding:7px 12px;font-size:11px;}
+    .role-extra{display:none;}
+    .nav-right{width:100%;}
+    .role-toggle{width:100%;}
+    .role-btn{flex:1;justify-content:center;}
+  }
+
+  /* ============ SISWA VIEW ============ */
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:820px;margin:0 auto;padding:48px 32px 24px;text-align:center;
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--violet-dim);margin-bottom:12px;
+  }
+  .hero h1{
+    font-size:38px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;
+    background:linear-gradient(135deg,var(--paper) 35%,var(--violet-dim) 65%,var(--amber) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+  .hero .subtitle{
+    font-size:15px;color:var(--text-dim);margin-top:10px;line-height:1.6;max-width:520px;
+    margin-left:auto;margin-right:auto;
+  }
+  .hero .class-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    padding:6px 14px;border-radius:20px;margin-top:16px;
+    background:rgba(124,92,255,0.12);border:1px solid rgba(124,92,255,0.25);color:var(--violet-dim);
+  }
+
+  /* ---------- STATS ROW ---------- */
+  .stats-row{
+    display:flex;justify-content:center;gap:12px;margin-top:24px;flex-wrap:wrap;
+  }
+  .stat-card{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 18px;border-radius:var(--radius-sm);
+    background:var(--ink-2);border:1px solid var(--line);
+    transition:all .2s ease;
+  }
+  .stat-card:hover{border-color:var(--line-strong);}
+  .stat-card .icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+  .stat-card .icon.vlt{background:rgba(124,92,255,0.15);color:var(--violet-dim);}
+  .stat-card .icon.amb{background:rgba(255,182,39,0.15);color:var(--amber);}
+  .stat-card .icon.teal{background:rgba(45,212,191,0.15);color:var(--teal);}
+  .stat-card .info{display:flex;flex-direction:column;}
+  .stat-card .info .n{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:18px;color:var(--paper);line-height:1.2;}
+  .stat-card .info .l{font-size:11px;color:var(--text-dim);}
+
+  /* ---------- CHAPTERS SECTION ---------- */
+  .chapters-wrap{max-width:820px;margin:0 auto;padding:28px 32px 48px;}
+  .section-header{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+    flex-wrap:wrap;gap:10px;
+  }
+  .section-header h2{
+    font-size:18px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section-header h2 span{font-size:12px;color:var(--text-dim);font-family:'Inter',sans-serif;font-weight:400;}
+  .section-header .badge-count{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    padding:4px 12px;border-radius:8px;
+    background:rgba(124,92,255,0.12);color:var(--violet-dim);
+    border:1px solid rgba(124,92,255,0.2);
+  }
+
+  .chapters-grid{display:flex;flex-direction:column;gap:12px;}
+
+  /* CHAPTER CARD */
+  .ch-card{
+    display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;
+    padding:20px 22px;border-radius:var(--radius);
+    background:var(--ink-2);border:1px solid var(--line);
+    box-shadow:0 8px 30px -16px rgba(0,0,0,0.5);
+    transition:all .25s ease;cursor:default;
+  }
+  .ch-card.active{
+    border-color:rgba(124,92,255,0.2);cursor:pointer;
+  }
+  .ch-card.active:hover{
+    border-color:rgba(124,92,255,0.45);
+    box-shadow:0 12px 40px -12px rgba(124,92,255,0.18);
+    transform:translateY(-2px);
+    background:var(--ink-3);
+  }
+  .ch-card.locked{opacity:0.45;}
+  .ch-num{
+    width:46px;height:46px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;
+    flex:none;transition:all .2s ease;
+  }
+  .ch-card.active .ch-num{background:rgba(124,92,255,0.16);color:var(--violet-dim);}
+  .ch-card.locked .ch-num{background:rgba(247,245,240,0.05);color:var(--text-muted);}
+  .ch-info h3{font-size:15px;font-weight:600;margin-bottom:2px;}
+  .ch-card.locked .ch-info h3{color:var(--text-dim);}
+  .ch-info p{font-size:12.5px;color:var(--text-dim);line-height:1.45;margin:0;}
+  .ch-info .tags{margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;}
+  .ch-info .status-tag{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;
+    padding:2px 8px;border-radius:5px;display:inline-block;
+  }
+  .tag-available{background:rgba(45,212,191,0.14);color:var(--teal);}
+  .tag-soon{background:rgba(255,182,39,0.12);color:var(--amber);}
+  .ch-action{flex:none;}
+  .ch-action .btn-go{
+    padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12.5px;
+    transition:all .2s ease;white-space:nowrap;
+  }
+  .ch-card.active .btn-go{
+    background:linear-gradient(135deg,var(--violet),#5f3dff);color:#fff;
+    box-shadow:0 6px 18px -8px rgba(124,92,255,0.5);
+  }
+  .ch-card.active .btn-go:hover{transform:translateY(-1px);box-shadow:0 8px 24px -6px rgba(124,92,255,0.6);}
+  .ch-card.locked .btn-go{
+    background:transparent;color:var(--text-muted);
+    border:1px solid rgba(247,245,240,0.1);cursor:not-allowed;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .page-footer{
+    text-align:center;padding:20px 32px 28px;
+    border-top:1px solid var(--line);
+  }
+  .page-footer p{
+    font-size:11.5px;color:var(--text-muted);margin:0;
+  }
+
+  /* ============ GURU VIEW ============ */
+
+  .guru-panel{max-width:900px;margin:0 auto;padding:40px 32px 60px;}
+
+  /* Login */
+  .admin-login-box{
+    max-width:420px;margin:40px auto;padding:36px 32px;
+    background:var(--ink-2);border:1px solid var(--line);
+    border-radius:var(--radius);text-align:center;
+  }
+  .admin-login-box .lock-icon{
+    width:56px;height:56px;border-radius:50%;
+    background:rgba(124,92,255,0.12);color:var(--violet-dim);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 16px;font-size:24px;
+  }
+  .admin-login-box h2{font-size:18px;margin-bottom:4px;}
+  .admin-login-box .subtle{font-size:13px;color:var(--text-dim);margin-bottom:20px;}
+  .admin-login-box .field{margin-bottom:14px;text-align:left;}
+  .admin-login-box label.field-label{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--violet-dim);margin-bottom:5px;
+  }
+  .admin-login-box input[type=text]{
+    width:100%;padding:12px 16px;background:var(--ink);border:1px solid rgba(247,245,240,0.18);
+    border-radius:var(--radius-sm);color:var(--paper);font-family:'Inter',sans-serif;font-size:14px;
+  }
+  .admin-login-box input:focus{outline:2px solid var(--violet);outline-offset:1px;}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 22px;border-radius:var(--radius-sm);border:none;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;
+    transition:all .15s ease;
+  }
+  .btn-primary{background:linear-gradient(135deg,var(--violet),#5f3dff);color:#fff;box-shadow:0 8px 22px -10px rgba(124,92,255,0.6);}
+  .btn-primary:hover{transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid rgba(247,245,240,0.18);}
+  .btn-ghost:hover{color:var(--paper);border-color:rgba(247,245,240,0.35);}
+  .btn-amber{background:var(--amber);color:#241a00;box-shadow:0 6px 16px -8px rgba(255,182,39,0.4);}
+  .btn-amber:hover{transform:translateY(-1px);}
+  .btn-coral{background:var(--coral);color:#fff;box-shadow:0 6px 16px -8px rgba(255,107,107,0.4);}
+  .btn-block{width:100%;}
+  .btn-sm{padding:8px 14px;font-size:11.5px;}
+
+  /* Admin dashboard */
+  .admin-dashboard{}
+  .admin-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+  .admin-top h2{font-size:20px;}
+  .admin-top .close-btn{
+    background:transparent;border:1px solid var(--line);color:var(--text-dim);
+    padding:6px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;
+    transition:all .15s ease;
+  }
+  .admin-top .close-btn:hover{color:var(--paper);border-color:rgba(247,245,240,0.35);}
+
+  .adm-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px;}
+  .adm-stat{
+    background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px 16px;
+  }
+  .adm-stat .n{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;}
+  .adm-stat .l{font-size:11px;color:var(--text-dim);margin-top:2px;}
+  .adm-stat .sub{font-size:10px;color:var(--text-muted);margin-top:4px;}
+
+  .admin-actions{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+
+  /* Table */
+  table.report{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.report th, table.report td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap;}
+  table.report th{
+    font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);
+    position:sticky;top:0;background:var(--ink);z-index:2;
+  }
+  table.report td.num{font-family:'JetBrains Mono',monospace;}
+  table.report tr:hover td{background:rgba(247,245,240,0.02);}
+  .badge{padding:2px 8px;border-radius:5px;font-size:10px;font-family:'JetBrains Mono',monospace;}
+  .badge-pre{background:rgba(255,182,39,0.18);color:var(--amber);}
+  .badge-post{background:rgba(124,92,255,0.2);color:var(--violet-dim);}
+  .badge-ch{background:rgba(45,212,191,0.14);color:var(--teal);}
+  .btn-reset{
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    background:rgba(255,182,39,0.14);color:var(--amber);
+    border:1px solid rgba(255,182,39,0.4);border-radius:6px;
+    padding:4px 8px;cursor:pointer;transition:all .15s ease;white-space:nowrap;
+  }
+  .btn-reset:hover{background:rgba(255,182,39,0.28);}
+  .empty-state{text-align:center;padding:28px 10px;color:var(--text-dim);font-size:13px;}
+  .subtle{color:var(--text-dim);font-size:13px;line-height:1.55;}
+  #admin-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);}
+  #admin-table-wrap table{margin-top:0;}
+
+  .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+  .filter-bar label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--text-dim);letter-spacing:.06em;}
+  .filter-bar select{
+    background:var(--ink);color:var(--paper);border:1px solid var(--line);
+    padding:7px 12px;border-radius:8px;font-family:'Inter',sans-serif;font-size:12px;
+  }
+  .filter-bar select:focus{outline:2px solid var(--violet);outline-offset:1px;}
+
+  /* Timer Settings */
+  .timer-settings{
+    background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px 22px;margin-bottom:18px;
+  }
+  .timer-settings h3{font-size:15px;font-weight:600;margin-bottom:4px;}
+  .timer-settings .sub{font-size:12px;color:var(--text-dim);margin-bottom:14px;}
+  .timer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .timer-item{
+    background:var(--ink);border:1px solid var(--line);border-radius:var(--radius-sm);
+    padding:14px;display:flex;flex-direction:column;gap:6px;
+  }
+  .timer-item .ti-label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet-dim);}
+  .timer-item .ti-name{font-size:12.5px;color:var(--paper);font-weight:500;}
+  .timer-item .ti-row{display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .timer-item input[type=number]{
+    width:72px;padding:7px 10px;background:var(--ink-2);border:1px solid var(--line);
+    border-radius:8px;color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:13px;
+    text-align:center;
+  }
+  .timer-item input:focus{outline:2px solid var(--violet);outline-offset:1px;}
+  .timer-item .ti-unit{font-size:11px;color:var(--text-dim);}
+  .timer-item .ti-status{font-size:10px;color:var(--text-muted);margin-top:2px;}
+  .timer-item .ti-status.active{color:var(--teal);}
+  .btn-save-timer{
+    margin-top:12px;padding:9px 18px;border-radius:var(--radius-sm);border:none;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;
+    background:linear-gradient(135deg,var(--teal),#14b8a6);color:#0a2e28;
+    box-shadow:0 6px 16px -8px rgba(45,212,191,0.4);transition:all .15s ease;
+  }
+  .btn-save-timer:hover{transform:translateY(-1px);}
+  .btn-save-timer:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+  @media(max-width:600px){
+    .hero{padding:32px 16px 16px;}
+    .hero h1{font-size:26px;}
+    .chapters-wrap{padding:16px 16px 32px;}
+    .guru-panel{padding:24px 16px 40px;}
+    .ch-card{grid-template-columns:auto 1fr;gap:12px;padding:16px;}
+    .ch-action{grid-column:1/-1;}
+    .ch-action .btn-go{width:100%;}
+    .stat-card{padding:8px 14px;}
+    .adm-summary{grid-template-columns:repeat(2,1fr);}
+    .admin-login-box{padding:24px 18px;}
+    .admin-top h2{font-size:17px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== TOP NAV ========== -->
+<nav class="top-nav">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M4 26 C 10 6, 18 32, 28 8" stroke="#7c5cff" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <circle cx="4" cy="26" r="2.8" fill="#ffb627"/>
+      <circle cx="28" cy="8" r="2.8" fill="#2dd4bf"/>
+      <circle cx="16" cy="18" r="2.2" fill="#7c5cff"/>
+    </svg>
+    <div>
+      <div class="brand-name" id="brand-name">Komputer Grafis</div>
+      <div class="brand-sub" id="brand-sub">XI DKV 4</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <!-- Subject toggle -->
+    <div class="role-toggle" style="margin-right:8px;">
+      <button class="role-btn active" data-subject="kompis" onclick="switchSubject('kompis')">Kompis</button>
+      <button class="role-btn" data-subject="mppai" onclick="switchSubject('mppai')">MPP AI</button>
+    </div>
+    <div class="role-toggle">
+      <button class="role-btn active" data-role="siswa" onclick="switchRole('siswa')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Siswa
+      </button>
+      <button class="role-btn" data-role="guru" onclick="switchRole('guru')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Guru
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== SISWA VIEW ========== -->
+<div id="siswa-view">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow" id="hero-eyebrow">Kelas XI DKV 4 — Tahun Ajaran 2026/2027</div>
+    <h1 id="hero-title">Evaluasi Komputer Grafis</h1>
+    <p class="subtitle" id="hero-sub">
+      Uji pemahaman materi setiap bab secara online. Pilih bab, jawab soal, dan lihat skor langsung.
+      Setiap peserta hanya dapat mengerjakan masing-masing evaluasi satu kali.
+    </p>
+    <div class="class-badge" id="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      XI DKV 4 · SMK
+    </div>
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card">
+        <div class="icon vlt">📖</div>
+        <div class="info">
+          <span class="n" id="stat-bab">—</span>
+          <span class="l">Bab Tersedia</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="icon amb">📝</div>
+        <div class="info">
+          <span class="n" id="stat-soal">—</span>
+          <span class="l">Total Soal</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="icon teal">⏳</div>
+        <div class="info">
+          <span class="n" id="stat-aktif">—</span>
+          <span class="l">Pretest / Posttest</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTERS -->
+  <section class="chapters-wrap" id="chapters">
+    <div class="section-header">
+      <h2>
+        Daftar Evaluasi
+        <span>— pilih bab untuk memulai</span>
+      </h2>
+      <div class="badge-count" id="bab-count">7 Bab</div>
+    </div>
+    <div class="chapters-grid" id="chapters-grid"></div>
+  </section>
+
+</div>
+
+<!-- ========== GURU VIEW ========== -->
+<div id="guru-view" class="hidden">
+
+  <section class="guru-panel">
+
+    <!-- Login gate -->
+    <div id="guru-login">
+      <div class="admin-login-box">
+        <div class="lock-icon">🔒</div>
+        <h2>Panel Guru</h2>
+        <p class="subtle">Masukkan kode akses guru untuk melihat rekap hasil evaluasi seluruh siswa.</p>
+        <div class="field">
+          <label class="field-label">Kode Akses Guru</label>
+          <input type="text" id="guru-code" placeholder="Masukkan kode akses" onkeydown="if(event.key==='Enter')checkGuruCode()">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="checkGuruCode()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Buka Panel
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard (after login) -->
+    <div id="guru-dashboard" class="hidden">
+      <div class="admin-top">
+        <div>
+          <h2>Rekap Laporan Guru</h2>
+          <p class="subtle" style="margin:4px 0 0;">Hasil evaluasi siswa — semua bab</p>
+        </div>
+        <button class="close-btn" onclick="logoutGuru()">✕ Keluar</button>
+      </div>
+
+      <div class="adm-summary">
+        <div class="adm-stat"><div class="n" id="adm-total">0</div><div class="l">Total Pengerjaan</div><div class="sub">semua bab & jenis</div></div>
+        <div class="adm-stat"><div class="n" id="adm-avg-score">–</div><div class="l">Rata-rata Skor</div></div>
+        <div class="adm-stat"><div class="n" id="adm-siswa-count">0</div><div class="l">Siswa Aktif</div><div class="sub">dari 36 siswa</div></div>
+        <div class="adm-stat"><div class="n" id="adm-violations">0</div><div class="l">Total Pelanggaran</div><div class="sub">anti-cheat</div></div>
+      </div>
+
+      <div class="filter-bar">
+        <label>Filter:</label>
+        <select id="filter-subject" onchange="loadGuruData()">
+          <option value="kompis">Komputer Grafis</option>
+          <option value="mppai">MPP AI</option>
+        </select>
+        <select id="filter-bab" onchange="loadGuruData()">
+          <option value="all">Semua Bab</option>
+        </select>
+        <select id="filter-type" onchange="loadGuruData()">
+          <option value="all">Semua Jenis</option>
+          <option value="pretest">Pretest</option>
+          <option value="posttest">Posttest</option>
+        </select>
+      </div>
+
+      <!-- Timer Settings -->
+      <div class="timer-settings" id="timer-settings-section">
+        <h3>Pengaturan Waktu Ujian (Timer)</h3>
+        <p class="sub">Atur durasi ujian per bab dan jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim jawaban saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
+        <div class="timer-grid" id="timer-grid"></div>
+        <button class="btn-save-timer" id="btn-save-timer" onclick="saveTimerSettings()">Simpan Pengaturan Timer</button>
+      </div>
+
+      <div class="admin-actions">
+        <button class="btn btn-ghost btn-sm" onclick="loadGuruData()">↻ Muat Ulang</button>
+        <button class="btn btn-amber btn-sm" onclick="exportCSV()">⬇ Unduh CSV</button>
+      </div>
+
+      <div id="guru-table-wrap">
+        <div class="empty-state">Belum ada data. Klik "Muat Ulang" atau buka panel guru.</div>
+      </div>
+    </div>
+
+  </section>
+
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="page-footer">
+  <p>Komputer Grafis — Kelas XI DKV 4 &middot; SMKN 9 Garut<br>developed by Dede Alamsyah</p>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+/* =========================================================
+   DATA: MATA PELAJARAN & DAFTAR BAB
+   ========================================================= */
+const SUBJECTS = {
+  kompis: {
+    label: 'Komputer Grafis',
+    short: 'Kompis',
+    kelas: 'XI DKV 4',
+    deskripsi: 'Uji pemahaman materi Komputer Grafis setiap bab secara online.',
+    icon: '🖥️',
+    chapters: [
+      {
+        num: 1,
+        title: "Pengenalan CorelDRAW 2020",
+        desc: "Antarmuka kerja, menu bar, toolbar, tool box, dan fitur dasar CorelDRAW",
+        file: "bab1-kompis.html",
+        active: true,
+        soalCount: 42
+      },
+      {
+        num: 2,
+        title: "Membuat Objek & Menggambar",
+        desc: "Menggunakan shape tool, freehand, pen, dan teknik drawing dasar",
+        file: "",
+        active: false,
+        soalCount: 0
+      },
+      {
+        num: 3,
+        title: "Transformasi & Pengeditan Objek",
+        desc: "Align, distribute, weld, trim, intersect, dan pengeditan objek",
+        file: "",
+        active: false,
+        soalCount: 0
+      },
+      {
+        num: 4,
+        title: "Tekstur, Warna & Efek",
+        desc: "Fill, gradient, pattern, mesh fill, transparency, dan efek visual",
+        file: "",
+        active: false,
+        soalCount: 0
+      },
+      {
+        num: 5,
+        title: "Teks & Tipografi",
+        desc: "Artistic text, paragraph text, text on path, dan formatting teks",
+        file: "",
+        active: false,
+        soalCount: 0
+      },
+      {
+        num: 6,
+        title: "Layout & Komposisi Desain",
+        desc: "PowerClip, layers, guidelines, dan menyusun desain akhir",
+        file: "",
+        active: false,
+        soalCount: 0
+      },
+      {
+        num: 7,
+        title: "Cetak & Eksport",
+        desc: "Print settings, export ke berbagai format, dan publish ke web",
+        file: "",
+        active: false,
+        soalCount: 0
+      }
+    ]
+  },
+  mppai: {
+    label: 'MPP AI',
+    short: 'MPP AI',
+    kelas: 'XI DKV 1-3',
+    deskripsi: 'Uji pemahaman materi MPP AI setiap bab secara online.',
+    icon: '🤖',
+    chapters: [
+      {
+        num: 1,
+        title: "Kecerdasan Buatan (AI) dalam Desain",
+        desc: "Konsep dasar AI, AI Generatif, Diffusion Model, dan GAN",
+        file: "bab1-mppai.html",
+        active: true,
+        soalCount: 30
+      }
+    ]
+  }
+};
+
+let currentSubject = 'kompis';
+
+function getChapters() {
+  return SUBJECTS[currentSubject].chapters;
+}
+
+function getSubject() {
+  return SUBJECTS[currentSubject];
+}
+
+/* =========================================================
+   SUBJECT SWITCHING
+   ========================================================= */
+function switchSubject(subject) {
+  currentSubject = subject;
+  document.querySelectorAll('[data-subject]').forEach(b => b.classList.toggle('active', b.dataset.subject === subject));
+
+  const s = getSubject();
+  document.getElementById('brand-name').textContent = s.label;
+  document.getElementById('brand-sub').textContent = s.kelas;
+  document.getElementById('hero-title').textContent = 'Evaluasi ' + s.label;
+  document.getElementById('hero-sub').textContent = s.deskripsi;
+  document.getElementById('hero-eyebrow').textContent = 'Kelas ' + s.kelas + ' — Tahun Ajaran 2026/2027';
+  document.getElementById('hero-badge').innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    ${s.kelas} · SMK`;
+
+  renderChapters();
+  updateFilterBab();
+  $("filter-subject").value = subject;
+  if(!$("guru-dashboard").classList.contains("hidden")){
+    loadGuruData();
+    loadTimerSettings();
+  }
+}
+
+/* =========================================================
+   RENDER CHAPTER CARDS
+   ========================================================= */
+function renderChapters(){
+  const chapters = getChapters();
+  const grid = $("chapters-grid");
+  grid.innerHTML = "";
+  const activeCount = chapters.filter(c=>c.active).length;
+  const totalSoal = chapters.filter(c=>c.active).reduce((s,c)=>s+c.soalCount, 0);
+  $("stat-bab").textContent = activeCount;
+  $("stat-soal").textContent = totalSoal || "—";
+  $("stat-aktif").textContent = activeCount > 0 ? activeCount + " Bab" : "—";
+  $("bab-count").textContent = chapters.length + " Bab";
+
+  chapters.forEach(ch=>{
+    const div = document.createElement("div");
+    div.className = "ch-card " + (ch.active ? "active" : "locked");
+    if(ch.active) div.onclick = ()=> location.href = ch.file;
+
+    div.innerHTML = `
+      <div class="ch-num">${ch.num}</div>
+      <div class="ch-info">
+        <h3>Bab ${ch.num}: ${ch.title}</h3>
+        <p>${ch.desc}</p>
+        <div class="tags">
+          <span class="status-tag ${ch.active ? 'tag-available' : 'tag-soon'}">
+            ${ch.active ? (ch.soalCount + ' soal') : 'Segera Hadir'}
+          </span>
+        </div>
+      </div>
+      <div class="ch-action">
+        <button class="btn-go">${ch.active ? 'Mulai →' : 'Coming Soon'}</button>
+      </div>`;
+    grid.appendChild(div);
+  });
+}
+
+renderChapters();
+
+/* =========================================================
+   ROLE SWITCHING
+   ========================================================= */
+function switchRole(role){
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.dataset.role===role));
+  $("siswa-view").classList.toggle("hidden", role !== "siswa");
+  $("guru-view").classList.toggle("hidden", role !== "guru");
+  if(role === "guru" && !$("guru-dashboard").classList.contains("hidden")){
+    loadGuruData();
+  }
+}
+
+/* =========================================================
+   GURU PANEL — ADMIN
+   ========================================================= */
+const ADMIN_CODE = "guru2026";
+
+function checkGuruCode(){
+  if($("guru-code").value.trim() === ADMIN_CODE){
+    $("guru-login").classList.add("hidden");
+    $("guru-dashboard").classList.remove("hidden");
+    loadGuruData();
+    loadTimerSettings();
+  } else {
+    alert("Kode akses salah.");
+  }
+}
+
+function logoutGuru(){
+  $("guru-code").value = "";
+  $("guru-login").classList.remove("hidden");
+  $("guru-dashboard").classList.add("hidden");
+  switchRole("siswa");
+}
+
+function titleCase(s){
+  return s.toLowerCase().split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
+}
+
+let lastReportRows = [];
+
+/* =========================================================
+   SUPABASE INIT (bungkus try-catch agar error tidak
+   menghentikan renderChapters yang sudah jalan di atas)
+   ========================================================= */
+let _supabase = null;
+try {
+  const supabaseUrl = "https://btdrvpdzncmocfvszwdt.supabase.co";
+  const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0ZHJ2cGR6bmNtb2NmdnN6d2R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwNzAyMTcsImV4cCI6MjEwMDY0NjIxN30.Fy4yRD2VIRb87TtPwMjzCqhwj-BvCK4fYOQdBrcBMhA";
+  _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+} catch(e){
+  console.warn("Supabase gagal dimuat:", e.message);
+}
+
+async function loadGuruData(){
+  const wrap = $("guru-table-wrap");
+  wrap.innerHTML = `<p class="subtle" style="padding:16px;">Memuat data dari Supabase...</p>`;
+
+  if(!_supabase){
+    wrap.innerHTML = `<div class="empty-state">Supabase tidak tersedia. Periksa koneksi internet.</div>`;
+    return;
+  }
+
+  const activeBabs = getChapters().filter(c=>c.active).map(c=>c.num);
+  const filterBab = $("filter-bab").value;
+  const filterType = $("filter-type").value;
+  const filterSubject = $("filter-subject").value;
+
+  let query = _supabase.from('evaluasi_results').select('*');
+  query = query.eq('subject', filterSubject);
+  if(filterBab !== "all") query = query.eq('bab', parseInt(filterBab));
+  else query = query.in('bab', activeBabs);
+  if(filterType !== "all") query = query.eq('type', filterType);
+  query = query.order('name');
+
+  const { data: allRows, error } = await query;
+
+  if(error){
+    wrap.innerHTML = `<div class="empty-state">Gagal memuat data: ${error.message}</div>`;
+    return;
+  }
+
+  const rows = allRows || [];
+  rows.sort((a,b)=> a.name.localeCompare(b.name) || a.bab - b.bab || a.type.localeCompare(b.type));
+  lastReportRows = rows;
+
+  const scores = rows.map(r=>r.score);
+  const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : null;
+  const totalViolations = rows.reduce((s,r)=>s+(r.violations||0), 0);
+  const uniqueStudents = new Set(rows.map(r=>r.name.toLowerCase())).size;
+
+  $("adm-total").textContent = rows.length;
+  $("adm-avg-score").textContent = avgScore !== null ? avgScore : "–";
+  $("adm-siswa-count").textContent = uniqueStudents;
+  $("adm-violations").textContent = totalViolations;
+
+  if(rows.length === 0){
+    wrap.innerHTML = `<div class="empty-state">Belum ada data yang cocok dengan filter.</div>`;
+    return;
+  }
+
+  let html = `<table class="report"><thead><tr>
+    <th>Nama</th><th>Bab</th><th>Jenis</th><th>Skor</th><th>Benar</th><th>Pelanggaran</th><th>Waktu</th><th>Aksi</th>
+  </tr></thead><tbody>`;
+  rows.forEach(r=>{
+    const v = r.violations||0;
+    html += `<tr>
+      <td>${titleCase(r.name)}</td>
+      <td><span class="badge badge-ch">Bab ${r.bab}</span></td>
+      <td><span class="badge ${r.type==='pretest'?'badge-pre':'badge-post'}">${r.type==='pretest'?'Pretest':'Posttest'}</span></td>
+      <td class="num">${r.score}</td>
+      <td class="num">${r.correct}/${r.total}</td>
+      <td class="num" style="${v>0?'color:var(--coral);':''}">${v}</td>
+      <td>${new Date(r.submitted_at).toLocaleString('id-ID')}</td>
+      <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','Bab ${r.bab}','${r.type==='pretest'?'Pretest':'Posttest'}')">↺ Reset</button></td>
+    </tr>`;
+  });
+  html += "</tbody></table>";
+  wrap.innerHTML = html;
+}
+
+async function resetStudentResult(id, displayName, babLabel, typeLabel){
+  if(!_supabase){ alert("Supabase tidak tersedia."); return; }
+  const ok = confirm(`Reset hasil ${typeLabel} milik "${displayName}" (${babLabel})?\n\nData akan DIHAPUS PERMANEN. Lanjutkan?`);
+  if(!ok) return;
+  try{
+    await _supabase.from('evaluasi_results').delete().eq('id', id);
+    await loadGuruData();
+    alert("Berhasil direset.");
+  }catch(e){
+    console.error(e);
+    alert("Gagal mereset data.");
+  }
+}
+
+function exportCSV(){
+  if(!lastReportRows.length){ alert("Tidak ada data untuk diunduh."); return; }
+  let csv = "Nama,Bab,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
+  lastReportRows.forEach(r=>{
+    csv += `"${titleCase(r.name)}",${r.bab||'?'},${r.type==='pretest'?'Pretest':'Posttest'},${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`;
+  });
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "rekap_evaluasi_komputer_grafis.csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   TIMER SETTINGS — Load & Save from Supabase
+   ========================================================= */
+let currentTimerSettings = {};
+
+async function loadTimerSettings(){
+  if(!_supabase) return;
+  try{
+    const { data, error } = await _supabase.from('exam_settings').select('*').eq('subject', currentSubject);
+    if(error) throw error;
+    currentTimerSettings = {};
+    (data||[]).forEach(row=>{
+      const key = `${row.bab}_${row.type}`;
+      currentTimerSettings[key] = row.duration;
+    });
+  }catch(e){
+    console.warn("Gagal memuat pengaturan timer:", e.message);
+  }
+  renderTimerGrid();
+}
+
+function renderTimerGrid(){
+  const grid = $("timer-grid");
+  grid.innerHTML = "";
+  const activeBabs = getChapters().filter(c=>c.active);
+  const types = [{val:'pretest',label:'Pretest'},{val:'posttest',label:'Posttest'}];
+
+  activeBabs.forEach(ch=>{
+    types.forEach(t=>{
+      const key = `${ch.num}_${t.val}`;
+      const dur = currentTimerSettings[key] || 0;
+      const div = document.createElement("div");
+      div.className = "timer-item";
+      div.innerHTML = `
+        <span class="ti-label">Bab ${ch.num} · ${t.label}</span>
+        <span class="ti-name">${ch.title}</span>
+        <div class="ti-row">
+          <input type="number" min="0" max="300" value="${dur}" data-key="${key}" onchange="updateTimerValue(this)">
+          <span class="ti-unit">menit</span>
+        </div>
+        <span class="ti-status ${dur>0?'active':''}">${dur>0 ? 'Timer aktif: '+dur+' menit' : 'Tanpa batas waktu'}</span>
+      `;
+      grid.appendChild(div);
+    });
+  });
+}
+
+function updateTimerValue(input){
+  const key = input.dataset.key;
+  const val = Math.max(0, Math.min(300, parseInt(input.value)||0));
+  input.value = val;
+  currentTimerSettings[key] = val;
+  const statusEl = input.closest('.timer-item').querySelector('.ti-status');
+  if(val > 0){
+    statusEl.textContent = 'Timer aktif: '+val+' menit';
+    statusEl.className = 'ti-status active';
+  } else {
+    statusEl.textContent = 'Tanpa batas waktu';
+    statusEl.className = 'ti-status';
+  }
+}
+
+async function saveTimerSettings(){
+  if(!_supabase){ alert("Supabase tidak tersedia."); return; }
+  const btn = $("btn-save-timer");
+  btn.disabled = true;
+  btn.textContent = "Menyimpan...";
+
+  try{
+    for(const [key, duration] of Object.entries(currentTimerSettings)){
+      const [bab, type] = key.split('_');
+      const { error } = await _supabase.from('exam_settings').upsert(
+        { subject: currentSubject, bab: parseInt(bab), type, duration, updated_at: new Date().toISOString() },
+        { onConflict: 'subject,bab,type' }
+      );
+      if(error) throw error;
+    }
+    btn.textContent = "Tersimpan!";
+    setTimeout(()=>{ btn.textContent = "Simpan Pengaturan Timer"; btn.disabled = false; }, 1500);
+  }catch(e){
+    console.error(e);
+    alert("Gagal menyimpan pengaturan timer: " + e.message);
+    btn.textContent = "Simpan Pengaturan Timer";
+    btn.disabled = false;
+  }
+}
+
+/* =========================================================
+   INIT — filter dropdowns + initial render
+   ========================================================= */
+function updateFilterBab(){
+  const sel = $("filter-bab");
+  sel.innerHTML = '<option value="all">Semua Bab</option>';
+  getChapters().filter(c=>c.active).forEach(ch=>{
+    const opt = document.createElement("option");
+    opt.value = ch.num;
+    opt.textContent = "Bab " + ch.num + ": " + ch.title;
+    sel.appendChild(opt);
+  });
+}
+
+// Set initial subject state
+switchSubject('kompis');
+</script>
+</body>
+</html>
