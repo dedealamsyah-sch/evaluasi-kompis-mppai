@@ -436,6 +436,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+document.write('<div id="js-check" style="display:none;">JS loaded</div>');
 /* =========================================================
    DATA: DAFTAR NAMA (✏️ ganti nanti sesuai kelas masing-masing)
    ========================================================= */
@@ -626,8 +627,9 @@ function backToStart(){
 }
 
 function init(){
-  $("total-soal-info").textContent = SOAL.length;
-  try { buildPathSVG(); } catch(e){ console.warn(e); }
+  var el = $("total-soal-info");
+  if(el) el.textContent = SOAL.length;
+  try { buildPathSVG(); } catch(e){}
 }
 
 function loadNamaList(){
@@ -654,7 +656,8 @@ function chooseType(type){
 }
 
 function validateStart(){
-  $("btn-start").disabled = !($("sel-nama").value && state.type && $("sel-kelas").value);
+  var ok = ($("sel-nama").value && state.type && $("sel-kelas").value);
+  $("btn-start").disabled = !ok;
 }
 
 /* =========================================================
