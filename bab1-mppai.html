@@ -5,147 +5,152 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bab 1 — AI dalam Desain · Evaluasi MPP AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#080b16;
-    --panel:#0e1326;
-    --panel-2:#121933;
-    --cyan:#00e5ff;
-    --cyan-dim:#5be8f5;
-    --magenta:#ff3ea5;
-    --violet:#8b5cf6;
+    --ink:#14151f;
+    --ink-2:#1c1e2b;
+    --paper:#f7f5f0;
+    --paper-dim:#eceae3;
+    --violet:#7c5cff;
+    --violet-dim:#a894ff;
     --amber:#ffb627;
-    --coral:#ff5c72;
-    --mint:#3ee6a8;
-    --text:#eef1fb;
-    --text-dim:rgba(238,241,251,0.6);
-    --line:rgba(238,241,251,0.12);
+    --teal:#2dd4bf;
+    --coral:#ff6b6b;
+    --line:rgba(247,245,240,0.12);
+    --text-dim:rgba(247,245,240,0.6);
     --radius:18px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(circle at 10% 0%, rgba(0,229,255,0.14), transparent 40%),
-      radial-gradient(circle at 92% 18%, rgba(255,62,165,0.14), transparent 42%),
-      radial-gradient(circle at 50% 100%, rgba(139,92,246,0.10), transparent 45%),
-      var(--bg);
-    background-attachment:fixed;
-    color:var(--text);
+      radial-gradient(circle at 12% 8%, rgba(124,92,255,0.16), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(255,182,39,0.12), transparent 45%),
+      var(--ink);
+    color:var(--paper);
     font-family:'Inter',sans-serif;
     min-height:100vh;
     display:flex;
     justify-content:center;
     padding:32px 16px 60px;
   }
-  body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-    background-image:linear-gradient(rgba(238,241,251,0.035) 1px, transparent 1px),linear-gradient(90deg, rgba(238,241,251,0.035) 1px, transparent 1px);
-    background-size:42px 42px;
-    mask-image:radial-gradient(circle at 50% 20%, black, transparent 75%);
-  }
-  .app{width:100%;max-width:760px;position:relative;z-index:1;}
-  h1,h2,h3{font-family:'Sora',sans-serif;margin:0;}
+  .app{width:100%;max-width:760px;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;}
   .mono{font-family:'JetBrains Mono',monospace;}
 
+  /* ---------- Header / node path signature ---------- */
   .brand{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
-  .brand-mark{width:44px;height:44px;flex:none;}
-  .brand-text .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(90deg,var(--cyan),var(--magenta));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .brand-mark{width:42px;height:42px;flex:none;}
+  .brand-text .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet-dim);}
   .brand-text h1{font-size:20px;letter-spacing:-0.01em;}
 
-  .path-progress{position:relative;height:50px;margin:8px 0 26px;}
-  .path-progress svg{width:100%;height:100%;display:block;overflow:visible;}
-  .net-edge{stroke:rgba(238,241,251,0.14);stroke-width:1.4;fill:none;}
-  .net-edge-done{stroke:url(#gradEdge);stroke-width:1.8;fill:none;transition:stroke-dashoffset .5s ease;}
-  .node-fill{fill:var(--panel-2);stroke:rgba(238,241,251,0.35);stroke-width:1.4;transition:all .3s ease;}
-  .node-fill.done{fill:var(--cyan);stroke:var(--cyan);filter:drop-shadow(0 0 4px rgba(0,229,255,0.7));}
-  .node-fill.current{fill:var(--magenta);stroke:var(--magenta);filter:drop-shadow(0 0 6px rgba(255,62,165,0.8));}
+  .path-progress{position:relative;height:46px;margin:8px 0 26px;}
+  .path-progress svg{width:100%;height:100%;display:block;}
+  .path-progress .seg{stroke:rgba(247,245,240,0.16);stroke-width:2;fill:none;}
+  .path-progress .seg-done{stroke:var(--violet);stroke-width:2;fill:none;transition:stroke-dashoffset .5s ease;}
+  .node{transition:all .3s ease;}
+  .node-fill{fill:var(--ink-2);stroke:rgba(247,245,240,0.35);stroke-width:1.5;}
+  .node-fill.done{fill:var(--violet);stroke:var(--violet);}
+  .node-fill.current{fill:var(--amber);stroke:var(--amber);}
 
+  /* ---------- Cards ---------- */
   .card{
-    background:linear-gradient(180deg, var(--panel-2), var(--panel));
+    background:var(--ink-2);
     border:1px solid var(--line);
     border-radius:var(--radius);
     padding:32px;
-    box-shadow:0 24px 70px -24px rgba(0,0,0,0.65);
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.5);
   }
   .card + .card{margin-top:18px;}
   .subtle{color:var(--text-dim);font-size:14px;line-height:1.6;}
 
-  label.field-label{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan-dim);margin-bottom:8px;}
+  /* ---------- Form controls ---------- */
+  label.field-label{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet-dim);margin-bottom:8px;}
   select, input[type=text]{
-    width:100%;padding:14px 16px;background:var(--bg);border:1px solid rgba(238,241,251,0.18);
-    border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;
-    appearance:none;-webkit-appearance:none;
+    width:100%;
+    padding:14px 16px;
+    background:var(--ink);
+    border:1px solid rgba(247,245,240,0.18);
+    border-radius:12px;
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    appearance:none;
+    -webkit-appearance:none;
   }
-  select:focus, input:focus{outline:2px solid var(--cyan);outline-offset:1px;}
+  select:focus, input:focus{outline:2px solid var(--violet);outline-offset:1px;}
   .field{margin-bottom:20px;}
   .select-wrap{position:relative;}
   .select-wrap::after{
-    content:"⌄";position:absolute;right:16px;top:50%;transform:translateY(-55%);
-    color:var(--cyan-dim);pointer-events:none;font-size:18px;
+    content:"⌄";
+    position:absolute;right:16px;top:50%;transform:translateY(-55%);
+    color:var(--violet-dim);pointer-events:none;font-size:18px;
   }
 
   .type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .type-toggle button{
-    padding:16px;border-radius:12px;border:1px solid rgba(238,241,251,0.18);
-    background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;
-    font-size:15px;font-weight:600;cursor:pointer;transition:all .18s ease;text-align:left;
+    padding:16px;border-radius:12px;border:1px solid rgba(247,245,240,0.18);
+    background:var(--ink);color:var(--paper);font-family:'Space Grotesk',sans-serif;
+    font-size:15px;font-weight:600;cursor:pointer;transition:all .18s ease;
+    text-align:left;
   }
   .type-toggle button .t-desc{display:block;font-family:'Inter',sans-serif;font-weight:400;font-size:12px;color:var(--text-dim);margin-top:3px;}
-  .type-toggle button.active{border-color:var(--cyan);background:rgba(0,229,255,0.1);box-shadow:0 0 0 1px var(--cyan) inset;}
+  .type-toggle button.active{border-color:var(--violet);background:rgba(124,92,255,0.14);box-shadow:0 0 0 1px var(--violet) inset;}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
     padding:15px 26px;border-radius:12px;border:none;cursor:pointer;
-    font-family:'Sora',sans-serif;font-weight:600;font-size:15px;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;
     transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
   }
-  .btn-primary{background:linear-gradient(135deg,var(--cyan),var(--magenta));color:#04101a;box-shadow:0 10px 26px -10px rgba(0,229,255,0.5);}
+  .btn-primary{background:linear-gradient(135deg,var(--violet),#5f3dff);color:#fff;box-shadow:0 10px 26px -10px rgba(124,92,255,0.7);}
   .btn-primary:hover{transform:translateY(-1px);}
   .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
-  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid rgba(238,241,251,0.18);}
-  .btn-ghost:hover{color:var(--text);border-color:rgba(238,241,251,0.4);}
+  .btn-ghost{background:transparent;color:var(--text-dim);border:1px solid rgba(247,245,240,0.18);}
+  .btn-ghost:hover{color:var(--paper);border-color:rgba(247,245,240,0.4);}
   .btn-amber{background:var(--amber);color:#241a00;}
   .btn-block{width:100%;}
   .btn-row{display:flex;gap:10px;margin-top:22px;}
 
+  /* ---------- Quiz ---------- */
   .qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
-  .qmeta .qnum{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--cyan-dim);}
+  .qmeta .qnum{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--violet-dim);}
   .qmeta .qname{font-size:13px;color:var(--text-dim);}
-  .question-text{font-family:'Sora',sans-serif;font-size:19px;font-weight:600;line-height:1.5;margin-bottom:22px;}
+  .question-text{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;line-height:1.5;margin-bottom:22px;}
   .question-img-wrap{
-    background:var(--bg);border:1px solid var(--line);border-radius:14px;
-    padding:18px;margin-bottom:20px;
+    background:var(--ink);border:1px solid var(--line);border-radius:14px;
+    padding:16px;margin-bottom:20px;display:flex;justify-content:center;align-items:center;
   }
-  .question-img-wrap svg{width:100%;height:auto;display:block;}
-  .question-img-cap{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-dim);text-align:center;margin-top:10px;letter-spacing:.03em;}
+  .question-img-wrap img{max-width:100%;max-height:260px;object-fit:contain;border-radius:6px;}
+  .question-img-cap{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-dim);text-align:center;margin-top:8px;letter-spacing:.03em;}
   .options{display:flex;flex-direction:column;gap:10px;}
   .option{
     display:flex;align-items:center;gap:14px;
-    padding:15px 16px;border-radius:12px;border:1px solid rgba(238,241,251,0.16);
-    background:var(--bg);cursor:pointer;transition:all .15s ease;
+    padding:15px 16px;border-radius:12px;border:1px solid rgba(247,245,240,0.16);
+    background:var(--ink);cursor:pointer;transition:all .15s ease;
   }
-  .option:hover{border-color:var(--cyan-dim);}
-  .option.selected{border-color:var(--cyan);background:rgba(0,229,255,0.1);}
+  .option:hover{border-color:var(--violet-dim);}
+  .option.selected{border-color:var(--violet);background:rgba(124,92,255,0.16);}
   .option .opt-letter{
-    width:28px;height:28px;flex:none;border-radius:8px;background:rgba(238,241,251,0.08);
+    width:28px;height:28px;flex:none;border-radius:8px;background:rgba(247,245,240,0.08);
     display:flex;align-items:center;justify-content:center;
     font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-dim);
   }
-  .option.selected .opt-letter{background:var(--cyan);color:#04101a;}
+  .option.selected .opt-letter{background:var(--violet);color:#fff;}
   .option .opt-text{font-size:14.5px;line-height:1.5;}
 
+  /* ---------- Result ---------- */
   .score-hero{text-align:center;padding:12px 0 8px;}
   .score-ring{position:relative;width:180px;height:180px;margin:0 auto 18px;}
   .score-num{
     position:absolute;inset:0;display:flex;flex-direction:column;
     align-items:center;justify-content:center;
   }
-  .score-num .val{font-family:'Sora',sans-serif;font-size:42px;font-weight:700;}
+  .score-num .val{font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:700;}
   .score-num .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;}
   .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:22px;}
-  .stat{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
+  .stat{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
   .stat .n{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:600;}
   .stat .l{font-size:11px;color:var(--text-dim);margin-top:2px;}
   .review-item{padding:14px 0;border-top:1px solid var(--line);}
@@ -153,55 +158,13 @@
   .review-item .rq{font-size:13.5px;margin-bottom:6px;}
   .review-item .ra{font-size:12.5px;color:var(--text-dim);}
   .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:2px 8px;border-radius:6px;margin-right:6px;}
-  .tag-ok{background:rgba(62,230,168,0.18);color:var(--mint);}
-  .tag-no{background:rgba(255,92,114,0.18);color:var(--coral);}
+  .tag-ok{background:rgba(45,212,191,0.18);color:var(--teal);}
+  .tag-no{background:rgba(255,107,107,0.18);color:var(--coral);}
 
+  /* ---------- Locked ---------- */
   .locked-icon{width:52px;height:52px;color:var(--amber);}
 
-  .rule-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
-  .rule-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.55;color:var(--text);}
-  .rule-list .ri{
-    flex:none;width:30px;height:30px;border-radius:9px;
-    background:rgba(255,92,114,0.16);color:var(--coral);
-    display:flex;align-items:center;justify-content:center;font-size:15px;
-  }
-  .agree-row{display:flex;gap:10px;align-items:flex-start;margin-top:22px;padding:14px;background:var(--bg);border:1px solid rgba(238,241,251,0.16);border-radius:12px;}
-  .agree-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--cyan);flex:none;}
-  .agree-row label{font-size:13px;color:var(--text-dim);line-height:1.5;cursor:pointer;}
-
-  .violation-badge{
-    display:inline-flex;align-items:center;gap:6px;
-    font-family:'JetBrains Mono',monospace;font-size:11px;
-    padding:4px 10px;border-radius:20px;background:rgba(255,92,114,0.14);color:var(--coral);
-  }
-  .violation-overlay{
-    position:fixed;inset:0;background:rgba(4,6,14,0.88);backdrop-filter:blur(4px);
-    display:flex;align-items:center;justify-content:center;z-index:999;padding:20px;
-  }
-  .violation-box{
-    max-width:420px;background:var(--panel-2);border:1px solid var(--coral);border-radius:18px;
-    padding:28px;text-align:center;box-shadow:0 20px 60px -12px rgba(255,92,114,0.35);
-  }
-  .violation-box .vicon{font-size:34px;}
-  .violation-box h3{font-size:18px;margin:12px 0 8px;color:var(--coral);}
-  .violation-box p{font-size:13.5px;color:var(--text-dim);line-height:1.6;margin-bottom:20px;}
-
-  .timer-bar{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    margin-bottom:14px;padding:10px 16px;
-    background:var(--panel-2);border:1px solid var(--line);border-radius:12px;
-  }
-  .timer-bar svg{width:18px;height:18px;flex:none;color:var(--amber);}
-  .timer-bar .timer-text{
-    font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;
-    color:var(--amber);letter-spacing:.04em;min-width:60px;text-align:center;
-  }
-  .timer-bar .timer-label{font-size:12px;color:var(--text-dim);}
-  .timer-bar.urgent{border-color:rgba(255,92,114,0.4);background:rgba(255,92,114,0.08);}
-  .timer-bar.urgent .timer-text{color:var(--coral);}
-  .timer-bar.urgent svg{color:var(--coral);}
-  .timer-bar.no-timer{display:none;}
-
+  /* ---------- Admin ---------- */
   table.report{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;}
   table.report th, table.report td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap;}
   table.report th{font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);}
@@ -216,14 +179,90 @@
   .btn-reset:hover{background:rgba(255,182,39,0.28);}
   .badge{padding:2px 8px;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;}
   .badge-pre{background:rgba(255,182,39,0.18);color:var(--amber);}
-  .badge-post{background:rgba(0,229,255,0.16);color:var(--cyan-dim);}
-  .badge-ch{background:rgba(139,92,246,0.14);color:var(--violet);}
+  .badge-post{background:rgba(124,92,255,0.2);color:var(--violet-dim);}
   .adm-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
   .footer-link{text-align:center;margin-top:26px;}
   .footer-link a{color:var(--text-dim);font-size:12.5px;cursor:pointer;text-decoration:underline;}
   .hidden{display:none !important;}
   .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
   .empty-state{text-align:center;padding:30px 10px;color:var(--text-dim);font-size:13.5px;}
+
+  /* ---------- Timer ---------- */
+  .timer-bar{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    margin-bottom:14px;padding:10px 16px;
+    background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
+  }
+  .timer-bar svg{width:18px;height:18px;flex:none;color:var(--amber);}
+  .timer-bar .timer-text{
+    font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600;
+    color:var(--amber);letter-spacing:.04em;min-width:60px;text-align:center;
+  }
+  .timer-bar .timer-label{font-size:12px;color:var(--text-dim);}
+  .timer-bar.urgent{border-color:rgba(255,107,107,0.4);background:rgba(255,107,107,0.08);}
+  .timer-bar.urgent .timer-text{color:var(--coral);}
+  .timer-bar.urgent svg{color:var(--coral);}
+  .timer-bar.no-timer{display:none;}
+
+  /* Timer settings in admin */
+  .timer-admin-section{margin-top:18px;padding:18px;background:var(--ink);border:1px solid var(--line);border-radius:12px;}
+  .timer-admin-section h4{font-size:14px;margin-bottom:4px;}
+  .timer-admin-section .sub{font-size:11.5px;color:var(--text-dim);margin-bottom:12px;}
+  .timer-admin-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .timer-admin-row label{font-size:13px;min-width:100px;}
+  .timer-admin-row input[type=number]{
+    width:80px;padding:8px 10px;background:var(--ink-2);border:1px solid var(--line);
+    border-radius:8px;color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:13px;
+    text-align:center;
+  }
+  .timer-admin-row input:focus{outline:2px solid var(--violet);outline-offset:1px;}
+  .timer-admin-row .unit{font-size:11.5px;color:var(--text-dim);}
+  .timer-admin-row .status{font-size:11px;color:var(--text-muted);}
+  .timer-admin-row .status.on{color:var(--teal);}
+
+  /* ---------- Warning / rules screen ---------- */
+  .rule-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .rule-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.55;color:var(--paper);}
+  .rule-list .ri{
+    flex:none;width:30px;height:30px;border-radius:9px;
+    background:rgba(255,107,107,0.16);color:var(--coral);
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .agree-row{display:flex;gap:10px;align-items:flex-start;margin-top:22px;padding:14px;background:var(--ink);border:1px solid rgba(247,245,240,0.16);border-radius:12px;}
+  .agree-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--violet);flex:none;}
+  .agree-row label{font-size:13px;color:var(--text-dim);line-height:1.5;cursor:pointer;}
+
+  /* ---------- Warning text ---------- */
+  .warning-text{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    color:var(--coral);text-align:center;
+    padding:7px 0 0;border-top:1px solid var(--line);margin-top:7px;
+    letter-spacing:.04em;
+  }
+  .body-mobile{
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    user-select:none;
+    touch-action:manipulation;
+  }
+
+  /* ---------- Violation badge & overlay ---------- */
+  .violation-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    padding:4px 10px;border-radius:20px;background:rgba(255,107,107,0.14);color:var(--coral);
+  }
+  .violation-overlay{
+    position:fixed;inset:0;background:rgba(10,10,16,0.86);backdrop-filter:blur(4px);
+    display:flex;align-items:center;justify-content:center;z-index:999;padding:20px;
+  }
+  .violation-box{
+    max-width:420px;background:var(--ink-2);border:1px solid var(--coral);border-radius:18px;
+    padding:28px;text-align:center;box-shadow:0 20px 60px -12px rgba(255,107,107,0.35);
+  }
+  .violation-box .vicon{font-size:34px;}
+  .violation-box h3{font-size:18px;margin:12px 0 8px;color:var(--coral);}
+  .violation-box p{font-size:13.5px;color:var(--text-dim);line-height:1.6;margin-bottom:20px;}
   @media (max-width:520px){
     .card{padding:22px 18px;}
     .stat-row{grid-template-columns:1fr 1fr;}
@@ -235,13 +274,11 @@
 <div class="app">
 
   <div class="brand">
-    <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
-      <circle cx="8" cy="10" r="3.4" fill="#00e5ff"/>
-      <circle cx="8" cy="34" r="3.4" fill="#8b5cf6"/>
-      <circle cx="36" cy="22" r="3.6" fill="#ff3ea5"/>
-      <circle cx="22" cy="8" r="2.6" fill="#00e5ff"/>
-      <circle cx="22" cy="36" r="2.6" fill="#8b5cf6"/>
-      <path d="M8 10 L22 8 L36 22 M8 10 L22 36 L36 22 M8 34 L22 8 M8 34 L22 36" stroke="rgba(238,241,251,0.5)" stroke-width="1.1" fill="none"/>
+    <svg class="brand-mark" viewBox="0 0 42 42" fill="none">
+      <path d="M6 32 C 14 8, 22 40, 36 10" stroke="#7c5cff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <circle cx="6" cy="32" r="3.4" fill="#ffb627"/>
+      <circle cx="36" cy="10" r="3.4" fill="#2dd4bf"/>
+      <circle cx="21" cy="24" r="2.6" fill="#7c5cff"/>
     </svg>
     <div class="brand-text">
       <div class="eyebrow">Evaluasi Belajar · Bab I MPP AI</div>
@@ -249,7 +286,7 @@
     </div>
   </div>
 
-  <!-- SCREEN: START -->
+  <!-- ============ SCREEN: START ============ -->
   <div id="screen-start">
     <div class="card">
       <div class="field">
@@ -267,8 +304,8 @@
       <div class="field">
         <label class="field-label">Nama Peserta Didik</label>
         <div class="select-wrap">
-          <select id="sel-nama" onchange="validateStart()">
-            <option value="">— Pilih kelas dulu —</option>
+          <select id="sel-nama">
+            <option value="">— Pilih nama —</option>
           </select>
         </div>
       </div>
@@ -277,15 +314,17 @@
         <label class="field-label">Jenis Evaluasi</label>
         <div class="type-toggle">
           <button type="button" data-type="pretest" onclick="chooseType('pretest')">
-            Pretest <span class="t-desc">Sebelum materi diajarkan</span>
+            Pretest
+            <span class="t-desc">Sebelum materi diajarkan</span>
           </button>
           <button type="button" data-type="posttest" onclick="chooseType('posttest')">
-            Posttest <span class="t-desc">Setelah materi diajarkan</span>
+            Posttest
+            <span class="t-desc">Setelah materi diajarkan</span>
           </button>
         </div>
       </div>
 
-      <p class="subtle">Terdiri dari <b id="total-soal-info"></b> soal pilihan ganda seputar Pertemuan 1: Pengenalan AI dalam Desain. Setiap peserta hanya dapat mengerjakan <b>satu kali</b> untuk masing-masing jenis evaluasi.</p>
+      <p class="subtle">Terdiri dari <b id="total-soal-info"></b> soal pilihan ganda seputar Pertemuan 1: Pengenalan AI dalam Desain. Setiap peserta hanya dapat mengerjakan <b>satu kali</b> untuk masing-masing jenis evaluasi, jadi pastikan Anda siap sebelum memulai.</p>
 
       <div class="btn-row">
         <button class="btn btn-primary btn-block" id="btn-start" onclick="startQuiz()" disabled>Mulai Mengerjakan →</button>
@@ -295,7 +334,7 @@
     <div class="footer-link"><a onclick="openAdmin()">Masuk sebagai Guru — Lihat Rekap Laporan</a> · <a href="index.html">← Beranda</a></div>
   </div>
 
-  <!-- SCREEN: LOCKED -->
+  <!-- ============ SCREEN: LOCKED (already done) ============ -->
   <div id="screen-locked" class="hidden">
     <div class="card">
       <svg class="locked-icon" viewBox="0 0 24 24" fill="none"><path d="M6 10V8a6 6 0 1112 0v2M5 10h14a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1v-9a1 1 0 011-1z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -307,17 +346,17 @@
     </div>
   </div>
 
-  <!-- SCREEN: WARNING -->
+  <!-- ============ SCREEN: WARNING / RULES ============ -->
   <div id="screen-warning" class="hidden">
     <div class="card">
       <h2 style="font-size:19px;">Sebelum Memulai — Baca Aturan Ujian</h2>
-      <p class="subtle" style="margin-top:6px;">Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Sistem memantau aktivitas perangkat Anda.</p>
+      <p class="subtle" style="margin-top:6px;">Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Selama mengerjakan, sistem memantau aktivitas pada perangkat Anda.</p>
       <ul class="rule-list">
-        <li><span class="ri">⛔</span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b>.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang menggunakan <b>bantuan AI, internet, atau alat bantu lain</b>.</span></li>
-        <li><span class="ri">⚠</span><span>Setiap pelanggaran <b>terdeteksi otomatis</b> dan tercatat pada laporan guru.</span></li>
+        <li><span class="ri">⛔</span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian berlangsung.</span></li>
+        <li><span class="ri">⛔</span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai dikirim.</span></li>
+        <li><span class="ri">⛔</span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b> dalam bentuk apa pun.</span></li>
+        <li><span class="ri">⛔</span><span>Dilarang menggunakan <b>bantuan AI, internet, atau alat bantu lain</b> untuk menjawab soal.</span></li>
+        <li><span class="ri">⚠</span><span>Setiap pelanggaran di atas akan <b>terdeteksi otomatis</b> dan tercatat sebagai peringatan pada laporan guru.</span></li>
       </ul>
       <div class="agree-row">
         <input type="checkbox" id="agree-check" onchange="$('btn-confirm-start').disabled = !this.checked">
@@ -330,9 +369,9 @@
     </div>
   </div>
 
-  <!-- SCREEN: QUIZ -->
+  <!-- ============ SCREEN: QUIZ ============ -->
   <div id="screen-quiz" class="hidden">
-    <svg id="path-svg" viewBox="0 0 700 50" preserveAspectRatio="none"></svg>
+    <div class="path-progress"><svg id="path-svg" viewBox="0 0 700 46" preserveAspectRatio="none"></svg></div>
     <div id="timer-bar" class="timer-bar no-timer">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span class="timer-text" id="timer-text">00:00</span>
@@ -344,9 +383,12 @@
         <span class="qname" id="q-participant"></span>
         <span class="violation-badge" id="violation-badge">⚠ Pelanggaran: 0</span>
       </div>
+      <div class="warning-text">⚠ Tidak boleh screenshoot — terdeteksi otomatis</div>
       <div class="question-img-wrap hidden" id="q-img-wrap">
-        <div id="q-img-svg"></div>
-        <div class="question-img-cap" id="q-img-cap"></div>
+        <div>
+          <img id="q-img" src="" alt="Ilustrasi soal">
+          <div class="question-img-cap" id="q-img-cap"></div>
+        </div>
       </div>
       <div class="question-text" id="q-text"></div>
       <div class="options" id="q-options"></div>
@@ -357,16 +399,16 @@
     </div>
   </div>
 
-  <!-- SCREEN: RESULT -->
+  <!-- ============ SCREEN: RESULT ============ -->
   <div id="screen-result" class="hidden">
     <div class="card">
       <div class="score-hero">
         <div class="score-ring">
           <svg viewBox="0 0 180 180">
-            <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(238,241,251,0.1)" stroke-width="14"/>
+            <circle cx="90" cy="90" r="78" fill="none" stroke="rgba(247,245,240,0.1)" stroke-width="14"/>
             <circle id="score-arc" cx="90" cy="90" r="78" fill="none" stroke="url(#gradScore)" stroke-width="14" stroke-linecap="round" transform="rotate(-90 90 90)"/>
             <defs><linearGradient id="gradScore" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#ff3ea5"/>
+              <stop offset="0%" stop-color="#7c5cff"/><stop offset="100%" stop-color="#2dd4bf"/>
             </linearGradient></defs>
           </svg>
           <div class="score-num"><span class="val" id="score-val">0</span><span class="lbl">Skor Akhir</span></div>
@@ -389,11 +431,11 @@
     <div class="footer-link"><a onclick="backToStart()">← Kembali ke Halaman Awal</a> · <a href="index.html">Beranda</a></div>
   </div>
 
-  <!-- SCREEN: ADMIN -->
+  <!-- ============ SCREEN: ADMIN ============ -->
   <div id="screen-admin" class="hidden">
     <div class="card">
       <div class="top-bar">
-        <h2 style="font-size:19px;">Rekap Laporan Guru — MPP AI</h2>
+        <h2 style="font-size:19px;">Rekap Laporan Guru</h2>
         <a class="footer-link" style="margin:0;"><span style="cursor:pointer;color:var(--text-dim);font-size:12.5px;text-decoration:underline;" onclick="backToStart()">Tutup</span></a>
       </div>
       <div id="admin-locked">
@@ -411,6 +453,25 @@
           <div class="stat"><div class="n" id="adm-belum">0</div><div class="l">Belum Mengerjakan</div></div>
         </div>
 
+        <!-- Timer Settings per chapter -->
+        <div class="timer-admin-section">
+          <h4>Pengaturan Waktu Ujian (Timer)</h4>
+          <p class="sub">Atur durasi ujian per jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
+          <div class="timer-admin-row">
+            <label>Pretest:</label>
+            <input type="number" id="admin-timer-pre" min="0" max="300" value="0" onchange="updateAdminTimerStatus('pre')">
+            <span class="unit">menit</span>
+            <span class="status" id="admin-timer-pre-status">Tanpa batas waktu</span>
+          </div>
+          <div class="timer-admin-row">
+            <label>Posttest:</label>
+            <input type="number" id="admin-timer-post" min="0" max="300" value="0" onchange="updateAdminTimerStatus('post')">
+            <span class="unit">menit</span>
+            <span class="status" id="admin-timer-post-status">Tanpa batas waktu</span>
+          </div>
+          <button class="btn btn-ghost" style="margin-top:8px;padding:8px 16px;font-size:12px;" onclick="saveAdminTimerSettings()">Simpan Pengaturan Timer</button>
+        </div>
+
         <div class="btn-row">
           <button class="btn btn-ghost" onclick="loadAdminData()">↻ Muat Ulang</button>
           <button class="btn btn-amber" onclick="exportCSV()">⬇ Unduh CSV</button>
@@ -420,12 +481,13 @@
     </div>
   </div>
 
-  <!-- VIOLATION OVERLAY -->
+  <!-- ============ VIOLATION OVERLAY ============ -->
   <div id="violation-overlay" class="violation-overlay hidden">
     <div class="violation-box">
       <div class="vicon">⚠️</div>
+      <img src="https://media.tenor.com/j5rPRPBwSOMAAAAM/cat-smacking-other-cat-cat.gif" alt="peringatan pelanggaran" style="width:140px;border-radius:12px;margin-bottom:8px;">
       <h3 id="violation-title">Pelanggaran Terdeteksi</h3>
-      <p id="violation-desc">Aktivitas mencurigakan terdeteksi. Kejadian ini tercatat dan akan dilaporkan kepada guru.</p>
+      <p id="violation-desc">Aktivitas mencurigakan terdeteksi selama ujian berlangsung. Kejadian ini telah tercatat dan akan dilaporkan kepada guru.</p>
       <button class="btn btn-primary btn-block" onclick="resumeExam()">Kembali ke Ujian (Layar Penuh)</button>
     </div>
   </div>
@@ -435,7 +497,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* =========================================================
-   DATA: DAFTAR NAMA PER KELAS
+   DATA: DAFTAR NAMA
    ========================================================= */
 const NAMA_BY_KELAS = {
   "XI DKV 1": [
@@ -474,258 +536,452 @@ const NAMA_BY_KELAS = {
 };
 
 const ADMIN_CODE = "guru2026";
+
+/* =========================================================
+   DATABASE: Supabase (PostgreSQL)
+   ========================================================= */
+// GANTI konfigurasi di bawah dengan milikmu sendiri
+// Cara dapatkan: https://supabase.com → Project → Settings → API
 const supabaseUrl = "https://btdrvpdzncmocfvszwdt.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0ZHJ2cGR6bmNtb2NmdnN6d2R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwNzAyMTcsImV4cCI6MjEwMDY0NjIxN30.Fy4yRD2VIRb87TtPwMjzCqhwj-BvCK4fYOQdBrcBMhA";
-
-var _supabase = null;
-try { if(typeof supabase !== 'undefined') _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey); } catch(e){ console.warn('Supabase init:', e.message); }
+const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 const BAB_NUM = 1;
 const SUBJECT = 'mppai';
 
 const db = {
   async getExisting(name, kelas, bab, type){
-    if(!_supabase) return null;
-    const { data, error } = await _supabase.from('evaluasi_results').select('*')
-      .eq('subject', SUBJECT).eq('name', name).eq('kelas', kelas)
-      .eq('bab', bab).eq('type', type).maybeSingle();
+    const { data, error } = await _supabase
+      .from('evaluasi_results')
+      .select('*')
+      .eq('subject', SUBJECT)
+      .eq('name', name)
+      .eq('kelas', kelas)
+      .eq('bab', bab)
+      .eq('type', type)
+      .maybeSingle();
     return error ? null : data;
   },
   async save(payload){
-    if(!_supabase) return false;
     const { error } = await _supabase.from('evaluasi_results').insert({ subject: SUBJECT, ...payload });
     return !error;
   },
   async listAll(babFilter){
-    if(!_supabase) return [];
     let q = _supabase.from('evaluasi_results').select('*').eq('subject', SUBJECT);
     if(babFilter) q = q.eq('bab', babFilter);
     const { data, error } = await q.order('name');
     return error ? [] : (data || []);
   },
   async deleteById(id){
-    if(!_supabase) return false;
     const { error } = await _supabase.from('evaluasi_results').delete().eq('id', id);
     return !error;
   }
 };
 
 /* =========================================================
-   DATA: DIAGRAM SVG
+   DATA: GAMBAR SUMBER (BAB I Pengenalan CorelDRAW 2020)
    ========================================================= */
 const DIAGRAMS = {};
-try {
-  (function(){var items=[["1956","Konferensi","Dartmouth",30],["1980an","AI Winter","(stagnasi)",165],["2012","AlexNet /","Deep Learning",300],["2014","GAN","(Ian Goodfellow)",435],["2020an","Ledakan AI","Generatif",570]];var parts=items.map(function(d,i){var cx=d[3],cy=95,fill=(i%2===0?'#00e5ff':'#ff3ea5'),ty=(i%2===0?70:132),extra='';if(d[2])extra='<text x="'+cx+'" y="'+(i%2===0?(ty-14):(ty+18))+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="10.5" fill="rgba(238,241,251,0.62)">'+d[2]+'</text>';return '<circle cx="'+cx+'" cy="'+cy+'" r="7" fill="'+fill+'"/><text x="'+cx+'" y="'+ty+'" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" font-weight="600" fill="#eef1fb">'+d[0]+'</text>'+extra;}).join('');DIAGRAMS.timeline='<svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="tlg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="50%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#ff3ea5"/></linearGradient></defs><line x1="30" y1="95" x2="610" y2="95" stroke="url(#tlg)" stroke-width="2.5"/>'+parts+'</svg>';})();
 
-  DIAGRAMS.compare = '<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg"><text x="160" y="26" text-anchor="middle" font-family="Sora, sans-serif" font-size="13" font-weight="700" fill="#ffb627">AI KONVENSIONAL</text><rect x="60" y="42" width="200" height="34" rx="8" fill="none" stroke="#ffb627" stroke-width="1.4"/><text x="160" y="63" text-anchor="middle" font-family="Inter" font-size="11" fill="#eef1fb">Aturan (if-then)</text><path d="M160 76 L160 96" stroke="#ffb627" stroke-width="1.4"/><rect x="60" y="100" width="200" height="34" rx="8" fill="none" stroke="#ffb627" stroke-width="1.4"/><text x="160" y="121" text-anchor="middle" font-family="Inter" font-size="11" fill="#eef1fb">Data Berlabel</text><path d="M160 134 L160 154" stroke="#ffb627" stroke-width="1.4"/><rect x="60" y="158" width="200" height="34" rx="8" fill="rgba(255,182,39,0.12)" stroke="#ffb627" stroke-width="1.4"/><text x="160" y="179" text-anchor="middle" font-family="Inter" font-size="11" font-weight="600" fill="#ffb627">Output Tetap (deterministik)</text><line x1="320" y1="10" x2="320" y2="210" stroke="rgba(238,241,251,0.15)" stroke-dasharray="4 4"/><text x="480" y="26" text-anchor="middle" font-family="Sora, sans-serif" font-size="13" font-weight="700" fill="#00e5ff">AI GENERATIF</text><rect x="380" y="42" width="200" height="34" rx="8" fill="none" stroke="#00e5ff" stroke-width="1.4"/><text x="480" y="63" text-anchor="middle" font-family="Inter" font-size="11" fill="#eef1fb">Jutaan Data Latih</text><path d="M480 76 L480 96" stroke="#00e5ff" stroke-width="1.4"/><rect x="380" y="100" width="200" height="34" rx="8" fill="none" stroke="#00e5ff" stroke-width="1.4"/><text x="480" y="121" text-anchor="middle" font-family="Inter" font-size="11" fill="#eef1fb">Pola Dipelajari</text><path d="M480 134 L480 154" stroke="#00e5ff" stroke-width="1.4"/><rect x="380" y="158" width="200" height="34" rx="8" fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="1.4"/><text x="480" y="179" text-anchor="middle" font-family="Inter" font-size="11" font-weight="600" fill="#00e5ff">Output Variatif (probabilistik)</text><line x1="320" y1="10" x2="320" y2="210" stroke="rgba(238,241,251,0.15)" stroke-dasharray="4 4"/></svg>';
-
-  (function(){var fwd='',rev='',i=0,x=0,op=0;for(i=0;i<5;i++){x=60+i*130;op=0.15+i*0.2;fwd+='<rect x="'+x+'" y="40" width="90" height="60" rx="10" fill="rgba(255,62,165,'+op+')" stroke="#ff3ea5" stroke-width="1.2"/>';if(i<4)fwd+='<path d="M'+(x+90)+' 70 L'+(x+128)+' 70" stroke="#ff3ea5" stroke-width="1.4"/>';}for(i=0;i<5;i++){x=580-i*130;op=0.85-i*0.17;rev+='<rect x="'+(x-90)+'" y="166" width="90" height="42" rx="10" fill="rgba(0,229,255,'+(op*0.35)+')" stroke="#00e5ff" stroke-width="1.2"/>';if(i<4)rev+='<path d="M'+(x-90)+' 187 L'+(x-128)+' 187" stroke="#00e5ff" stroke-width="1.4"/>';}DIAGRAMS.diffusion='<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg"><text x="320" y="24" text-anchor="middle" font-family="Sora, sans-serif" font-size="13" font-weight="700" fill="#ff3ea5">FORWARD DIFFUSION — menambah noise (pelatihan)</text>'+fwd+'<text x="105" y="118" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="rgba(238,241,251,0.6)">gambar asli</text><text x="580" y="118" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9.5" fill="rgba(238,241,251,0.6)">noise murni</text><text x="320" y="152" text-anchor="middle" font-family="Sora, sans-serif" font-size="13" font-weight="700" fill="#00e5ff">REVERSE DIFFUSION — denoising bertahap (generate)</text>'+rev+'</svg>';})();
-
-  DIAGRAMS.gan = '<svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="90" width="60" height="46" rx="10" fill="rgba(139,92,246,0.15)" stroke="#8b5cf6" stroke-width="1.3"/><text x="60" y="117" text-anchor="middle" font-family="JetBrains Mono" font-size="9.5" fill="#eef1fb">noise</text><rect x="150" y="80" width="130" height="66" rx="12" fill="rgba(0,229,255,0.1)" stroke="#00e5ff" stroke-width="1.6"/><text x="215" y="108" text-anchor="middle" font-family="Sora" font-size="13" font-weight="700" fill="#00e5ff">Generator</text><text x="215" y="126" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.62)">bikin gambar palsu</text><rect x="380" y="80" width="150" height="66" rx="12" fill="rgba(255,62,165,0.1)" stroke="#ff3ea5" stroke-width="1.6"/><text x="455" y="104" text-anchor="middle" font-family="Sora" font-size="13" font-weight="700" fill="#ff3ea5">Discriminator</text><text x="455" y="122" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.62)">asli vs palsu?</text><rect x="380" y="10" width="150" height="40" rx="10" fill="none" stroke="rgba(238,241,251,0.35)" stroke-width="1.2" stroke-dasharray="3 3"/><text x="455" y="34" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(238,241,251,0.6)">data gambar asli</text><path d="M90 113 L148 113" stroke="#8b5cf6" stroke-width="1.5"/><path d="M280 113 L378 113" stroke="#00e5ff" stroke-width="1.5"/><path d="M455 50 L455 78" stroke="rgba(238,241,251,0.4)" stroke-width="1.2"/><path d="M455 146 C 455 200, 215 200, 215 148" stroke="#ff3ea5" stroke-width="1.5" stroke-dasharray="5 4"/><text x="335" y="196" text-anchor="middle" font-family="JetBrains Mono" font-size="9.5" fill="#ff3ea5">umpan balik (loss / backpropagation)</text></svg>';
-
-  (function(){var items=[["🎵","Rekomendasi","Streaming"],["🎙","Asisten","Virtual"],["🔓","Deteksi","Wajah"],["🗺","Navigasi","Peta"],["✉","Filter","Spam"],["⌨","Prediksi","Kata"]],colors=["#00e5ff","#ff3ea5","#8b5cf6"];var parts=items.map(function(d,i){var cols=3,x=70+(i%cols)*180,y=40+Math.floor(i/cols)*95,c=colors[i%3];return '<circle cx="'+x+'" cy="'+y+'" r="26" fill="rgba(255,255,255,0.04)" stroke="'+c+'" stroke-width="1.4"/><text x="'+x+'" y="'+(y+8)+'" text-anchor="middle" font-size="20">'+d[0]+'</text><text x="'+x+'" y="'+(y+46)+'" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(238,241,251,0.65)">'+d[1]+'</text><text x="'+x+'" y="'+(y+58)+'" text-anchor="middle" font-family="Inter" font-size="10" fill="rgba(238,241,251,0.65)">'+d[2]+'</text>';}).join('');DIAGRAMS.daily='<svg viewBox="0 0 640 170" xmlns="http://www.w3.org/2000/svg">'+parts+'</svg>';})();
-
-  DIAGRAMS.prompt = '<svg viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg"><rect x="30" y="60" width="190" height="70" rx="12" fill="rgba(0,229,255,0.08)" stroke="#00e5ff" stroke-width="1.4"/><text x="125" y="88" text-anchor="middle" font-family="Sora" font-size="12" font-weight="700" fill="#00e5ff">Prompt Teks</text><text x="125" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(238,241,251,0.6)">"kucing astronot,</text><text x="125" y="118" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="rgba(238,241,251,0.6)">gaya cat air"</text><path d="M220 95 L268 95" stroke="#8b5cf6" stroke-width="1.5"/><rect x="272" y="55" width="170" height="80" rx="12" fill="rgba(139,92,246,0.1)" stroke="#8b5cf6" stroke-width="1.4"/><text x="357" y="88" text-anchor="middle" font-family="Sora" font-size="12" font-weight="700" fill="#8b5cf6">Model AI Generatif</text><text x="357" y="105" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.6)">Diffusion / GAN</text><text x="357" y="119" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.6)">memproses makna prompt</text><path d="M446 95 L494 95" stroke="#ff3ea5" stroke-width="1.5"/><rect x="498" y="50" width="112" height="90" rx="12" fill="rgba(255,62,165,0.1)" stroke="#ff3ea5" stroke-width="1.4"/><circle cx="554" cy="90" r="26" fill="none" stroke="#ff3ea5" stroke-width="1.4" stroke-dasharray="4 3"/><text x="554" y="96" text-anchor="middle" font-size="18">🖼️</text><text x="554" y="128" text-anchor="middle" font-family="Sora" font-size="10.5" font-weight="700" fill="#ff3ea5">Gambar Baru</text></svg>';
-
-  (function(){var items=[["Midjourney","#00e5ff"],["Leonardo AI","#8b5cf6"],["Adobe Firefly","#ff3ea5"],["Canva AI","#3ee6a8"]];var parts=items.map(function(d,i){var x=40+i*150;return '<rect x="'+x+'" y="35" width="130" height="70" rx="12" fill="rgba(255,255,255,0.03)" stroke="'+d[1]+'" stroke-width="1.4"/><circle cx="'+(x+65)+'" cy="60" r="14" fill="none" stroke="'+d[1]+'" stroke-width="1.4"/><text x="'+(x+65)+'" y="65" text-anchor="middle" font-size="13">🎨</text><text x="'+(x+65)+'" y="92" text-anchor="middle" font-family="Inter" font-size="10.5" font-weight="600" fill="#eef1fb">'+d[0]+'</text>';}).join('');DIAGRAMS.platforms='<svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg">'+parts+'<text x="320" y="130" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="rgba(238,241,251,0.5)">Platform AI generatif untuk desain visual</text></svg>';})();
-
-  DIAGRAMS.role = '<svg viewBox="0 0 640 160" xmlns="http://www.w3.org/2000/svg"><circle cx="130" cy="80" r="46" fill="rgba(0,229,255,0.08)" stroke="#00e5ff" stroke-width="1.5"/><text x="130" y="72" text-anchor="middle" font-size="24">🧑‍🎨</text><text x="130" y="98" text-anchor="middle" font-family="Sora" font-size="11" font-weight="700" fill="#00e5ff">Desainer DKV</text><text x="130" y="140" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.6)">ide, arahan kreatif, keputusan akhir</text><path d="M186 80 C 230 50, 280 50, 320 78" stroke="#8b5cf6" stroke-width="1.5" fill="none"/><path d="M320 88 C 280 116, 230 116, 186 90" stroke="#8b5cf6" stroke-width="1.5" fill="none"/><text x="253" y="42" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#8b5cf6">alat bantu</text><circle cx="380" cy="80" r="46" fill="rgba(255,62,165,0.08)" stroke="#ff3ea5" stroke-width="1.5"/><text x="380" y="72" text-anchor="middle" font-size="24">🤖</text><text x="380" y="98" text-anchor="middle" font-family="Sora" font-size="11" font-weight="700" fill="#ff3ea5">AI Generatif</text><text x="380" y="140" text-anchor="middle" font-family="Inter" font-size="9.5" fill="rgba(238,241,251,0.6)">eksekusi cepat, variasi, eksplorasi</text></svg>';
-} catch(e) { console.error('DIAGRAMS error:', e); }
-
-/* =========================================================
-   DATA: BANK SOAL (30 soal)
-   ========================================================= */
 const SOAL = [
 {q:"Kecerdasan Buatan (Artificial Intelligence/AI) adalah cabang ilmu komputer yang memungkinkan mesin...",o:["Meniru kemampuan berpikir manusia seperti mengenali pola dan mengambil keputusan","Hanya menjalankan instruksi tetap tanpa bisa berubah","Menyimpan data dalam jumlah besar tanpa diproses","Menggantikan seluruh pekerjaan manusia secara total"],a:0},
-{img:"timeline",q:"Istilah \"Artificial Intelligence\" pertama kali diperkenalkan pada Konferensi Dartmouth tahun 1956 oleh...",o:["Ian Goodfellow","John McCarthy","Alan Turing","Geoffrey Hinton"],a:1},
-{img:"timeline",q:"Periode 1980an–1990an dalam sejarah AI ditandai dengan istilah \"AI Winter\" karena...",o:["AI berkembang sangat pesat berkat internet","Munculnya GAN yang mengejutkan dunia","Mengalami masa stagnasi akibat keterbatasan komputasi","Ditemukannya Diffusion Model pertama kali"],a:2},
-{img:"timeline",q:"Deep Learning mulai mendominasi pada tahun 2012 setelah keberhasilan model...",o:["ChatGPT","AlexNet dalam kompetisi pengenalan gambar","DALL·E","Stable Diffusion"],a:1},
-{img:"timeline",q:"Generative Adversarial Network (GAN) diperkenalkan pada tahun 2014 oleh...",o:["John McCarthy","Ian Goodfellow","Sam Altman","Alan Turing"],a:1},
-{img:"timeline",q:"Ledakan AI Generatif pada era 2020an ditandai dengan menjadi arus utamanya...",o:["Sistem pakar berbasis aturan (expert system)","Model Diffusion dan Large Language Model (LLM)","Kalkulator elektronik","Basis data relasional"],a:1},
-{img:"daily",q:"Berikut ini yang merupakan contoh penerapan AI dalam kehidupan sehari-hari adalah...",o:["Sistem rekomendasi pada aplikasi streaming musik dan video","Mesin ketik manual tanpa listrik","Kalkulator sederhana penjumlahan","Buku catatan fisik"],a:0},
+{q:"Istilah Artificial Intelligence pertama kali diperkenalkan pada Konferensi Dartmouth tahun 1956 oleh...",o:["Ian Goodfellow","John McCarthy","Alan Turing","Geoffrey Hinton"],a:1},
+{q:"Periode 1980an\u20131990an dalam sejarah AI ditandai dengan istilah AI Winter karena...",o:["AI berkembang sangat pesat berkat internet","Munculnya GAN yang mengejutkan dunia","Mengalami masa stagnasi akibat keterbatasan komputasi","Ditemukannya Diffusion Model pertama"],a:2},
+{q:"Deep Learning mulai mendominasi pada tahun 2012 setelah keberhasilan model...",o:["ChatGPT","AlexNet dalam kompetisi pengenalan gambar","DALL\u00b7E","Stable Diffusion"],a:1},
+{q:"Generative Adversarial Network (GAN) diperkenalkan pada tahun 2014 oleh...",o:["John McCarthy","Ian Goodfellow","Sam Altman","Alan Turing"],a:1},
+{q:"Ledakan AI Generatif pada era 2020an ditandai dengan menjadi arus utamanya...",o:["Sistem pakar berbasis aturan (expert system)","Model Diffusion dan Large Language Model (LLM)","Kalkulator elektronik","Basis data relasional"],a:1},
+{q:"Berikut ini yang merupakan contoh penerapan AI dalam kehidupan sehari-hari adalah...",o:["Sistem rekomendasi pada aplikasi streaming musik dan video","Mesin ketik manual tanpa listrik","Kalkulator sederhana penjumlahan","Buku catatan fisik"],a:0},
 {q:"AI Generatif (Generative AI) adalah cabang AI yang mampu...",o:["Hanya mengklasifikasikan data tanpa menghasilkan apa pun","Menghasilkan (generate) konten baru seperti gambar, teks, musik, dan video","Menyimpan data mentah tanpa pengolahan","Menghapus data yang sudah tidak terpakai"],a:1},
-{img:"compare",q:"Cara kerja AI Konvensional pada umumnya berbasis...",o:["Distribusi data berskala besar","Aturan (if-then) atau klasifikasi pola dari data berlabel","Proses denoising bertahap","Kompetisi dua jaringan saraf tiruan"],a:1},
-{img:"compare",q:"Contoh teknologi yang termasuk AI Konvensional adalah...",o:["GAN dan Diffusion Model","Large Language Model (LLM)","Expert System dan Chatbot rule-based","Midjourney dan Adobe Firefly"],a:2},
-{img:"compare",q:"Contoh teknologi yang termasuk AI Generatif adalah...",o:["Expert System","Model klasifikasi/prediksi sederhana","GAN, Diffusion Model, dan Large Language Model (LLM)","Kalkulator digital"],a:2},
-{img:"compare",q:"Sifat hasil dari AI Konvensional bersifat deterministik, artinya...",o:["Hasil berbeda meski input sama","Hasil sama untuk input yang sama","Hasil selalu berupa gambar","Hasil tidak dapat diprediksi sama sekali"],a:1},
-{img:"compare",q:"Sifat hasil dari AI Generatif bersifat variatif/probabilistik, artinya...",o:["Hasil dapat berbeda meski prompt yang diberikan sama","Hasil selalu identik untuk prompt yang sama","Hasil tidak pernah berubah","Hasil hanya berupa angka"],a:0},
+{q:"Cara kerja AI Konvensional pada umumnya berbasis...",o:["Distribusi data berskala besar","Aturan (if-then) atau klasifikasi pola dari data berlabel","Proses denoising bertahap","Kompetisi dua jaringan saraf tiruan"],a:1},
+{q:"Contoh teknologi yang termasuk AI Konvensional adalah...",o:["GAN dan Diffusion Model","Large Language Model (LLM)","Expert System dan Chatbot rule-based","Midjourney dan Adobe Firefly"],a:2},
+{q:"Contoh teknologi yang termasuk AI Generatif adalah...",o:["Expert System","Model klasifikasi/prediksi sederhana","GAN, Diffusion Model, dan Large Language Model (LLM)","Kalkulator digital"],a:2},
+{q:"Sifat hasil dari AI Konvensional bersifat deterministik, artinya...",o:["Hasil berbeda meski input sama","Hasil sama untuk input yang sama","Hasil selalu berupa gambar","Hasil tidak dapat diprediksi"],a:1},
+{q:"Sifat hasil dari AI Generatif bersifat variatif/probabilistik, artinya...",o:["Hasil dapat berbeda meski prompt yang diberikan sama","Hasil selalu identik untuk prompt yang sama","Hasil tidak pernah berubah","Hasil hanya berupa angka"],a:0},
 {q:"Contoh penerapan AI Konvensional dalam bidang desain adalah...",o:["Membuat ilustrasi baru dari deskripsi teks","Software yang otomatis meluruskan objek atau memberi peringatan resolusi rendah","Menciptakan variasi mockup produk","Menghasilkan musik latar orisinal"],a:1},
-{img:"diffusion",q:"Diffusion Model adalah arsitektur AI generatif yang paling banyak digunakan pada platform desain seperti...",o:["Midjourney, Stable Diffusion, dan Adobe Firefly","Microsoft Excel dan Word","Photoshop versi lama tanpa AI","Aplikasi pengolah kata biasa"],a:0},
-{img:"diffusion",q:"Proses Forward Diffusion pada saat pelatihan bekerja dengan cara...",o:["Menghasilkan gambar akhir yang jelas","Menambahkan noise secara bertahap hingga gambar berubah total menjadi noise murni","Mengubah teks menjadi suara","Menggabungkan dua gambar berbeda"],a:1},
-{img:"diffusion",q:"Proses Reverse Diffusion saat menghasilkan gambar baru dimulai dari...",o:["Gambar yang sudah jadi dan sempurna","Sebuah gambar berisi noise/piksel acak sepenuhnya","Teks murni tanpa gambar","Data suara pengguna"],a:1},
-{img:"diffusion",q:"Pada proses Reverse Diffusion, prompt teks pengguna diubah menjadi representasi numerik (embedding) oleh...",o:["Discriminator","Text encoder","Generator","Ruler tool"],a:1},
-{img:"diffusion",q:"Pada Reverse Diffusion, langkah denoising (mengurangi noise sedikit demi sedikit) umumnya diulang sebanyak...",o:["Hanya satu kali langsung selesai","Puluhan hingga ratusan kali secara bertahap","Ribuan tahun proses manual","Tidak pernah diulang"],a:1},
-{img:"gan",q:"Generative Adversarial Network (GAN) terdiri dari dua jaringan saraf tiruan yang saling bertanding, yaitu...",o:["Encoder dan Decoder","Generator dan Discriminator","Input Layer dan Output Layer","Prompt dan Embedding"],a:1},
-{img:"gan",q:"Tugas Generator dalam arsitektur GAN adalah...",o:["Membedakan gambar asli dan palsu","Menciptakan gambar baru dari noise acak agar menyerupai data asli","Menghitung akurasi model","Menyimpan data pelatihan"],a:1},
-{img:"gan",q:"Tugas Discriminator dalam arsitektur GAN adalah...",o:["Menciptakan gambar baru dari noise","Membedakan mana gambar asli (data pelatihan) dan mana gambar palsu buatan Generator","Menambahkan noise ke gambar","Mengubah prompt menjadi embedding"],a:1},
-{img:"gan",q:"Jika Discriminator berhasil mengenali gambar palsu buatan Generator, maka Generator akan menerima umpan balik berupa...",o:["Hadiah berupa data tambahan","Nilai kesalahan (loss) yang besar untuk memperbarui bobot melalui backpropagation","Perintah untuk berhenti bekerja","Gambar asli baru secara langsung"],a:1},
-{img:"gan",q:"Proses tarik-menarik antara Generator dan Discriminator berulang terus-menerus hingga...",o:["Generator berhenti bekerja sama sekali","Generator mampu menghasilkan gambar yang sangat sulit dibedakan dari gambar asli","Discriminator dihapus dari sistem","Data pelatihan habis digunakan"],a:1},
+{q:"Diffusion Model adalah arsitektur AI generatif yang paling banyak digunakan pada platform desain seperti...",o:["Midjourney, Stable Diffusion, dan Adobe Firefly","Microsoft Excel dan Word","Photoshop versi lama tanpa AI","Aplikasi pengolah kata biasa"],a:0},
+{q:"Proses Forward Diffusion pada saat pelatihan bekerja dengan cara...",o:["Menghasilkan gambar akhir yang jelas","Menambahkan noise secara bertahap hingga gambar berubah total menjadi noise murni","Mengubah teks menjadi suara","Menggabungkan dua gambar berbeda"],a:1},
+{q:"Proses Reverse Diffusion saat menghasilkan gambar baru dimulai dari...",o:["Gambar yang sudah jadi dan sempurna","Sebuah gambar berisi noise/piksel acak sepenuhnya","Teks murni tanpa gambar","Data suara pengguna"],a:1},
+{q:"Pada proses Reverse Diffusion, prompt teks pengguna diubah menjadi representasi numerik (embedding) oleh...",o:["Discriminator","Text encoder","Generator","Ruler tool"],a:1},
+{q:"Pada Reverse Diffusion, langkah denoising (mengurangi noise sedikit demi sedikit) umumnya diulang sebanyak...",o:["Hanya satu kali langsung selesai","Puluhan hingga ratusan kali secara bertahap","Ribuan tahun proses manual","Tidak pernah diulang"],a:1},
+{q:"Generative Adversarial Network (GAN) terdiri dari dua jaringan saraf tiruan yang saling bertanding, yaitu...",o:["Encoder dan Decoder","Generator dan Discriminator","Input Layer dan Output Layer","Prompt dan Embedding"],a:1},
+{q:"Tugas Generator dalam arsitektur GAN adalah...",o:["Membedakan gambar asli dan palsu","Menciptakan gambar baru dari noise acak agar menyerupai data asli","Menghitung akurasi model","Menyimpan data pelatihan"],a:1},
+{q:"Tugas Discriminator dalam arsitektur GAN adalah...",o:["Menciptakan gambar baru dari noise","Membedakan mana gambar asli (data pelatihan) dan mana gambar palsu buatan Generator","Menambahkan noise ke gambar","Mengubah prompt menjadi embedding"],a:1},
+{q:"Jika Discriminator berhasil mengenali gambar palsu buatan Generator, maka Generator akan menerima umpan balik berupa...",o:["Hadiah berupa data tambahan","Nilai kesalahan (loss) yang besar untuk memperbarui bobot melalui backpropagation","Perintah untuk berhenti bekerja","Gambar asli baru secara langsung"],a:1},
+{q:"Proses tarik-menarik antara Generator dan Discriminator berulang terus-menerus hingga...",o:["Generator berhenti bekerja sama sekali","Generator mampu menghasilkan gambar yang sangat sulit dibedakan dari gambar asli","Discriminator dihapus dari sistem","Data pelatihan habis digunakan"],a:1},
 {q:"Perbedaan utama GAN dengan Diffusion Model dari segi jumlah jaringan yang bersaing adalah...",o:["GAN menggunakan dua jaringan yang bersaing (Generator vs Discriminator), Diffusion Model tidak","Diffusion Model menggunakan dua jaringan yang bersaing, GAN tidak","Keduanya sama-sama tidak memiliki jaringan yang bersaing","Keduanya sama-sama menggunakan tiga jaringan"],a:0},
 {q:"Proses denoising bertahap merupakan ciri khas dari...",o:["GAN","Diffusion Model","Expert System","Chatbot rule-based"],a:1},
-{q:"Berdasarkan materi, platform AI generatif yang lebih banyak digunakan pada rentang 2024–2026 adalah yang berbasis...",o:["GAN, karena lebih modern","Diffusion Model, karena mayoritas platform saat ini menggunakannya","Expert System, karena paling stabil","Tidak ada yang dominan"],a:1},
-{q:"Kemampuan GAN dalam memahami prompt teks dibandingkan Diffusion Model tergolong...",o:["Lebih unggul dan otomatis tanpa tambahan apa pun","Terbatas, umumnya perlu arsitektur tambahan","Sama persis dengan Diffusion Model","GAN tidak pernah bisa diberi prompt sama sekali"],a:1},
-{img:"platforms",q:"Berikut ini yang termasuk contoh platform AI generatif untuk desain adalah...",o:["Midjourney, Leonardo AI, dan Adobe Firefly","Microsoft Word dan Excel","WhatsApp dan Telegram","Windows Explorer"],a:0},
-{img:"prompt",q:"Prompt engineering dalam konteks AI generatif untuk desain berarti...",o:["Memperbaiki perangkat keras komputer","Menerapkan prinsip dasar penyusunan instruksi teks agar menghasilkan gambar sesuai kebutuhan desain","Menghapus riwayat penggunaan aplikasi","Menginstal ulang sistem operasi"],a:1},
-{img:"role",q:"Menurut materi, peran AI generatif bagi seorang desainer DKV di masa depan sebaiknya dipahami sebagai...",o:["Pengganti penuh peran desainer manusia","Alat bantu (tool) bagi desainer, bukan pengganti","Ancaman yang harus dihindari sepenuhnya","Hal yang tidak relevan dengan dunia desain"],a:1}
+{q:"Berdasarkan materi, platform AI generatif yang lebih banyak digunakan pada rentang 2024\u20132026 adalah yang berbasis...",o:["GAN, karena lebih modern","Diffusion Model, karena mayoritas platform saat ini menggunakannya","Expert System, karena paling stabil","Tidak ada yang dominan"],a:1},
+{q:"Kemampuan GAN dalam memahami prompt teks dibandingkan Diffusion Model tergolong...",o:["Lebih unggul dan otomatis tanpa tambahan apa pun","Terbatas, umumnya perlu arsitektur tambahan","Sama persis dengan Diffusion Model","GAN tidak pernah bisa diberi prompt"],a:1},
+{q:"Berikut ini yang termasuk contoh platform AI generatif untuk desain adalah...",o:["Midjourney, Leonardo AI, dan Adobe Firefly","Microsoft Word dan Excel","WhatsApp dan Telegram","Windows Explorer"],a:0},
+{q:"Prompt engineering dalam konteks AI generatif untuk desain berarti...",o:["Memperbaiki perangkat keras komputer","Menerapkan prinsip dasar penyusunan instruksi teks agar menghasilkan gambar sesuai kebutuhan desain","Menghapus riwayat penggunaan aplikasi","Menginstal ulang sistem operasi"],a:1},
+{q:"Menurut materi, peran AI generatif bagi seorang desainer DKV di masa depan sebaiknya dipahami sebagai...",o:["Pengganti penuh peran desainer manusia","Alat bantu (tool) bagi desainer, bukan pengganti","Ancaman yang harus dihindari sepenuhnya","Hal yang tidak relevan dengan dunia desain"],a:1}
 ];
+
 
 /* =========================================================
    STATE
    ========================================================= */
-function $(id){ return document.getElementById(id); }
-const state = { kelas: '', type: null, answers: {}, currentIdx: 0, violations: 0, examActive: false };
-let timerDuration = 0;
-
-async function fetchTimerSettings(){
-  if(!_supabase) return 0;
-  try{
-    const { data, error } = await _supabase.from('exam_settings').select('duration')
-      .eq('subject', SUBJECT).eq('bab', BAB_NUM).eq('type', state.type).maybeSingle();
-    if(error) throw error;
-    return (data && data.duration) ? data.duration : 0;
-  }catch(e){ console.warn("Gagal memuat pengaturan timer:", e.message); return 0; }
+let currentQuiz = [];
+function shuffleArray(arr){
+  const a = [...arr];
+  for(let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
 }
 
-function startTimer(seconds){
-  if(seconds <= 0) return;
-  const bar = $("timer-bar");
-  bar.classList.remove("no-timer");
-  let remaining = seconds;
-  const tick = () => {
-    if(remaining <= 0){ clearInterval(timerInterval); submitQuiz(true); return; }
-    remaining--;
-    const m = String(Math.floor(remaining/60)).padStart(2,'0');
-    const s = String(remaining%60).padStart(2,'0');
-    $("timer-text").textContent = m+":"+s;
-    bar.classList.toggle("urgent", remaining < 60);
-  };
-  tick();
-  const timerInterval = setInterval(tick, 1000);
-}
+let state = { name:"", type:"", index:0, answers:new Array(SOAL.length).fill(null), violations:0, examActive:false };
 
+function $(id){return document.getElementById(id);}
 function showScreen(id){
-  ['start','locked','warning','quiz','result','admin'].forEach(s=>$("screen-"+s).classList.toggle("hidden","screen-"+s!==id));
+  ["screen-start","screen-locked","screen-warning","screen-quiz","screen-result","screen-admin"].forEach(s=>{
+    $(s).classList.toggle("hidden", s!==id);
+  });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function backToStart(){
-  showScreen('start');
-  state.type = null; state.answers = {}; state.currentIdx = 0; state.violations = 0; state.examActive = false;
-  $("btn-start").disabled = true;
-  document.querySelectorAll('.type-toggle button').forEach(b=>b.classList.remove('active'));
-  $("sel-nama").value = "";
-  $("timer-bar").classList.add("no-timer");
-  teardownProctor();
-  document.exitFullscreen();
-}
-
+/* -------- init -------- */
 function init(){
-  var el = $("total-soal-info");
-  if(el) el.textContent = SOAL.length;
-  try { buildPathSVG(); } catch(e){}
+  $("sel-nama").addEventListener("change", validateStart);
+  $("total-soal-info").textContent = SOAL.length;
+}
+function titleCase(s){
+  return s.toLowerCase().split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ");
 }
 
 function loadNamaList(){
-  const kelas = $("sel-kelas").value;
-  const sel = $("sel-nama");
-  sel.innerHTML = '<option value="">— Pilih nama —</option>';
+  var kelas = $("sel-kelas").value;
+  var sel = $("sel-nama");
+  sel.innerHTML = '<option value="">\u2014 Pilih nama \u2014</option>';
   sel.disabled = !kelas;
   if(!kelas) return;
-  const list = NAMA_BY_KELAS[kelas] || [];
-  list.forEach(n=>{
-    const o = document.createElement("option");
+  var list = NAMA_BY_KELAS[kelas] || [];
+  list.forEach(function(n){
+    var o = document.createElement("option");
     o.value = n; o.textContent = titleCase(n);
     sel.appendChild(o);
   });
   sel.value = "";
 }
 
-function titleCase(s){ return s.toLowerCase().split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" "); }
-
 function chooseType(type){
   state.type = type;
-  document.querySelectorAll('.type-toggle button').forEach(b=>b.classList.toggle('active', b.dataset.type===type));
+  document.querySelectorAll(".type-toggle button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.type===type);
+  });
   validateStart();
 }
-
 function validateStart(){
-  var ok = ($("sel-nama").value && state.type && $("sel-kelas").value);
-  $("btn-start").disabled = !ok;
+  const name = $("sel-nama").value;
+  const kelas = $("sel-kelas").value;
+  $("btn-start").disabled = !(name && state.type && kelas);
 }
 
 /* =========================================================
-   START QUIZ
+   START QUIZ (cek apakah sudah pernah mengerjakan)
    ========================================================= */
 async function startQuiz(){
-  const name = $("sel-nama").value.trim();
-  const kelas = $("sel-kelas").value;
-  if(!name || !state.type || !kelas) return;
-  state.kelas = kelas;
-  const existing = await db.getExisting(name, kelas, BAB_NUM, state.type);
-  if(existing){
-    showScreen('locked');
-    $("locked-text").textContent = `"${titleCase(name)}" (${kelas}) sudah mengerjakan ${state.type==='pretest'?'Pretest':'Posttest'} Bab ${BAB_NUM} pada ${new Date(existing.submitted_at).toLocaleString('id-ID')}.`;
-    return;
+  state.name = $("sel-nama").value;
+  var kelas = $("sel-kelas").value;
+  $("btn-start").disabled = true;
+  $("btn-start").textContent = "Memeriksa...";
+  try{
+    let existing = null;
+    try{
+      existing = await db.getExisting(state.name, kelas, BAB_NUM, state.type);
+    }catch(e){ existing = null; }
+
+    if(existing){
+      $("locked-text").innerHTML = `<b>${titleCase(state.name)}</b> sudah mengerjakan <b>${state.type==='pretest'?'Pretest':'Posttest'}</b> pada ${new Date(existing.submitted_at).toLocaleString('id-ID')} dengan skor <b>${existing.score}</b>. Setiap peserta hanya dapat mengerjakan satu kali.`;
+      showScreen("screen-locked");
+    } else {
+      $("agree-check").checked = false;
+      $("btn-confirm-start").disabled = true;
+      showScreen("screen-warning");
+    }
+  } finally {
+    $("btn-start").disabled = false;
+    $("btn-start").textContent = "Mulai Mengerjakan →";
   }
-  showScreen('warning');
 }
-
-function confirmStartExam(){
-  state.answers = {}; state.currentIdx = 0; state.violations = 0; state.examActive = true;
-  $("violation-badge").textContent = "⚠ Pelanggaran: 0";
-  showScreen('quiz');
-  $("q-participant").textContent = titleCase($("sel-nama").value) + " · " + $("sel-kelas").value;
-  renderQuestion(0);
-  requestFullscreen();
-  setupProctor();
-  fetchTimerSettings().then(dur=>{ timerDuration = dur * 60; startTimer(timerDuration); });
-}
-
-function requestFullscreen(){
-  const el = document.documentElement;
-  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
-  if(req) req.call(el).catch(()=>{});
+function backToStart(){
+  currentQuiz = [];
+  $("sel-nama").value = "";
+  state.type = "";
+  document.querySelectorAll(".type-toggle button").forEach(b=>b.classList.remove("active"));
+  validateStart();
+  teardownProctor();
+  showScreen("screen-start");
 }
 
 /* =========================================================
-   PATH / NODE PROGRESS
+   MULAI UJIAN (FULLSCREEN + ANTI-CURANG)
    ========================================================= */
-function buildPathSVG(){
-  try {
-    const n = SOAL.length, w=700, h=50, pad=18;
-    const step = (w-pad*2)/(n-1);
-    var pts = [];
-    for(var i=0;i<n;i++) pts.push([pad+step*i, 25+Math.sin(i*1.15)*13]);
-    var d = "M"+pts[0][0]+","+pts[0][1];
-    for(var i=1;i<pts.length;i++) d += " L"+pts[i][0]+","+pts[i][1];
-    var circles = '';
-    for(var i=0;i<n;i++) circles += '<circle class="node-fill" id="node-'+i+'" cx="'+pts[i][0]+'" cy="'+pts[i][1]+'" r="4.4"/>';
-    var svgHtml = '<svg viewBox="0 0 700 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gradEdge" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#ff3ea5"/></linearGradient></defs><path class="net-edge" d="'+d+'"/><path class="net-edge-done" id="seg-done" d="'+d+'"/>'+circles+'</svg>';
-    $("path-svg").innerHTML = svgHtml;
-    setTimeout(function(){
-      try {
-        var segEl = $("seg-done");
-        if(segEl) {
-          var len = segEl.getTotalLength();
-          segEl.style.strokeDasharray = len;
-          segEl.style.strokeDashoffset = len;
-        }
-      } catch(e){}
-    }, 50);
-  } catch(e){ console.warn('buildPathSVG:', e.message); }
+function confirmStartExam(){
+  currentQuiz = shuffleArray(SOAL);
+  state.index = 0;
+  state.answers = new Array(currentQuiz.length).fill(null);
+  state.violations = 0;
+  state.examActive = true;
+  updateViolationBadge();
+  buildPathSVG();
+  requestExamFullscreen();
+  showScreen("screen-quiz");
+  renderQuestion();
+  setupProctor();
+  // Fetch timer and start countdown
+  fetchTimerSettings().then(dur => {
+    startTimer(dur);
+  });
 }
 
-function updatePathProgress(){
-  const n = SOAL.length;
+function requestExamFullscreen(){
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req){ req.call(el).catch(()=>{ /* diizinkan browser untuk menolak; ujian tetap lanjut */ }); }
+}
+function exitExamFullscreen(){
+  const exitFs = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+  if(document.fullscreenElement && exitFs){ exitFs.call(document).catch(()=>{}); }
+}
+
+function updateViolationBadge(){
+  const b = $("violation-badge");
+  if(b) b.textContent = `⚠ Pelanggaran: ${state.violations}`;
+}
+
+function showViolation(title, desc){
+  if(!state.examActive) return;
+  state.violations++;
+  updateViolationBadge();
+  $("violation-title").textContent = title;
+  $("violation-desc").textContent = desc;
+  $("violation-overlay").classList.remove("hidden");
+}
+function resumeExam(){
+  $("violation-overlay").classList.add("hidden");
+  requestExamFullscreen();
+}
+
+function handleVisibilityChange(){
+  if(document.hidden && state.examActive){
+    showViolation("Berpindah Aplikasi/Tab Terdeteksi", "Anda meninggalkan halaman ujian. Aktivitas ini tercatat sebagai pelanggaran dan dilaporkan ke guru.");
+  }
+}
+function handleFullscreenChange(){
+  if(!document.fullscreenElement && state.examActive){
+    showViolation("Keluar dari Mode Layar Penuh", "Anda keluar dari mode layar penuh selama ujian. Kejadian ini tercatat sebagai pelanggaran.");
+  }
+}
+function handleWindowBlur(){
+  if(state.examActive){
+    showViolation("Jendela Ujian Tidak Aktif", "Perangkat mendeteksi Anda berpindah ke jendela/aplikasi lain. Kejadian ini tercatat sebagai pelanggaran.");
+  }
+}
+function handleKeydown(e){
+  if(!state.examActive) return;
+  const key = e.key;
+  const isPrintScreen = key === "PrintScreen";
+  const isSnip = (e.metaKey && e.shiftKey && ["3","4","5","S","s"].includes(key)) || (e.shiftKey && (e.key==="S"||e.key==="s") && e.metaKey);
+  const isDevtools = key==="F12" || (e.ctrlKey && e.shiftKey && ["I","i","J","j","C","c"].includes(key)) || (e.ctrlKey && (key==="u"||key==="U"));
+  if(isPrintScreen || isSnip){
+    showViolation("Percobaan Screenshoot Terdeteksi", "Sistem mendeteksi upaya pengambilan tangkapan layar. Kejadian ini tercatat sebagai pelanggaran.");
+  } else if(isDevtools){
+    e.preventDefault();
+    showViolation("Akses Alat Pengembang Terdeteksi", "Membuka developer tools/inspect element selama ujian tidak diizinkan dan tercatat sebagai pelanggaran.");
+  }
+}
+function handleContextMenu(e){
+  if(state.examActive) e.preventDefault();
+}
+function handleCopy(e){
+  if(state.examActive) e.preventDefault();
+}
+
+/* ---------- Mobile / touch gesture detection ---------- */
+let _touchTimer = null;
+let _touchStartCount = 0;
+function handleTouchStart(e){
+  if(!state.examActive) return;
+  _touchStartCount = e.touches.length;
+  if(e.touches.length >= 3){
+    e.preventDefault();
+    showViolation("Gestur Multi-Sentuh Terdeteksi", "Sistem mendeteksi gestur multi-sentuh (3 jari atau lebih) yang sering digunakan untuk screenshot. Kejadian ini tercatat sebagai pelanggaran.");
+    return;
+  }
+  clearTimeout(_touchTimer);
+  _touchTimer = setTimeout(function(){
+    if(state.examActive){
+      showViolation("Sentuhan Lama Terdeteksi", "Sistem mendeteksi sentuhan layar dalam durasi panjang (long press). Gestur ini sering digunakan untuk mengambil screenshot. Kejadian ini tercatat sebagai pelanggaran.");
+    }
+  }, 3000);
+}
+function handleTouchEnd(){
+  clearTimeout(_touchTimer);
+  _touchStartCount = 0;
+}
+function handleTouchMove(e){
+  if(!state.examActive) return;
+  if(e.touches.length >= 3){
+    e.preventDefault();
+  }
+}
+function handleGestureStart(e){ e.preventDefault(); }
+function handleGestureChange(e){ e.preventDefault(); }
+function handleGestureEnd(e){ e.preventDefault(); }
+
+function setupProctor(){
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+  document.addEventListener("fullscreenchange", handleFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+  window.addEventListener("blur", handleWindowBlur);
+  document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  document.addEventListener("copy", handleCopy);
+  /* Mobile gesture listeners */
+  document.addEventListener("touchstart", handleTouchStart, {passive:false});
+  document.addEventListener("touchend", handleTouchEnd);
+  document.addEventListener("touchmove", handleTouchMove, {passive:false});
+  document.addEventListener("gesturestart", handleGestureStart);
+  document.addEventListener("gesturechange", handleGestureChange);
+  document.addEventListener("gestureend", handleGestureEnd);
+  document.body.classList.add("body-mobile");
+}
+function teardownProctor(){
+  state.examActive = false;
+  stopTimer();
+  document.removeEventListener("visibilitychange", handleVisibilityChange);
+  document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+  window.removeEventListener("blur", handleWindowBlur);
+  document.removeEventListener("keydown", handleKeydown);
+  document.removeEventListener("contextmenu", handleContextMenu);
+  document.removeEventListener("copy", handleCopy);
+  document.removeEventListener("touchstart", handleTouchStart);
+  document.removeEventListener("touchend", handleTouchEnd);
+  document.removeEventListener("touchmove", handleTouchMove);
+  document.removeEventListener("gesturestart", handleGestureStart);
+  document.removeEventListener("gesturechange", handleGestureChange);
+  document.removeEventListener("gestureend", handleGestureEnd);
+  document.body.classList.remove("body-mobile");
+  $("violation-overlay").classList.add("hidden");
+  exitExamFullscreen();
+}
+
+/* =========================================================
+   TIMER — Fetch settings, countdown, auto-submit
+   ========================================================= */
+let timerInterval = null;
+let timerRemaining = 0; // seconds
+let timerDuration = 0;  // seconds (0 = no timer)
+
+async function fetchTimerSettings(){
+  try{
+    const { data, error } = await _supabase
+      .from('exam_settings')
+      .select('duration')
+      .eq('subject', SUBJECT)
+      .eq('bab', BAB_NUM)
+      .eq('type', state.type)
+      .maybeSingle();
+    if(error) throw error;
+    return (data && data.duration) ? data.duration : 0;
+  }catch(e){
+    console.warn("Gagal memuat pengaturan timer:", e.message);
+    return 0;
+  }
+}
+
+function startTimer(seconds){
+  if(seconds <= 0) return;
+  timerDuration = seconds;
+  timerRemaining = seconds;
+  const bar = $("timer-bar");
+  bar.classList.remove("no-timer");
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    timerRemaining--;
+    updateTimerDisplay();
+    if(timerRemaining <= 0){
+      clearInterval(timerInterval);
+      timerInterval = null;
+      autoSubmitTimeout();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay(){
+  const mins = Math.floor(timerRemaining / 60);
+  const secs = timerRemaining % 60;
+  const text = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  $("timer-text").textContent = text;
+  const bar = $("timer-bar");
+  // Urgent when less than 2 minutes
+  if(timerRemaining <= 120 && timerRemaining > 0){
+    bar.classList.add("urgent");
+  } else {
+    bar.classList.remove("urgent");
+  }
+  // Update document title
+  document.title = `[${text}] Bab 1 — Evaluasi Komputer Grafis`;
+}
+
+function stopTimer(){
+  if(timerInterval){
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  $("timer-bar").classList.add("no-timer");
+  $("timer-bar").classList.remove("urgent");
+  document.title = "Bab 1 — AI dalam Desain · Evaluasi MPP AI";
+}
+
+function autoSubmitTimeout(){
+  state.examActive = false;
+  // Mark unanswered questions
+  currentQuiz.forEach((q, i) => {
+    if(state.answers[i] === null) state.answers[i] = null; // leave unanswered
+  });
+  alert("Waktu ujian habis! Jawaban Anda akan dikirim secara otomatis.");
+  submitQuiz();
+}
+
+/* =========================================================
+   PATH / NODE PROGRESS (signature visual)
+   ========================================================= */
+function buildPathSVG(){
+  const svg = $("path-svg");
+  const n = currentQuiz.length;
+  const w = 700, h = 46, pad=18;
+  const step = (w-pad*2)/(n-1);
+  let pts = [];
+  for(let i=0;i<n;i++){
+    const x = pad + step*i;
+    const y = 23 + Math.sin(i*0.9)*10;
+    pts.push([x,y]);
+  }
+  let d = "M"+pts[0][0]+","+pts[0][1];
+  for(let i=1;i<pts.length;i++) d += " L"+pts[i][0]+","+pts[i][1];
+  svg.innerHTML = `<path class="seg" d="${d}"/><path class="seg-done" id="seg-done" d="${d}"/>` +
+    pts.map((p,i)=>`<circle class="node node-fill" id="node-${i}" cx="${p[0]}" cy="${p[1]}" r="4.2"/>`).join("");
   const segEl = $("seg-done");
-  if(!segEl) return;
-  var len = segEl.getTotalLength();
-  if(!len) return;
-  const frac = state.currentIdx/(n-1);
+  const len = segEl.getTotalLength();
+  segEl.style.strokeDasharray = len;
+  segEl.style.strokeDashoffset = len;
+  svg.dataset.len = len;
+}
+function updatePathProgress(){
+  const n = currentQuiz.length;
+  const segEl = $("seg-done");
+  const len = parseFloat($("path-svg").dataset.len);
+  const frac = state.index/(n-1);
   segEl.style.strokeDashoffset = len - len*frac;
   for(let i=0;i<n;i++){
     const node = $("node-"+i);
     node.classList.remove("done","current");
-    if(i===state.currentIdx) node.classList.add("current");
+    if(state.answers[i]!==null && i<state.index) node.classList.add("done");
+    if(i===state.index) node.classList.add("current");
     else if(state.answers[i]!==null) node.classList.add("done");
   }
 }
@@ -733,159 +989,131 @@ function updatePathProgress(){
 /* =========================================================
    QUIZ RENDERING
    ========================================================= */
-function renderQuestion(idx){
-  const q = SOAL[idx];
-  $("q-counter").textContent = `Soal ${idx+1}/${SOAL.length}`;
+function renderQuestion(){
+  const q = currentQuiz[state.index];
+  $("q-counter").textContent = `Soal ${state.index+1}/${currentQuiz.length}`;
+  $("q-participant").textContent = titleCase(state.name) + " · " + (state.type==='pretest'?'Pretest':'Posttest');
   $("q-text").textContent = q.q;
-  $("btn-prev").style.visibility = idx===0 ? 'hidden' : 'visible';
-  $("btn-next").textContent = idx===SOAL.length-1 ? 'Selesai & Kirim ✓' : 'Selanjutnya →';
-
   const imgWrap = $("q-img-wrap");
-  if(q.img && DIAGRAMS[q.img]){
-    $("q-img-svg").innerHTML = DIAGRAMS[q.img];
-    $("q-img-cap").textContent = "Ilustrasi konsep — Materi Pertemuan 1: Pengenalan AI dalam Desain";
+  if(q.img && IMG[q.img]){
+    $("q-img").src = IMG[q.img];
+    $("q-img-cap").textContent = `Gambar 1.${q.img} — Materi Pertemuan 1: Pengenalan AI dalam Desain`;
     imgWrap.classList.remove("hidden");
   } else {
     imgWrap.classList.add("hidden");
-    $("q-img-svg").innerHTML = "";
+    $("q-img").src = "";
   }
-
   const wrap = $("q-options");
   wrap.innerHTML = "";
   const letters = ["A","B","C","D"];
   q.o.forEach((opt,i)=>{
     const div = document.createElement("div");
-    div.className = "option" + (state.answers[idx]===i ? " selected":"");
+    div.className = "option" + (state.answers[state.index]===i ? " selected":"");
     div.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${opt}</span>`;
-    div.onclick = ()=>{ state.answers[idx]=i; renderQuestion(idx); updateNavButtons(); };
+    div.onclick = ()=>selectOption(i);
     wrap.appendChild(div);
   });
-  updateNavButtons();
+  $("btn-prev").style.visibility = state.index===0 ? "hidden" : "visible";
+  $("btn-next").textContent = state.index===currentQuiz.length-1 ? "Selesai & Kirim ✓" : "Selanjutnya →";
+  $("btn-next").disabled = state.answers[state.index]===null;
+  updatePathProgress();
 }
-
-function updateNavButtons(){ $("btn-next").disabled = state.answers[state.currentIdx]===null; }
-
-function nextQuestion(){
-  if(state.currentIdx < SOAL.length-1){ state.currentIdx++; renderQuestion(state.currentIdx); }
-  else submitQuiz(false);
+function selectOption(i){
+  state.answers[state.index] = i;
+  renderQuestion();
 }
-
 function prevQuestion(){
-  if(state.currentIdx > 0){ state.currentIdx--; renderQuestion(state.currentIdx); }
+  if(state.index>0){ state.index--; renderQuestion(); }
+}
+function nextQuestion(){
+  if(state.answers[state.index]===null) return;
+  if(state.index < currentQuiz.length-1){
+    state.index++;
+    renderQuestion();
+  } else {
+    submitQuiz();
+  }
 }
 
 /* =========================================================
-   SUBMIT
+   SUBMIT & SAVE RESULT
    ========================================================= */
-function submitQuiz(timeUp){
+async function submitQuiz(){
   let correct = 0;
-  const total = SOAL.length;
-  SOAL.forEach((q,i)=>{ if(state.answers[i]===q.a) correct++; });
-  const score = total ? Math.round(correct/total*100) : 0;
-
+  const detail = currentQuiz.map((q,i)=>{
+    const ok = state.answers[i]===q.a;
+    if(ok) correct++;
+    return {q:q.q, chosen:state.answers[i], correctIdx:q.a, options:q.o, ok};
+  });
+  const total = currentQuiz.length;
+  const score = Math.round((correct/total)*100);
   const payload = {
-    name: $("sel-nama").value.trim(),
-    kelas: state.kelas,
+    name: state.name,
     bab: BAB_NUM,
     type: state.type,
     score, correct, total,
-    violations: state.violations
+    violations: state.violations||0,
+    submitted_at: new Date().toISOString()
   };
-  db.save(payload).then(ok=>{ if(!ok) console.warn("Gagal menyimpan hasil."); });
+  try{
+    await db.save(payload);
+  }catch(e){ console.error("Gagal menyimpan hasil:", e); }
 
-  showResult(score, correct, total);
   teardownProctor();
-  document.exitFullscreen();
+  renderResult(payload, detail);
+  showScreen("screen-result");
 }
 
-function showResult(score, correct, total){
-  showScreen('result');
-  const wrong = total - correct;
-  $("score-val").textContent = score;
-  $("stat-correct").textContent = correct;
-  $("stat-wrong").textContent = wrong;
-  $("stat-total").textContent = total;
-  const pct = total ? correct/total : 0;
-  const arc = $("score-arc");
+function renderResult(payload, detail){
+  $("score-val").textContent = payload.score;
   const circumference = 2*Math.PI*78;
-  if(arc){ arc.style.strokeDasharray = circumference; arc.style.strokeDashoffset = circumference - circumference*pct; }
-  let grade = "Perlu Ditingkatkan", sub = "Pelajari kembali materi bab ini.";
-  if(pct >= 0.9){ grade = "Sangat Baik!"; sub = "Pemahaman yang luar biasa."; }
-  else if(pct >= 0.75){ grade = "Baik"; sub = "Sudah cukup baik, sedikit lagi sempurna."; }
-  else if(pct >= 0.6){ grade = "Cukup"; sub = "Masih perlu belajar lebih giat."; }
-  $("result-title").textContent = grade;
-  $("result-sub").textContent = sub + (state.violations>0 ? ` (${state.violations} peringatan pelanggaran)` : '');
+  const arc = $("score-arc");
+  arc.style.strokeDasharray = circumference;
+  arc.style.strokeDashoffset = circumference - (circumference*payload.score/100);
+  const grade = payload.score>=85?"Sangat Baik":payload.score>=70?"Baik":payload.score>=55?"Cukup":"Perlu Belajar Lagi";
+  $("result-title").textContent = `${titleCase(payload.name)} — ${grade}`;
+  $("result-sub").textContent = payload.violations>0
+    ? `Hasil ${payload.type==='pretest'?'Pretest':'Posttest'} telah tersimpan. Tercatat ${payload.violations} peringatan pelanggaran selama ujian.`
+    : `Hasil ${payload.type==='pretest'?'Pretest':'Posttest'} telah tersimpan dan tercatat untuk laporan guru.`;
+  $("stat-correct").textContent = payload.correct;
+  $("stat-wrong").textContent = payload.total - payload.correct;
+  $("stat-total").textContent = payload.total;
 
   const list = $("review-list");
   list.innerHTML = "";
-  SOAL.forEach((q,i)=>{
-    const userAns = state.answers[i];
-    const isCorrect = userAns === q.a;
+  detail.forEach((d,i)=>{
     const div = document.createElement("div");
     div.className = "review-item";
-    div.innerHTML = `<div class="rq"><span class="tag ${isCorrect?'tag-ok':'tag-no'}">${isCorrect?'✓':'✗'}</span> Soal ${i+1}: ${q.q}</div><div class="ra">Jawabanmu: ${userAns!==undefined ? q.o[userAns] : '(tidak dijawab)'}${!isCorrect ? `<br>Jawaban benar: ${q.o[q.a]}` : ''}</div>`;
+    const chosenText = d.chosen!==null ? d.options[d.chosen] : "(tidak dijawab)";
+    const correctText = d.options[d.correctIdx];
+    div.innerHTML = `
+      <div class="rq"><b>${i+1}.</b> ${d.q}</div>
+      <div class="ra">
+        <span class="tag ${d.ok?'tag-ok':'tag-no'}">${d.ok?'BENAR':'SALAH'}</span>
+        Jawaban Anda: ${chosenText}${!d.ok?` · Kunci: ${correctText}`:''}
+      </div>`;
     list.appendChild(div);
   });
 }
 
 /* =========================================================
-   ANTI-CHEAT (PROCTOR)
-   ========================================================= */
-function setupProctor(){
-  document.addEventListener("visibilitychange", handleVisibility);
-  document.addEventListener("fullscreenchange", handleFSChange);
-  document.addEventListener("webkitfullscreenchange", handleFSChange);
-  window.addEventListener("blur", handleBlur);
-  document.addEventListener("keydown", handleKey);
-  document.addEventListener("contextmenu", e=>{ if(state.examActive) e.preventDefault(); });
-  document.addEventListener("copy", e=>{ if(state.examActive) e.preventDefault(); });
-}
-function teardownProctor(){
-  state.examActive = false;
-  document.removeEventListener("visibilitychange", handleVisibility);
-  document.removeEventListener("fullscreenchange", handleFSChange);
-  document.removeEventListener("webkitfullscreenchange", handleFSChange);
-  window.removeEventListener("blur", handleBlur);
-  document.removeEventListener("keydown", handleKey);
-  $("violation-overlay").classList.add("hidden");
-}
-function handleVisibility(){ if(document.hidden && state.examActive) recordViolation("Berpindah Aplikasi/Tab","Anda meninggalkan halaman ujian."); }
-function handleFSChange(){ if(!document.fullscreenElement && state.examActive) recordViolation("Keluar Layar Penuh","Anda keluar dari mode layar penuh."); }
-function handleBlur(){ if(state.examActive) recordViolation("Jendela Tidak Aktif","Perangkat mendeteksi perpindahan jendela."); }
-function handleKey(e){
-  if(!state.examActive) return;
-  const k = e.key;
-  if(k==="PrintScreen" || (e.metaKey&&e.shiftKey&&["3","4","5","S","s"].includes(k)) || (e.shiftKey&&["S","s"].includes(k)&&e.metaKey) || k==="F12" || (e.ctrlKey&&e.shiftKey&&["I","i","J","j","C","c"].includes(k)) || (e.ctrlKey&&["u","U"].includes(k))){
-    e.preventDefault();
-    recordViolation("Percobaan Screenshoot/DevTools","Upaya tangkapan layar atau developer tools terdeteksi.");
-  }
-}
-function recordViolation(title, desc){
-  state.violations++;
-  $("violation-badge").textContent = `⚠ Pelanggaran: ${state.violations}`;
-  $("violation-title").textContent = title;
-  $("violation-desc").textContent = desc;
-  $("violation-overlay").classList.remove("hidden");
-}
-function resumeExam(){
-  $("violation-overlay").classList.add("hidden");
-  requestFullscreen();
-}
-
-/* =========================================================
-   ADMIN PANEL
+   ADMIN / TEACHER REPORT
    ========================================================= */
 function openAdmin(){
-  showScreen('admin');
-  loadAdminData();
+  $("admin-locked").classList.remove("hidden");
+  $("admin-content").classList.add("hidden");
+  $("admin-code").value = "";
+  showScreen("screen-admin");
 }
-
 function checkAdminCode(){
   if($("admin-code").value.trim() === ADMIN_CODE){
     $("admin-locked").classList.add("hidden");
     $("admin-content").classList.remove("hidden");
     loadAdminData();
-  } else { alert("Kode akses salah."); }
+    loadAdminTimerSettings();
+  } else {
+    alert("Kode akses salah.");
+  }
 }
 
 let lastReportRows = [];
@@ -897,6 +1125,7 @@ async function loadAdminData(){
   rows.sort((a,b)=> a.name.localeCompare(b.name) || a.type.localeCompare(b.type));
   lastReportRows = rows;
 
+  // Summary
   const pre = rows.filter(r=>r.type==='pretest');
   const post = rows.filter(r=>r.type==='posttest');
   const avg = arr => arr.length ? Math.round(arr.reduce((s,r)=>s+r.score,0)/arr.length) : null;
@@ -904,37 +1133,115 @@ async function loadAdminData(){
   $("adm-avg-pre").textContent = avg(pre)!==null ? avg(pre) : "–";
   $("adm-avg-post").textContent = avg(post)!==null ? avg(post) : "–";
   const doneNames = new Set(rows.map(r=>r.name));
-  const allNames = Object.values(NAMA_BY_KELAS).flat();
-  $("adm-belum").textContent = allNames.filter(n=>!doneNames.has(n)).length;
+  var allNames = []; for(var k in NAMA_BY_KELAS) allNames = allNames.concat(NAMA_BY_KELAS[k]);
+  $("adm-belum").textContent = allNames.filter(function(n){ return !doneNames.has(n); }).length;
 
-  if(rows.length===0){ wrap.innerHTML = `<div class="empty-state">Belum ada data yang masuk.</div>`; return; }
+  if(rows.length===0){
+    wrap.innerHTML = `<div class="empty-state">Belum ada data yang masuk.</div>`;
+    return;
+  }
 
-  let html = `<table class="report"><thead><tr><th>Nama</th><th>Kelas</th><th>Jenis</th><th>Skor</th><th>Benar</th><th>Pelanggaran</th><th>Waktu</th><th>Aksi</th></tr></thead><tbody>`;
+  let html = `<table class="report"><thead><tr>
+    <th>Nama</th><th>Jenis</th><th>Skor</th><th>Benar</th><th>Pelanggaran</th><th>Waktu</th><th>Aksi</th>
+  </tr></thead><tbody>`;
   rows.forEach(r=>{
     const v = r.violations||0;
-    html += `<tr><td>${titleCase(r.name)}</td><td>${r.kelas||'-'}</td><td><span class="badge ${r.type==='pretest'?'badge-pre':'badge-post'}">${r.type==='pretest'?'Pretest':'Posttest'}</span></td><td class="num">${r.score}</td><td class="num">${r.correct}/${r.total}</td><td class="num" style="${v>0?'color:var(--coral);':''}">${v}</td><td>${new Date(r.submitted_at).toLocaleString('id-ID')}</td><td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','${r.kelas||'-'}','${r.type==='pretest'?'Pretest':'Posttest'}')">↺ Reset</button></td></tr>`;
+    html += `<tr>
+      <td>${titleCase(r.name)}</td>
+      <td><span class="badge ${r.type==='pretest'?'badge-pre':'badge-post'}">${r.type==='pretest'?'Pretest':'Posttest'}</span></td>
+      <td class="num">${r.score}</td>
+      <td class="num">${r.correct}/${r.total}</td>
+      <td class="num" style="${v>0?'color:var(--coral);':''}">${v}</td>
+      <td>${new Date(r.submitted_at).toLocaleString('id-ID')}</td>
+      <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','${r.type==='pretest'?'Pretest':'Posttest'}')">↺ Reset (Susulan)</button></td>
+    </tr>`;
   });
   html += "</tbody></table>";
   wrap.innerHTML = html;
 }
 
-async function resetStudentResult(id, displayName, kelas, typeLabel){
-  const ok = confirm(`Reset hasil ${typeLabel} milik "${displayName}" (${kelas})?\n\nData akan DIHAPUS PERMANEN. Lanjutkan?`);
+async function resetStudentResult(id, displayName, typeLabel){
+  const ok = confirm(`Reset hasil ${typeLabel} milik "${displayName}"?\n\nSkor dan jawaban yang tersimpan akan DIHAPUS PERMANEN, dan siswa ini akan bisa mengerjakan ${typeLabel} sekali lagi (misalnya untuk ujian susulan). Lanjutkan?`);
   if(!ok) return;
-  try{ await db.deleteById(id); await loadAdminData(); alert("Berhasil direset."); }
-  catch(e){ console.error(e); alert("Gagal mereset data."); }
+  try{
+    await db.deleteById(id);
+    await loadAdminData();
+    alert(`Berhasil direset. "${displayName}" kini dapat mengerjakan ${typeLabel} kembali.`);
+  }catch(e){
+    console.error(e);
+    alert("Gagal mereset data. Silakan coba lagi.");
+  }
 }
 
 function exportCSV(){
   if(!lastReportRows.length){ alert("Tidak ada data untuk diunduh."); return; }
-  let csv = "Nama,Kelas,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
-  lastReportRows.forEach(r=>{ csv += `"${titleCase(r.name)}","${r.kelas||'-'}","${r.type==='pretest'?'Pretest':'Posttest'}",${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`; });
+  let csv = "Nama,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
+  lastReportRows.forEach(r=>{
+    csv += `"${titleCase(r.name)}","${r.type==='pretest'?'Pretest':'Posttest'}",${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`;
+  });
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "rekap_evaluasi_mppai_bab1.csv";
+  a.href = url; a.download = "rekap_evaluasi_coreldraw.csv";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   ADMIN TIMER SETTINGS (per-chapter)
+   ========================================================= */
+async function loadAdminTimerSettings(){
+  try{
+    const { data:preData } = await _supabase
+      .from('exam_settings').select('duration')
+      .eq('subject', SUBJECT).eq('bab', BAB_NUM).eq('type', 'pretest').maybeSingle();
+    const { data:postData } = await _supabase
+      .from('exam_settings').select('duration')
+      .eq('subject', SUBJECT).eq('bab', BAB_NUM).eq('type', 'posttest').maybeSingle();
+
+    const preDur = (preData && preData.duration) ? preData.duration : 0;
+    const postDur = (postData && postData.duration) ? postData.duration : 0;
+
+    $("admin-timer-pre").value = preDur;
+    $("admin-timer-post").value = postDur;
+    updateAdminTimerStatus('pre');
+    updateAdminTimerStatus('post');
+  }catch(e){
+    console.warn("Gagal memuat pengaturan timer admin:", e.message);
+  }
+}
+
+function updateAdminTimerStatus(type){
+  const input = $(type === 'pre' ? 'admin-timer-pre' : 'admin-timer-post');
+  const status = $(type === 'pre' ? 'admin-timer-pre-status' : 'admin-timer-post-status');
+  const val = parseInt(input.value) || 0;
+  if(val > 0){
+    status.textContent = 'Timer aktif: ' + val + ' menit';
+    status.className = 'status on';
+  } else {
+    status.textContent = 'Tanpa batas waktu';
+    status.className = 'status';
+  }
+}
+
+async function saveAdminTimerSettings(){
+  const preDur = Math.max(0, parseInt($("admin-timer-pre").value) || 0);
+  const postDur = Math.max(0, parseInt($("admin-timer-post").value) || 0);
+
+  try{
+    await _supabase.from('exam_settings').upsert(
+      { subject: SUBJECT, bab: BAB_NUM, type: 'pretest', duration: preDur, updated_at: new Date().toISOString() },
+      { onConflict: 'subject,bab,type' }
+    );
+    await _supabase.from('exam_settings').upsert(
+      { subject: SUBJECT, bab: BAB_NUM, type: 'posttest', duration: postDur, updated_at: new Date().toISOString() },
+      { onConflict: 'subject,bab,type' }
+    );
+    alert('Pengaturan timer berhasil disimpan!');
+  }catch(e){
+    console.error(e);
+    alert('Gagal menyimpan pengaturan timer: ' + e.message);
+  }
 }
 
 init();
