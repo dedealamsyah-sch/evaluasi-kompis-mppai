@@ -478,29 +478,34 @@ const NAMA_BY_KELAS = {
 const ADMIN_CODE = "guru2026";
 const supabaseUrl = "https://btdrvpdzncmocfvszwdt.supabase.co";
 const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0ZHJ2cGR6bmNtb2NmdnN6d2R0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUwNzAyMTcsImV4cCI6MjEwMDY0NjIxN30.Fy4yRD2VIRb87TtPwMjzCqhwj-BvCK4fYOQdBrcBMhA";
-const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+var _supabase = null;
+try { if(typeof supabase !== 'undefined') _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey); } catch(e){ console.warn('Supabase init:', e.message); }
 
 const BAB_NUM = 1;
 const SUBJECT = 'mppai';
 
 const db = {
   async getExisting(name, kelas, bab, type){
+    if(!_supabase) return null;
     const { data, error } = await _supabase.from('evaluasi_results').select('*')
       .eq('subject', SUBJECT).eq('name', name).eq('kelas', kelas)
       .eq('bab', bab).eq('type', type).maybeSingle();
     return error ? null : data;
   },
   async save(payload){
+    if(!_supabase) return false;
     const { error } = await _supabase.from('evaluasi_results').insert({ subject: SUBJECT, ...payload });
     return !error;
   },
   async listAll(babFilter){
+    if(!_supabase) return [];
     let q = _supabase.from('evaluasi_results').select('*').eq('subject', SUBJECT);
     if(babFilter) q = q.eq('bab', babFilter);
     const { data, error } = await q.order('name');
     return error ? [] : (data || []);
   },
   async deleteById(id){
+    if(!_supabase) return false;
     const { error } = await _supabase.from('evaluasi_results').delete().eq('id', id);
     return !error;
   }
@@ -579,6 +584,7 @@ const state = { kelas: '', type: null, answers: {}, currentIdx: 0, violations: 0
 let timerDuration = 0;
 
 async function fetchTimerSettings(){
+  if(!_supabase) return 0;
   try{
     const { data, error } = await _supabase.from('exam_settings').select('duration')
       .eq('subject', SUBJECT).eq('bab', BAB_NUM).eq('type', state.type).maybeSingle();
