@@ -1092,7 +1092,7 @@ async function fetchTimerSettings(){
       .eq('type', state.type)
       .maybeSingle();
     if(error) throw error;
-    return (data && data.duration) ? data.duration : 0;
+    return (data && data.duration) ? data.duration * 60 : 0;
   }catch(e){
     console.warn("Gagal memuat pengaturan timer:", e.message);
     return 0;
