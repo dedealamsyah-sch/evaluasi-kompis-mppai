@@ -492,6 +492,9 @@
         <select id="filter-bab" onchange="loadGuruData()">
           <option value="all">Semua Bab</option>
         </select>
+        <select id="filter-kelas" onchange="loadGuruData()">
+          <option value="all">Semua Kelas</option>
+        </select>
         <select id="filter-type" onchange="loadGuruData()">
           <option value="all">Semua Jenis</option>
           <option value="pretest">Pretest</option>
@@ -761,11 +764,13 @@ async function loadGuruData(){
   const filterBab = $("filter-bab").value;
   const filterType = $("filter-type").value;
   const filterSubject = $("filter-subject").value;
+  const filterKelas = $("filter-kelas").value;
 
   let query = _supabase.from('evaluasi_results').select('*');
   query = query.eq('subject', filterSubject);
   if(filterBab !== "all") query = query.eq('bab', parseInt(filterBab));
   else query = query.in('bab', activeBabs);
+  if(filterKelas !== "all") query = query.eq('kelas', filterKelas);
   if(filterType !== "all") query = query.eq('type', filterType);
   query = query.order('name');
 
@@ -776,8 +781,21 @@ async function loadGuruData(){
     return;
   }
 
-  const rows = allRows || [];
-  rows.sort((a,b)=> a.name.localeCompare(b.name) || a.bab - b.bab || a.type.localeCompare(b.type));
+  let rows = allRows || [];
+
+  // populate kelas filter dropdown
+  const kelasSet = new Set(rows.map(r=>r.kelas).filter(Boolean));
+  const kelasEl = $("filter-kelas");
+  const currentKelas = kelasEl.value;
+  kelasEl.innerHTML = `<option value="all">Semua Kelas</option>`;
+  [...kelasSet].sort().forEach(k => {
+    kelasEl.innerHTML += `<option value="${k}">${k}</option>`;
+  });
+  if([...kelasSet].includes(currentKelas)) kelasEl.value = currentKelas;
+  const activeKelas = kelasEl.value;
+  if(activeKelas !== "all") rows = rows.filter(r => r.kelas === activeKelas);
+
+  rows.sort((a,b)=> (a.kelas||'').localeCompare(b.kelas||'') || a.name.localeCompare(b.name) || a.bab - b.bab || a.type.localeCompare(b.type));
   lastReportRows = rows;
 
   const scores = rows.map(r=>r.score);
@@ -796,12 +814,13 @@ async function loadGuruData(){
   }
 
   let html = `<table class="report"><thead><tr>
-    <th>Nama</th><th>Bab</th><th>Jenis</th><th>Skor</th><th>Benar</th><th>Pelanggaran</th><th>Waktu</th><th>Aksi</th>
+    <th>Nama</th><th>Kelas</th><th>Bab</th><th>Jenis</th><th>Skor</th><th>Benar</th><th>Pelanggaran</th><th>Waktu</th><th>Aksi</th>
   </tr></thead><tbody>`;
   rows.forEach(r=>{
     const v = r.violations||0;
     html += `<tr>
       <td>${titleCase(r.name)}</td>
+      <td>${r.kelas || '-'}</td>
       <td><span class="badge badge-ch">Bab ${r.bab}</span></td>
       <td><span class="badge ${r.type==='pretest'?'badge-pre':'badge-post'}">${r.type==='pretest'?'Pretest':'Posttest'}</span></td>
       <td class="num">${r.score}</td>
@@ -831,9 +850,9 @@ async function resetStudentResult(id, displayName, babLabel, typeLabel){
 
 function exportCSV(){
   if(!lastReportRows.length){ alert("Tidak ada data untuk diunduh."); return; }
-  let csv = "Nama,Bab,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
+  let csv = "Nama,Kelas,Bab,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
   lastReportRows.forEach(r=>{
-    csv += `"${titleCase(r.name)}",${r.bab||'?'},${r.type==='pretest'?'Pretest':'Posttest'},${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`;
+    csv += `"${titleCase(r.name)}","${r.kelas||''}",${r.bab||'?'},${r.type==='pretest'?'Pretest':'Posttest'},${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`;
   });
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
