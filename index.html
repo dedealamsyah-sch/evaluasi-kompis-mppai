@@ -760,7 +760,6 @@ async function loadGuruData(){
     return;
   }
 
-  const activeBabs = getChapters().filter(c=>c.active).map(c=>c.num);
   const filterBab = $("filter-bab").value;
   const filterType = $("filter-type").value;
   const filterSubject = $("filter-subject").value;
@@ -768,23 +767,22 @@ async function loadGuruData(){
 
   let query = _supabase.from('evaluasi_results').select('*');
   query = query.eq('subject', filterSubject);
-  if(filterBab !== "all") query = query.eq('bab', parseInt(filterBab));
-  else query = query.in('bab', activeBabs);
   if(filterKelas !== "all") query = query.eq('kelas', filterKelas);
+  if(filterBab !== "all") query = query.eq('bab', parseInt(filterBab));
   if(filterType !== "all") query = query.eq('type', filterType);
-  query = query.order('name');
+  query = query.order('kelas').order('name').order('bab').order('type');
 
-  const { data: allRows, error } = await query;
+  const { data: rows, error } = await query;
 
   if(error){
     wrap.innerHTML = `<div class="empty-state">Gagal memuat data: ${error.message}</div>`;
     return;
   }
 
-  let rows = allRows || [];
+  let allRows = rows || [];
 
-  // populate kelas filter dropdown
-  const kelasSet = new Set(rows.map(r=>r.kelas).filter(Boolean));
+  const allKelasQuery = await _supabase.from('evaluasi_results').select('kelas').eq('subject', filterSubject);
+  const kelasSet = new Set((allKelasQuery.data||[]).map(r=>r.kelas).filter(k => k && k !== '-'));
   const kelasEl = $("filter-kelas");
   const currentKelas = kelasEl.value;
   kelasEl.innerHTML = `<option value="all">Semua Kelas</option>`;
@@ -792,23 +790,20 @@ async function loadGuruData(){
     kelasEl.innerHTML += `<option value="${k}">${k}</option>`;
   });
   if([...kelasSet].includes(currentKelas)) kelasEl.value = currentKelas;
-  const activeKelas = kelasEl.value;
-  if(activeKelas !== "all") rows = rows.filter(r => r.kelas === activeKelas);
 
-  rows.sort((a,b)=> (a.kelas||'').localeCompare(b.kelas||'') || a.name.localeCompare(b.name) || a.bab - b.bab || a.type.localeCompare(b.type));
-  lastReportRows = rows;
+  lastReportRows = allRows;
 
-  const scores = rows.map(r=>r.score);
+  const scores = allRows.map(r=>r.score);
   const avgScore = scores.length ? Math.round(scores.reduce((s,v)=>s+v,0)/scores.length) : null;
-  const totalViolations = rows.reduce((s,r)=>s+(r.violations||0), 0);
-  const uniqueStudents = new Set(rows.map(r=>r.name.toLowerCase())).size;
+  const totalViolations = allRows.reduce((s,r)=>s+(r.violations||0), 0);
+  const uniqueStudents = new Set(allRows.map(r=>r.name.toLowerCase())).size;
 
-  $("adm-total").textContent = rows.length;
+  $("adm-total").textContent = allRows.length;
   $("adm-avg-score").textContent = avgScore !== null ? avgScore : "–";
   $("adm-siswa-count").textContent = uniqueStudents;
   $("adm-violations").textContent = totalViolations;
 
-  if(rows.length === 0){
+  if(allRows.length === 0){
     wrap.innerHTML = `<div class="empty-state">Belum ada data yang cocok dengan filter.</div>`;
     return;
   }
