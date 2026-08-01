@@ -1050,6 +1050,7 @@ async function submitQuiz(){
   const score = Math.round((correct/total)*100);
   const payload = {
     name: state.name,
+    kelas: 'XI DKV 4',
     bab: BAB_NUM,
     type: state.type,
     score, correct, total,

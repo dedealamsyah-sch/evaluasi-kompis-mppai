@@ -889,7 +889,8 @@ function validateStart(){
    ========================================================= */
 async function startQuiz(){
   state.name = $("sel-nama").value;
-  var kelas = $("sel-kelas").value;
+  state.kelas = $("sel-kelas").value;
+  var kelas = state.kelas;
   $("btn-start").disabled = true;
   $("btn-start").textContent = "Memeriksa...";
   try{
@@ -1255,6 +1256,7 @@ async function submitQuiz(){
   const score = Math.round((correct/total)*100);
   const payload = {
     name: state.name,
+    kelas: state.kelas,
     bab: BAB_NUM,
     type: state.type,
     score, correct, total,
