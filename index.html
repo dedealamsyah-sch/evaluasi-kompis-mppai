@@ -542,6 +542,7 @@ const SUBJECTS = {
     label: 'Komputer Grafis',
     short: 'Kompis',
     kelas: 'XI DKV 4',
+    kelasOptions: ['XI DKV 4'],
     deskripsi: 'Uji pemahaman materi Komputer Grafis setiap bab secara online.',
     icon: '🖥️',
     chapters: [
@@ -607,6 +608,7 @@ const SUBJECTS = {
     label: 'MPP AI',
     short: 'MPP AI',
     kelas: 'XI DKV 1-3',
+    kelasOptions: ['XI DKV 1', 'XI DKV 2', 'XI DKV 3'],
     deskripsi: 'Uji pemahaman materi MPP AI setiap bab secara online.',
     icon: '🤖',
     chapters: [
@@ -781,15 +783,14 @@ async function loadGuruData(){
 
   let allRows = rows || [];
 
-  const allKelasQuery = await _supabase.from('evaluasi_results').select('kelas').eq('subject', filterSubject);
-  const kelasSet = new Set((allKelasQuery.data||[]).map(r=>r.kelas).filter(k => k && k !== '-'));
+  const kelasOptions = getSubject().kelasOptions || [];
   const kelasEl = $("filter-kelas");
   const currentKelas = kelasEl.value;
   kelasEl.innerHTML = `<option value="all">Semua Kelas</option>`;
-  [...kelasSet].sort().forEach(k => {
+  kelasOptions.forEach(k => {
     kelasEl.innerHTML += `<option value="${k}">${k}</option>`;
   });
-  if([...kelasSet].includes(currentKelas)) kelasEl.value = currentKelas;
+  if(kelasOptions.includes(currentKelas)) kelasEl.value = currentKelas;
 
   lastReportRows = allRows;
 
