@@ -1039,7 +1039,12 @@ function nextQuestion(){
 /* =========================================================
    SUBMIT & SAVE RESULT
    ========================================================= */
+let isSubmitting = false;
+
 async function submitQuiz(){
+  if(isSubmitting) return;
+  isSubmitting = true;
+  
   let correct = 0;
   const detail = currentQuiz.map((q,i)=>{
     const ok = state.answers[i]===q.a;
@@ -1059,7 +1064,11 @@ async function submitQuiz(){
   };
   try{
     await db.save(payload);
-  }catch(e){ console.error("Gagal menyimpan hasil:", e); }
+  }catch(e){ 
+    console.error("Gagal menyimpan hasil:", e);
+    isSubmitting = false;
+    return;
+  }
 
   teardownProctor();
   renderResult(payload, detail);
