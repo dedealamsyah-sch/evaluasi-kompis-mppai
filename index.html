@@ -785,12 +785,12 @@ async function loadGuruData(){
 
   const kelasOptions = getSubject().kelasOptions || [];
   const kelasEl = $("filter-kelas");
-  const currentKelas = kelasEl.value;
+  const currentKelas = kelasEl.value || "all";
   kelasEl.innerHTML = `<option value="all">Semua Kelas</option>`;
   kelasOptions.forEach(k => {
     kelasEl.innerHTML += `<option value="${k}">${k}</option>`;
   });
-  if(kelasOptions.includes(currentKelas)) kelasEl.value = currentKelas;
+  kelasEl.value = kelasOptions.includes(currentKelas) ? currentKelas : "all";
 
   lastReportRows = allRows;
 
