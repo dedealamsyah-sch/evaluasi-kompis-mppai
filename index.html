@@ -146,6 +146,8 @@
     background:rgba(124,92,255,0.14);border:1px solid rgba(124,92,255,0.3);
   }
   .subject-card.mppai .sc-icon{background:rgba(45,212,191,0.12);border-color:rgba(45,212,191,0.3);}
+  .subject-card .sc-icon{color:var(--violet-dim);}
+  .subject-card.mppai .sc-icon{color:var(--teal);}
   .sc-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;line-height:1.2;}
   .sc-kelas{font-size:11.5px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-top:3px;}
   .sc-desc{font-size:13.5px;color:var(--text-dim);line-height:1.65;margin:0;position:relative;z-index:1;}
@@ -366,6 +368,7 @@
   .admin-top .close-btn{
     background:transparent;border:1px solid var(--line);color:var(--text-dim);
     padding:6px 14px;border-radius:10px;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;
+    display:inline-flex;align-items:center;gap:6px;
     transition:all .15s ease;
   }
   .admin-top .close-btn:hover{color:var(--paper);border-color:rgba(247,245,240,0.35);}
@@ -399,6 +402,7 @@
     background:rgba(255,182,39,0.14);color:var(--amber);
     border:1px solid rgba(255,182,39,0.4);border-radius:6px;
     padding:4px 8px;cursor:pointer;transition:all .15s ease;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:5px;
   }
   .btn-reset:hover{background:rgba(255,182,39,0.28);}
   .empty-state{text-align:center;padding:28px 10px;color:var(--text-dim);font-size:13px;}
@@ -513,9 +517,9 @@
         Kerjakan ujian setiap bab, lihat skor langsung, dan hasilnya tercatat untuk laporan guru.
       </p>
       <div class="landing-badges">
-        <span class="badge-pill">🎨 Komputer Grafis</span>
-        <span class="badge-pill teal">🤖 MPP AI</span>
-        <span class="badge-pill amber">🏫 XI DKV · SMKN 9 Garut</span>
+        <span class="badge-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 1 10-10c0 1.66-1.34 3-3 3h-2.16a3 3 0 0 0-2.5 4.5c.4.66.15 1.5-.84 1.5A10 10 0 0 1 12 22z"/><circle cx="7.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="12" cy="7.5" r=".5" fill="currentColor"/><circle cx="16.5" cy="10.5" r=".5" fill="currentColor"/></svg> Komputer Grafis</span>
+        <span class="badge-pill teal"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> MPP AI</span>
+        <span class="badge-pill amber"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> XI DKV · SMKN 9 Garut</span>
       </div>
     </div>
 
@@ -527,7 +531,7 @@
       <div class="subject-grid">
         <div class="subject-card" onclick="switchSubject('kompis')">
           <div class="sc-head">
-            <div class="sc-icon">🖥️</div>
+            <div class="sc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
             <div>
               <div class="sc-title">Komputer Grafis</div>
               <div class="sc-kelas">Kelas XI DKV 4</div>
@@ -541,7 +545,7 @@
         </div>
         <div class="subject-card mppai" onclick="switchSubject('mppai')">
           <div class="sc-head">
-            <div class="sc-icon">🤖</div>
+            <div class="sc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
             <div>
               <div class="sc-title">MPP AI</div>
               <div class="sc-kelas">Kelas XI DKV 1 · 2 · 3</div>
@@ -558,7 +562,7 @@
 
     <div class="landing-info">
       <div class="info-card">
-        <h3>📖 Tentang Platform</h3>
+        <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--violet-dim)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Tentang Platform</h3>
         <ul>
           <li>Evaluasi daring per bab untuk tiap mata pelajaran peminatan.</li>
           <li>Setiap peserta hanya dapat mengerjakan tiap evaluasi satu kali.</li>
@@ -567,7 +571,7 @@
         </ul>
       </div>
       <div class="info-card">
-        <h3>👨‍🏫 Guru Pengampu</h3>
+        <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg> Guru Pengampu</h3>
         <div class="teacher-box">
           <div class="teacher-avatar">DA</div>
           <div>
@@ -598,21 +602,21 @@
     </div>
     <div class="stats-row" id="stats-row">
       <div class="stat-card">
-        <div class="icon vlt">📖</div>
+        <div class="icon vlt"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <div class="info">
           <span class="n" id="stat-bab">—</span>
           <span class="l">Bab Tersedia</span>
         </div>
       </div>
       <div class="stat-card">
-        <div class="icon amb">📝</div>
+        <div class="icon amb"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
         <div class="info">
           <span class="n" id="stat-soal">—</span>
           <span class="l">Total Soal</span>
         </div>
       </div>
       <div class="stat-card">
-        <div class="icon teal">⏳</div>
+        <div class="icon teal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="info">
           <span class="n" id="stat-aktif">—</span>
           <span class="l">Pretest / Posttest</span>
@@ -643,7 +647,7 @@
     <!-- Login gate -->
     <div id="guru-login">
       <div class="admin-login-box">
-        <div class="lock-icon">🔒</div>
+        <div class="lock-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <h2>Panel Guru</h2>
         <p class="subtle">Masukkan kode akses guru untuk melihat rekap hasil evaluasi seluruh siswa.</p>
         <div class="field">
@@ -664,7 +668,7 @@
           <h2>Rekap Laporan Guru</h2>
           <p class="subtle" style="margin:4px 0 0;">Hasil evaluasi siswa — semua bab</p>
         </div>
-        <button class="close-btn" onclick="logoutGuru()">✕ Keluar</button>
+        <button class="close-btn" onclick="logoutGuru()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Keluar</button>
       </div>
 
       <div class="adm-summary">
@@ -702,8 +706,8 @@
       </div>
 
       <div class="admin-actions">
-        <button class="btn btn-ghost btn-sm" onclick="loadGuruData()">↻ Muat Ulang</button>
-        <button class="btn btn-amber btn-sm" onclick="exportCSV()">⬇ Unduh CSV</button>
+        <button class="btn btn-ghost btn-sm" onclick="loadGuruData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+        <button class="btn btn-amber btn-sm" onclick="exportCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
       </div>
 
       <div id="guru-table-wrap">
@@ -735,7 +739,6 @@ const SUBJECTS = {
     kelas: 'XI DKV 4',
     kelasOptions: ['XI DKV 4'],
     deskripsi: 'Uji pemahaman materi Komputer Grafis setiap bab secara online.',
-    icon: '🖥️',
     chapters: [
       {
         num: 1,
@@ -801,7 +804,6 @@ const SUBJECTS = {
     kelas: 'XI DKV 1-3',
     kelasOptions: ['XI DKV 1', 'XI DKV 2', 'XI DKV 3'],
     deskripsi: 'Uji pemahaman materi MPP AI setiap bab secara online.',
-    icon: '🤖',
     chapters: [
       {
         num: 1,
@@ -1057,7 +1059,7 @@ async function loadGuruData(){
       <td class="num">${r.correct}/${r.total}</td>
       <td class="num" style="${v>0?'color:var(--coral);':''}">${v}</td>
       <td>${new Date(r.submitted_at).toLocaleString('id-ID')}</td>
-      <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','Bab ${r.bab}','${r.type==='pretest'?'Pretest':'Posttest'}')">↺ Reset</button></td>
+       <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','Bab ${r.bab}','${r.type==='pretest'?'Pretest':'Posttest'}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Reset</button></td>
     </tr>`;
   });
   html += "</tbody></table>";

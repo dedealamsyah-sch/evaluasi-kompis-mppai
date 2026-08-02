@@ -175,6 +175,7 @@
     background:rgba(255,182,39,0.14);color:var(--amber);
     border:1px solid rgba(255,182,39,0.4);border-radius:8px;
     padding:6px 10px;cursor:pointer;transition:all .15s ease;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:6px;
   }
   .btn-reset:hover{background:rgba(255,182,39,0.28);}
   .badge{padding:2px 8px;border-radius:6px;font-size:11px;font-family:'JetBrains Mono',monospace;}
@@ -235,7 +236,8 @@
   /* ---------- Warning text ---------- */
   .warning-text{
     font-family:'JetBrains Mono',monospace;font-size:10.5px;
-    color:var(--coral);text-align:center;
+    color:var(--coral);
+    display:flex;align-items:center;justify-content:center;gap:6px;
     padding:7px 0 0;border-top:1px solid var(--line);margin-top:7px;
     letter-spacing:.04em;
   }
@@ -260,7 +262,11 @@
     max-width:420px;background:var(--ink-2);border:1px solid var(--coral);border-radius:18px;
     padding:28px;text-align:center;box-shadow:0 20px 60px -12px rgba(255,107,107,0.35);
   }
-  .violation-box .vicon{font-size:34px;}
+  .violation-box .vicon{
+    width:64px;height:64px;margin:0 auto;border-radius:50%;
+    background:rgba(255,107,107,0.12);color:var(--coral);
+    display:flex;align-items:center;justify-content:center;
+  }
   .violation-box h3{font-size:18px;margin:12px 0 8px;color:var(--coral);}
   .violation-box p{font-size:13.5px;color:var(--text-dim);line-height:1.6;margin-bottom:20px;}
   @media (max-width:520px){
@@ -340,11 +346,11 @@
       <h2 style="font-size:19px;">Sebelum Memulai — Baca Aturan Ujian</h2>
       <p class="subtle" style="margin-top:6px;">Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Selama mengerjakan, sistem memantau aktivitas pada perangkat Anda.</p>
       <ul class="rule-list">
-        <li><span class="ri">⛔</span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian berlangsung.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai dikirim.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b> dalam bentuk apa pun.</span></li>
-        <li><span class="ri">⛔</span><span>Dilarang menggunakan <b>bantuan AI, internet, atau alat bantu lain</b> untuk menjawab soal.</span></li>
-        <li><span class="ri">⚠</span><span>Setiap pelanggaran di atas akan <b>terdeteksi otomatis</b> dan tercatat sebagai peringatan pada laporan guru.</span></li>
+        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian berlangsung.</span></li>
+        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai dikirim.</span></li>
+        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b> dalam bentuk apa pun.</span></li>
+        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang menggunakan <b>bantuan AI, internet, atau alat bantu lain</b> untuk menjawab soal.</span></li>
+        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>Setiap pelanggaran di atas akan <b>terdeteksi otomatis</b> dan tercatat sebagai peringatan pada laporan guru.</span></li>
       </ul>
       <div class="agree-row">
         <input type="checkbox" id="agree-check" onchange="$('btn-confirm-start').disabled = !this.checked">
@@ -369,9 +375,9 @@
       <div class="qmeta">
         <span class="qnum mono" id="q-counter">Soal 1/30</span>
         <span class="qname" id="q-participant"></span>
-        <span class="violation-badge" id="violation-badge">⚠ Pelanggaran: 0</span>
+        <span class="violation-badge" id="violation-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Pelanggaran: 0</span>
       </div>
-      <div class="warning-text">⚠ Tidak boleh screenshoot — terdeteksi otomatis</div>
+      <div class="warning-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Tidak boleh screenshoot — terdeteksi otomatis</div>
       <div class="question-img-wrap hidden" id="q-img-wrap">
         <div>
           <img id="q-img" src="" alt="Ilustrasi soal">
@@ -461,8 +467,8 @@
         </div>
 
         <div class="btn-row">
-          <button class="btn btn-ghost" onclick="loadAdminData()">↻ Muat Ulang</button>
-          <button class="btn btn-amber" onclick="exportCSV()">⬇ Unduh CSV</button>
+          <button class="btn btn-ghost" onclick="loadAdminData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+          <button class="btn btn-amber" onclick="exportCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
         </div>
         <div id="admin-table-wrap"></div>
       </div>
@@ -472,7 +478,7 @@
   <!-- ============ VIOLATION OVERLAY ============ -->
   <div id="violation-overlay" class="violation-overlay hidden">
     <div class="violation-box">
-      <div class="vicon">⚠️</div>
+      <div class="vicon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <img src="https://media.tenor.com/j5rPRPBwSOMAAAAM/cat-smacking-other-cat-cat.gif" alt="peringatan pelanggaran" style="width:140px;border-radius:12px;margin-bottom:8px;">
       <h3 id="violation-title">Pelanggaran Terdeteksi</h3>
       <p id="violation-desc">Aktivitas mencurigakan terdeteksi selama ujian berlangsung. Kejadian ini telah tercatat dan akan dilaporkan kepada guru.</p>
@@ -749,7 +755,7 @@ function exitExamFullscreen(){
 
 function updateViolationBadge(){
   const b = $("violation-badge");
-  if(b) b.textContent = `⚠ Pelanggaran: ${state.violations}`;
+  if(b) b.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Pelanggaran: ${state.violations}`;
 }
 
 function showViolation(title, desc){
@@ -1015,7 +1021,7 @@ function renderQuestion(){
     wrap.appendChild(div);
   });
   $("btn-prev").style.visibility = state.index===0 ? "hidden" : "visible";
-  $("btn-next").textContent = state.index===currentQuiz.length-1 ? "Selesai & Kirim ✓" : "Selanjutnya →";
+  $("btn-next").innerHTML = state.index===currentQuiz.length-1 ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Selesai &amp; Kirim' : "Selanjutnya →";
   $("btn-next").disabled = state.answers[state.index]===null;
   updatePathProgress();
 }
@@ -1163,7 +1169,7 @@ async function loadAdminData(){
       <td class="num">${r.correct}/${r.total}</td>
       <td class="num" style="${v>0?'color:var(--coral);':''}">${v}</td>
       <td>${new Date(r.submitted_at).toLocaleString('id-ID')}</td>
-      <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','${r.type==='pretest'?'Pretest':'Posttest'}')">↺ Reset (Susulan)</button></td>
+      <td><button class="btn-reset" onclick="resetStudentResult('${r.id}','${titleCase(r.name).replace(/'/g,"\\'")}','${r.type==='pretest'?'Pretest':'Posttest'}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Reset (Susulan)</button></td>
     </tr>`;
   });
   html += "</tbody></table>";
