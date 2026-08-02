@@ -4,7 +4,8 @@
 -- =========================================================
 
 -- Buat tabel utama untuk menyimpan hasil evaluasi
-CREATE TABLE evaluasi_results (
+-- IF NOT EXISTS agar aman dijalankan ulang tanpa error
+CREATE TABLE IF NOT EXISTS evaluasi_results (
   id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   subject     TEXT NOT NULL DEFAULT 'kompis',    -- Mapel: 'kompis' atau 'mppai'
   kelas       TEXT NOT NULL DEFAULT '-',         -- Kelas (misal: 'XI DKV 1', 'XI DKV 2', dst)
@@ -19,10 +20,10 @@ CREATE TABLE evaluasi_results (
 );
 
 -- Index untuk pencarian cepat
-CREATE INDEX idx_eval_subject     ON evaluasi_results (subject);
-CREATE INDEX idx_eval_name_bab_type ON evaluasi_results (name, bab, type);
-CREATE INDEX idx_eval_bab         ON evaluasi_results (bab);
-CREATE INDEX idx_eval_submitted   ON evaluasi_results (submitted_at);
+CREATE INDEX IF NOT EXISTS idx_eval_subject     ON evaluasi_results (subject);
+CREATE INDEX IF NOT EXISTS idx_eval_name_bab_type ON evaluasi_results (name, bab, type);
+CREATE INDEX IF NOT EXISTS idx_eval_bab         ON evaluasi_results (bab);
+CREATE INDEX IF NOT EXISTS idx_eval_submitted   ON evaluasi_results (submitted_at);
 
 -- Aktifkan Row Level Security (RLS)
 ALTER TABLE evaluasi_results ENABLE ROW LEVEL SECURITY;
@@ -39,7 +40,7 @@ CREATE POLICY "Allow public read/write"
 -- Tabel Pengaturan Waktu Ujian (Timer)
 -- Menyimpan durasi ujian per mapel, bab, dan jenis evaluasi
 -- =========================================================
-CREATE TABLE exam_settings (
+CREATE TABLE IF NOT EXISTS exam_settings (
   id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   subject     TEXT NOT NULL DEFAULT 'kompis',    -- Mapel: 'kompis' atau 'mppai'
   bab         INTEGER NOT NULL,
@@ -70,7 +71,7 @@ UPDATE exam_settings SET subject = 'kompis' WHERE subject IS NULL OR subject = '
 -- Tabel Penilaian Manual (Catatan/LK & Tugas)
 -- Menyimpan nilai yang diinput guru secara manual per siswa
 -- =========================================================
-CREATE TABLE penilaian (
+CREATE TABLE IF NOT EXISTS penilaian (
   id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   subject     TEXT NOT NULL DEFAULT 'kompis',    -- Mapel: 'kompis' atau 'mppai'
   kelas       TEXT NOT NULL DEFAULT '-',         -- Kelas siswa
@@ -84,8 +85,8 @@ CREATE TABLE penilaian (
 );
 
 -- Index untuk pencarian cepat
-CREATE INDEX idx_penilaian_subject_bab_kategori ON penilaian (subject, bab, kategori);
-CREATE INDEX idx_penilaian_kelas ON penilaian (kelas);
+CREATE INDEX IF NOT EXISTS idx_penilaian_subject_bab_kategori ON penilaian (subject, bab, kategori);
+CREATE INDEX IF NOT EXISTS idx_penilaian_kelas ON penilaian (kelas);
 
 -- Aktifkan RLS
 ALTER TABLE penilaian ENABLE ROW LEVEL SECURITY;
