@@ -736,6 +736,14 @@
           </select>
         </div>
 
+        <!-- Timer Settings -->
+        <div class="timer-settings" id="timer-settings-section">
+          <h3>Pengaturan Waktu Ujian (Timer)</h3>
+          <p class="sub">Atur durasi ujian per bab dan jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim jawaban saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
+          <div class="timer-grid" id="timer-grid"></div>
+          <button class="btn-save-timer" id="btn-save-timer" onclick="saveTimerSettings()">Simpan Pengaturan Timer</button>
+        </div>
+
         <div class="admin-actions">
           <button class="btn btn-ghost btn-sm" onclick="loadGuruData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
           <button class="btn btn-amber btn-sm" onclick="exportCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
@@ -779,14 +787,6 @@
         <div id="recap-table-wrap">
           <div class="empty-state">Pilih bab untuk melihat rekap nilai per siswa.</div>
         </div>
-      </div>
-
-      <!-- Timer Settings -->
-      <div class="timer-settings" id="timer-settings-section">
-        <h3>Pengaturan Waktu Ujian (Timer)</h3>
-        <p class="sub">Atur durasi ujian per bab dan jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim jawaban saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
-        <div class="timer-grid" id="timer-grid"></div>
-        <button class="btn-save-timer" id="btn-save-timer" onclick="saveTimerSettings()">Simpan Pengaturan Timer</button>
       </div>
     </div>
 
