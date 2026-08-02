@@ -418,6 +418,31 @@
   }
   .filter-bar select:focus{outline:2px solid var(--violet);outline-offset:1px;}
 
+  /* Guru tabs */
+  .guru-tabs{display:flex;gap:6px;margin-bottom:18px;background:var(--ink-2);border:1px solid var(--line);border-radius:14px;padding:5px;}
+  .guru-tab{
+    flex:1;padding:10px 16px;border:none;border-radius:10px;background:transparent;color:var(--text-dim);
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:13px;cursor:pointer;
+    transition:all .15s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;
+  }
+  .guru-tab svg{width:15px;height:15px;flex:none;}
+  .guru-tab:hover{color:var(--paper);}
+  .guru-tab.active{background:var(--violet);color:#fff;box-shadow:0 4px 14px -6px rgba(124,92,255,0.6);}
+
+  /* Trend / status badges */
+  .trend{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+  .trend svg{width:12px;height:12px;flex:none;}
+  .trend.up{background:rgba(45,212,191,0.14);color:var(--teal);}
+  .trend.down{background:rgba(255,107,107,0.14);color:var(--coral);}
+  .trend.flat{background:rgba(247,245,240,0.08);color:var(--text-dim);}
+  .trend.pending{background:rgba(255,182,39,0.14);color:var(--amber);}
+  .muted{color:var(--text-muted);}
+  .recap-note{font-size:9.5px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-left:4px;}
+  @media(max-width:520px){
+    .guru-tab{font-size:11.5px;padding:9px 8px;}
+    .guru-tab svg{width:13px;height:13px;}
+  }
+
   /* Timer Settings */
   .timer-settings{
     background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius);
@@ -671,30 +696,89 @@
         <button class="close-btn" onclick="logoutGuru()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Keluar</button>
       </div>
 
-      <div class="adm-summary">
-        <div class="adm-stat"><div class="n" id="adm-total">0</div><div class="l">Total Pengerjaan</div><div class="sub">semua bab & jenis</div></div>
-        <div class="adm-stat"><div class="n" id="adm-avg-score">–</div><div class="l">Rata-rata Skor</div></div>
-        <div class="adm-stat"><div class="n" id="adm-siswa-count">0</div><div class="l">Siswa Aktif</div><div class="sub">dari 36 siswa</div></div>
-        <div class="adm-stat"><div class="n" id="adm-violations">0</div><div class="l">Total Pelanggaran</div><div class="sub">anti-cheat</div></div>
+      <!-- Guru tabs -->
+      <div class="guru-tabs">
+        <button class="guru-tab active" data-tab="pengerjaan" onclick="switchGuruTab('pengerjaan')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Rekap Pengerjaan
+        </button>
+        <button class="guru-tab" data-tab="nilai" onclick="switchGuruTab('nilai')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-7"/></svg>
+          Rekap Nilai Siswa
+        </button>
       </div>
 
-      <div class="filter-bar">
-        <label>Filter:</label>
-        <select id="filter-subject" onchange="loadGuruData()">
-          <option value="kompis">Komputer Grafis</option>
-          <option value="mppai">MPP AI</option>
-        </select>
-        <select id="filter-bab" onchange="loadGuruData()">
-          <option value="all">Semua Bab</option>
-        </select>
-        <select id="filter-kelas" onchange="loadGuruData()">
-          <option value="all">Semua Kelas</option>
-        </select>
-        <select id="filter-type" onchange="loadGuruData()">
-          <option value="all">Semua Jenis</option>
-          <option value="pretest">Pretest</option>
-          <option value="posttest">Posttest</option>
-        </select>
+      <!-- TAB: PENGERJAAN -->
+      <div id="tab-pengerjaan-panel">
+        <div class="adm-summary">
+          <div class="adm-stat"><div class="n" id="adm-total">0</div><div class="l">Total Pengerjaan</div><div class="sub">semua bab & jenis</div></div>
+          <div class="adm-stat"><div class="n" id="adm-avg-score">–</div><div class="l">Rata-rata Skor</div></div>
+          <div class="adm-stat"><div class="n" id="adm-siswa-count">0</div><div class="l">Siswa Aktif</div><div class="sub">dari 36 siswa</div></div>
+          <div class="adm-stat"><div class="n" id="adm-violations">0</div><div class="l">Total Pelanggaran</div><div class="sub">anti-cheat</div></div>
+        </div>
+
+        <div class="filter-bar">
+          <label>Filter:</label>
+          <select id="filter-subject" onchange="loadGuruData()">
+            <option value="kompis">Komputer Grafis</option>
+            <option value="mppai">MPP AI</option>
+          </select>
+          <select id="filter-bab" onchange="loadGuruData()">
+            <option value="all">Semua Bab</option>
+          </select>
+          <select id="filter-kelas" onchange="loadGuruData()">
+            <option value="all">Semua Kelas</option>
+          </select>
+          <select id="filter-type" onchange="loadGuruData()">
+            <option value="all">Semua Jenis</option>
+            <option value="pretest">Pretest</option>
+            <option value="posttest">Posttest</option>
+          </select>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn btn-ghost btn-sm" onclick="loadGuruData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+          <button class="btn btn-amber btn-sm" onclick="exportCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
+        </div>
+
+        <div id="guru-table-wrap">
+          <div class="empty-state">Belum ada data. Klik "Muat Ulang" atau buka panel guru.</div>
+        </div>
+      </div>
+
+      <!-- TAB: NILAI SISWA -->
+      <div id="tab-nilai-panel" class="hidden">
+        <p class="subtle" style="margin:0 0 14px;">Nilai rata-rata dihitung dari <b>pretest</b> dan <b>posttest</b> setelah siswa mengerjakan keduanya. Keterangan menunjukkan apakah nilai siswa mengalami peningkatan atau penurunan.</p>
+        <div class="adm-summary">
+          <div class="adm-stat"><div class="n" id="recap-total">0</div><div class="l">Siswa Tercatat</div><div class="sub">punya nilai di bab terpilih</div></div>
+          <div class="adm-stat"><div class="n" id="recap-lengkap">0</div><div class="l">Lengkap P & Post</div><div class="sub">sudah mengerjakan keduanya</div></div>
+          <div class="adm-stat"><div class="n" id="recap-avg">–</div><div class="l">Rata-rata Nilai</div><div class="sub">rata-rata tiap siswa</div></div>
+          <div class="adm-stat"><div class="n" id="recap-naik">0</div><div class="l" style="color:var(--teal);">Peningkatan</div><div class="sub">posttest &gt; pretest</div></div>
+          <div class="adm-stat"><div class="n" id="recap-turun">0</div><div class="l" style="color:var(--coral);">Penurunan</div><div class="sub">posttest &lt; pretest</div></div>
+        </div>
+
+        <div class="filter-bar">
+          <label>Filter:</label>
+          <select id="recap-subject" onchange="switchRecapSubject()">
+            <option value="kompis">Komputer Grafis</option>
+            <option value="mppai">MPP AI</option>
+          </select>
+          <select id="recap-kelas" onchange="loadRecapData()">
+            <option value="all">Semua Kelas</option>
+          </select>
+          <select id="recap-bab" onchange="loadRecapData()">
+            <option value="">Belum ada bab aktif</option>
+          </select>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn btn-ghost btn-sm" onclick="loadRecapData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+          <button class="btn btn-amber btn-sm" onclick="exportRecapCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
+        </div>
+
+        <div id="recap-table-wrap">
+          <div class="empty-state">Pilih bab untuk melihat rekap nilai per siswa.</div>
+        </div>
       </div>
 
       <!-- Timer Settings -->
@@ -703,15 +787,6 @@
         <p class="sub">Atur durasi ujian per bab dan jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim jawaban saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
         <div class="timer-grid" id="timer-grid"></div>
         <button class="btn-save-timer" id="btn-save-timer" onclick="saveTimerSettings()">Simpan Pengaturan Timer</button>
-      </div>
-
-      <div class="admin-actions">
-        <button class="btn btn-ghost btn-sm" onclick="loadGuruData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
-        <button class="btn btn-amber btn-sm" onclick="exportCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh CSV</button>
-      </div>
-
-      <div id="guru-table-wrap">
-        <div class="empty-state">Belum ada data. Klik "Muat Ulang" atau buka panel guru.</div>
       </div>
     </div>
 
@@ -875,11 +950,10 @@ function switchSubject(subject) {
   }
 
   renderChapters();
-  updateFilterBab();
   $("filter-subject").value = subject;
+  $("recap-subject").value = subject;
   if(!$("guru-dashboard").classList.contains("hidden")){
-    loadGuruData();
-    loadTimerSettings();
+    refreshGuruPanel();
   }
 }
 
@@ -931,9 +1005,8 @@ function switchRole(role){
     $("landing-view").classList.add("hidden");
     $("siswa-view").classList.add("hidden");
     $("guru-view").classList.remove("hidden");
-    updateFilterBab();
     if(!$("guru-dashboard").classList.contains("hidden")){
-      loadGuruData();
+      refreshGuruPanel();
     }
   } else {
     $("guru-view").classList.add("hidden");
@@ -956,8 +1029,7 @@ function checkGuruCode(){
   if($("guru-code").value.trim() === ADMIN_CODE){
     $("guru-login").classList.add("hidden");
     $("guru-dashboard").classList.remove("hidden");
-    loadGuruData();
-    loadTimerSettings();
+    refreshGuruPanel();
   } else {
     alert("Kode akses salah.");
   }
@@ -1019,14 +1091,7 @@ async function loadGuruData(){
 
   let allRows = rows || [];
 
-  const kelasOptions = getSubject().kelasOptions || [];
-  const kelasEl = $("filter-kelas");
-  const currentKelas = kelasEl.value || "all";
-  kelasEl.innerHTML = `<option value="all">Semua Kelas</option>`;
-  kelasOptions.forEach(k => {
-    kelasEl.innerHTML += `<option value="${k}">${k}</option>`;
-  });
-  kelasEl.value = kelasOptions.includes(currentKelas) ? currentKelas : "all";
+  fillKelasOptions($("filter-kelas"), filterSubject);
 
   lastReportRows = allRows;
 
@@ -1095,8 +1160,176 @@ function exportCSV(){
 }
 
 /* =========================================================
-   TIMER SETTINGS — Load & Save from Supabase
+   REKAP NILAI SISWA — agregat pretest & posttest per bab
    ========================================================= */
+let recapRows = [];
+let currentRecapBab = 1;
+
+function fillKelasOptions(sel, subject){
+  const opts = (SUBJECTS[subject] || {}).kelasOptions || [];
+  const cur = sel.value || "all";
+  sel.innerHTML = '<option value="all">Semua Kelas</option>';
+  opts.forEach(k => {
+    sel.innerHTML += `<option value="${k}">${k}</option>`;
+  });
+  sel.value = opts.includes(cur) ? cur : "all";
+}
+
+function switchGuruTab(tab){
+  $("tab-pengerjaan-panel").classList.toggle("hidden", tab !== "pengerjaan");
+  $("tab-nilai-panel").classList.toggle("hidden", tab !== "nilai");
+  document.querySelectorAll(".guru-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  if(tab === "nilai"){
+    fillKelasOptions($("recap-kelas"), $("recap-subject").value);
+    updateRecapBab();
+    loadRecapData();
+  } else {
+    loadGuruData();
+  }
+}
+
+function switchRecapSubject(){
+  fillKelasOptions($("recap-kelas"), $("recap-subject").value);
+  updateRecapBab();
+  loadRecapData();
+}
+
+function updateRecapBab(){
+  const sel = $("recap-bab");
+  const chapters = (SUBJECTS[$("recap-subject").value] || {}).chapters || [];
+  const cur = sel.value;
+  sel.innerHTML = "";
+  chapters.filter(c => c.active).forEach(ch => {
+    const opt = document.createElement("option");
+    opt.value = ch.num;
+    opt.textContent = "Bab " + ch.num + ": " + ch.title;
+    sel.appendChild(opt);
+  });
+  if(sel.options.length === 0){
+    sel.innerHTML = '<option value="">Belum ada bab aktif</option>';
+  } else if(![...sel.options].some(o => o.value === cur)){
+    sel.value = sel.options[0].value;
+  }
+}
+
+function refreshGuruPanel(){
+  const subject = $("filter-subject").value;
+  fillKelasOptions($("filter-kelas"), subject);
+  fillKelasOptions($("recap-kelas"), $("recap-subject").value);
+  updateFilterBab();
+  updateRecapBab();
+  loadTimerSettings();
+  if($("tab-nilai-panel").classList.contains("hidden")){
+    loadGuruData();
+  } else {
+    loadRecapData();
+  }
+}
+
+async function loadRecapData(){
+  const wrap = $("recap-table-wrap");
+  wrap.innerHTML = `<p class="subtle" style="padding:16px;">Memuat data rekap...</p>`;
+
+  if(!_supabase){
+    wrap.innerHTML = `<div class="empty-state">Supabase tidak tersedia. Periksa koneksi internet.</div>`;
+    return;
+  }
+
+  const subject = $("recap-subject").value;
+  const kelas = $("recap-kelas").value;
+  const bab = parseInt($("recap-bab").value) || 1;
+  currentRecapBab = bab;
+
+  let query = _supabase.from('evaluasi_results').select('*').eq('subject', subject);
+  if(kelas !== "all") query = query.eq('kelas', kelas);
+  const { data: rows, error } = await query;
+  if(error){
+    wrap.innerHTML = `<div class="empty-state">Gagal memuat data: ${error.message}</div>`;
+    return;
+  }
+
+  const map = new Map();
+  (rows || []).forEach(r => {
+    if(r.bab !== bab) return;
+    const key = (r.name || "").toLowerCase() + "|" + (r.kelas || "");
+    let st = map.get(key);
+    if(!st){ st = { name: r.name, kelas: r.kelas || "-", pre: null, post: null }; map.set(key, st); }
+    if(r.type === "pretest") st.pre = r.score;
+    if(r.type === "posttest") st.post = r.score;
+  });
+
+  const recap = [...map.values()].sort((a, b) => a.name.localeCompare(b.name));
+  recap.forEach(st => {
+    st.both = st.pre !== null && st.post !== null;
+    st.avg = st.both
+      ? Math.round((st.pre + st.post) / 2)
+      : (st.pre !== null ? st.pre : (st.post !== null ? st.post : null));
+    st.delta = st.both ? st.post - st.pre : null;
+    st.status = !st.both ? "pending" : (st.delta > 0 ? "up" : (st.delta < 0 ? "down" : "flat"));
+  });
+  recapRows = recap;
+
+  const lengkap = recap.filter(s => s.both).length;
+  const naik = recap.filter(s => s.status === "up").length;
+  const turun = recap.filter(s => s.status === "down").length;
+  const avgAll = recap.length ? Math.round(recap.reduce((s, x) => s + (x.avg || 0), 0) / recap.length) : null;
+
+  $("recap-total").textContent = recap.length;
+  $("recap-lengkap").textContent = lengkap;
+  $("recap-avg").textContent = avgAll !== null ? avgAll : "–";
+  $("recap-naik").textContent = naik;
+  $("recap-turun").textContent = turun;
+
+  if(recap.length === 0){
+    wrap.innerHTML = `<div class="empty-state">Belum ada data nilai siswa untuk bab ini.</div>`;
+    return;
+  }
+
+  let html = `<table class="report"><thead><tr>
+    <th>Nama</th><th>Kelas</th><th>Pretest</th><th>Posttest</th><th>Rata-rata</th><th>Keterangan</th>
+  </tr></thead><tbody>`;
+  recap.forEach(st => {
+    html += `<tr>
+      <td>${titleCase(st.name)}</td>
+      <td>${st.kelas}</td>
+      <td class="num">${st.pre !== null ? st.pre : '<span class="muted">–</span>'}</td>
+      <td class="num">${st.post !== null ? st.post : '<span class="muted">–</span>'}</td>
+      <td class="num"><b>${st.avg !== null ? st.avg : '–'}</b>${st.both ? '' : '<span class="recap-note">belum lengkap</span>'}</td>
+      <td>${recapStatusBadge(st)}</td>
+    </tr>`;
+  });
+  wrap.innerHTML = html + "</tbody></table>";
+}
+
+function recapStatusBadge(st){
+  if(st.status === "up"){
+    return `<span class="trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg> Peningkatan +${st.delta}</span>`;
+  }
+  if(st.status === "down"){
+    return `<span class="trend down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="7" x2="17" y2="17"/><polyline points="17 7 17 17 7 17"/></svg> Penurunan ${st.delta}</span>`;
+  }
+  if(st.status === "flat"){
+    return `<span class="trend flat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Stabil</span>`;
+  }
+  return `<span class="trend pending"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> Belum Lengkap</span>`;
+}
+
+function exportRecapCSV(){
+  if(!recapRows.length){ alert("Tidak ada data rekap untuk diunduh."); return; }
+  const label = s => s.status === "up" ? "Peningkatan +" + s.delta
+    : s.status === "down" ? "Penurunan " + s.delta
+    : s.status === "flat" ? "Stabil" : "Belum Lengkap";
+  let csv = "Nama,Kelas,Bab,Pretest,Posttest,Rata-rata,Keterangan\n";
+  recapRows.forEach(s => {
+    csv += `"${titleCase(s.name)}","${s.kelas}",${currentRecapBab},${s.pre !== null ? s.pre : ''},${s.post !== null ? s.post : ''},${s.avg !== null ? s.avg : ''},"${label(s)}"\n`;
+  });
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `rekap_nilai_siswa_bab${currentRecapBab}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 let currentTimerSettings = {};
 
 async function loadTimerSettings(){
