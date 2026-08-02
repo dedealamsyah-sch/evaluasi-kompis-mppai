@@ -443,6 +443,29 @@
     .guru-tab svg{width:13px;height:13px;}
   }
 
+  /* Penilaian manual (Catatan/LK & Tugas) */
+  .category-toggle{display:inline-flex;background:var(--ink-2);border:1px solid var(--line);border-radius:12px;padding:4px;margin-bottom:14px;gap:4px;}
+  .cat-btn{
+    padding:9px 22px;border:none;border-radius:9px;background:transparent;color:var(--text-dim);
+    font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:13px;cursor:pointer;
+    transition:all .15s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .cat-btn svg{width:15px;height:15px;}
+  .cat-btn:hover{color:var(--paper);}
+  .cat-btn.active{background:linear-gradient(135deg,var(--amber),#e69a00);color:#241a00;box-shadow:0 4px 14px -6px rgba(255,182,39,0.5);}
+  .score-input, .cat-input{
+    width:100%;padding:8px 10px;background:var(--ink);border:1px solid var(--line);
+    border-radius:8px;color:var(--paper);font-family:'JetBrains Mono',monospace;font-size:13px;
+  }
+  .score-input{max-width:88px;text-align:center;}
+  .cat-input{min-width:200px;}
+  .score-input:focus, .cat-input:focus{outline:2px solid var(--violet);outline-offset:1px;}
+  table.report td.penilaian-name{font-weight:500;color:var(--paper);}
+  @media(max-width:600px){
+    .cat-btn{font-size:12px;padding:9px 14px;flex:1;justify-content:center;}
+    .category-toggle{display:flex;}
+  }
+
   /* Timer Settings */
   .timer-settings{
     background:var(--ink-2);border:1px solid var(--line);border-radius:var(--radius);
@@ -706,6 +729,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-6 4 3 5-7"/></svg>
           Rekap Nilai Siswa
         </button>
+        <button class="guru-tab" data-tab="penilaian" onclick="switchGuruTab('penilaian')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          Penilaian Catatan & Tugas
+        </button>
       </div>
 
       <!-- TAB: PENGERJAAN -->
@@ -786,6 +813,51 @@
 
         <div id="recap-table-wrap">
           <div class="empty-state">Pilih bab untuk melihat rekap nilai per siswa.</div>
+        </div>
+      </div>
+
+      <!-- TAB: PENILAIAN CATATAN & TUGAS -->
+      <div id="tab-penilaian-panel" class="hidden">
+        <div class="category-toggle">
+          <button class="cat-btn active" data-kat="catatan" onclick="choosePenilaianKat('catatan')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Catatan / LK
+          </button>
+          <button class="cat-btn" data-kat="tugas" onclick="choosePenilaianKat('tugas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Tugas
+          </button>
+        </div>
+        <p class="subtle" style="margin:0 0 14px;">Masukkan nilai manual untuk setiap siswa pada kategori <b id="penilaian-kat-label">Catatan / LK</b>. Pilih mapel, kelas, dan bab, lalu isi nilai (0–100) beserta catatan guru bila perlu.</p>
+
+        <div class="adm-summary">
+          <div class="adm-stat"><div class="n" id="penilaian-siswa">0</div><div class="l">Jumlah Siswa</div></div>
+          <div class="adm-stat"><div class="n" id="penilaian-dinilai">0</div><div class="l" style="color:var(--teal);">Sudah Dinilai</div></div>
+          <div class="adm-stat"><div class="n" id="penilaian-belum">0</div><div class="l" style="color:var(--amber);">Belum Dinilai</div></div>
+          <div class="adm-stat"><div class="n" id="penilaian-avg">–</div><div class="l">Rata-rata Nilai</div></div>
+        </div>
+
+        <div class="filter-bar">
+          <label>Filter:</label>
+          <select id="penilaian-subject" onchange="switchPenilaianSubject()">
+            <option value="kompis">Komputer Grafis</option>
+            <option value="mppai">MPP AI</option>
+          </select>
+          <select id="penilaian-kelas" onchange="loadPenilaianData()">
+            <option value="all">Semua Kelas</option>
+          </select>
+          <select id="penilaian-bab" onchange="loadPenilaianData()">
+            <option value="">Belum ada bab aktif</option>
+          </select>
+        </div>
+
+        <div class="admin-actions">
+          <button class="btn btn-ghost btn-sm" onclick="loadPenilaianData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+          <button class="btn btn-primary btn-sm" id="btn-save-penilaian" onclick="savePenilaian()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Penilaian</button>
+        </div>
+
+        <div id="penilaian-table-wrap">
+          <div class="empty-state">Pilih mapel, kelas, dan bab untuk mulai menilai siswa.</div>
         </div>
       </div>
     </div>
@@ -895,6 +967,62 @@ const SUBJECTS = {
 let currentSubject = 'kompis';
 let currentView = 'landing'; // 'landing' | 'subject'
 
+/* =========================================================
+   DATA: DAFTAR NAMA SISWA (untuk penilaian manual)
+   ========================================================= */
+const NAMA_LIST = [
+"ADE SAHRUL GUNAWAN","AI IMAS","AI NURAWALIAH AL ZAHRA","AI SITI MUSLIMAH","AI TITO",
+"AJENG DWI RAISSA FITRI","AMELIA GENDIS EKA PRATIWI","AMIRA NUR AULIA","AQILA NAZIL FALAQ",
+"AZZAHRA QYASIMAH","CECEP REZA SOEHANDI","DAVA BAGJA NUGRAHA","DEDE APRILIA KARTIKA",
+"DEVINA NAYYRA FITRIANI","DIRA RAHMAWATI","FITRIYANI","GILAR APGAN MUHAMAD SOLEH",
+"INDAH TRIJAYANTI","KHAIRAN GLADWIN AGUSTIAN","NADIRA MEGA RIZKIA","NADYA NURLATIFA",
+"NAILA AGUSTIN","NANI YULIYANI","NAPSA JAKIYAH","NAZWA KURNIA","NAZWA NUR AISYAH",
+"NENG SRI RAHAYU","RAFI FAUZAN NAJA LUTFIANA","RAIRA PUTRI","RIJAL NURJAMAN",
+"RISMAYANTI","RITA PEBRIYANI","RIZKY KURNIAWAN","SILVY SILVI YANA","SULISTIAWATI",
+"YARA YUNIARSYAH"
+];
+
+const NAMA_BY_KELAS = {
+  "XI DKV 1": [
+    "ALEN FITRIANI","ALIA ALAIKA NURFADILA","AZIZAH NURUL KAMIL","DAPA MUSTOPA","DEBI LESTARI",
+    "DIFA ASTIA FEBRIANI","ERLYTA PUTRI KURNIAWAN","FAHMI AHMAD RAMDAN ALFIAN","GADNA WIDIATNI",
+    "IMAM PRASETYO","IWAN KURNIAWAN","KAILA AROPATILAH","LUCKY MOCHAMMAD RIVALDI","LUSI NURAENI",
+    "M REZA HUAFAH","M. DENHAN HAPRIJAL","MUHAMAD DANDI NUGRAHA","MUHAMAD DIAZ PIRDAUS",
+    "NENG OKTAVIA PUTRI AGUSTIN","RAISYA ALAWIYAH","RAISYA NURIL MAULIDA","RIANA SANJAYA",
+    "RIZKY MUHAMMAD REGAL SAFARI","SAFINAH SYARA GARINI","SHEILA AWALANI FEBRIA HIDAYAT",
+    "SILVI BUDIA PUTRI","SITI KHOIRIYAH","SITI MULYANI","SITI RAHMA SILPIANA","SUMIYATI",
+    "SYIPA NURAENI","SYIVA WIDIYANA AGUSTIN","WILDA AZKIA","WINDA APRIYANTI","WULAN SUNDARI",
+    "ZAHRATUL AYESA AULIA"
+  ],
+  "XI DKV 2": [
+    "AHMAD FAUZI","AI CINTA LESTARI","AIRA NURAINAH","ALYA NURAENI","AUPA AZNIA",
+    "AYU","CEISHA SINTHIA","HAFIDZ FAIZ HAMDANI","MOH PIKRI","MUHAMAD REZA RAMDANI",
+    "NADA NISRINA","NAZMA KAYVA GASANI","NURJIHAN","PITRYA HANDAYANI","PUTRI UTAMI",
+    "RAHMAWATI","REGINA GUNAWAN","RESTI NURUL FADILA","RISMA SAPARANI","SAHLA QUROTUL AINI",
+    "SAVINA KHOERUNNISA","SHANDIKA REVI SHAFARUDIN","SIFA FATIMAH","SIFA KAMILATUL AULA",
+    "SINDIA SAPUTRI","SITI JENAB","SRI AYU WAHYUNI","SRI MULYANI","SYABINA AYAT EL AKHROS",
+    "SYIFA HAIRA","TENI DAMAYANTI","TIRA FADILA","WAHDAN SAPARI","WINA AFRILIANI",
+    "YAYU ASTIA","ZAHWA JULIA"
+  ],
+  "XI DKV 3": [
+    "ALFIN RAMADANI","AZMI ANUGRAH","DHEA EKA KHOERUNNISA","FUZI NAILA ANNURI",
+    "HARUM NURAULIA SRI KAMILA","HASNI SAPA AL MAIRA","HILWA HELMYYAH AZAHRA",
+    "ILFA ALIFIANA KHOERUNISA","ILMA LATIFAH","INDRI","INDRI FITRIYANI",
+    "INTAN MAHARANY","INTAN WIDIYANTI","JAJANG M HUSNI MUBAROK","JAJANG NURJAMAN",
+    "JANETA SRI MULYANI","JIHAN SHAFIRA KEAN PUTRI MULYADI","KAMILA APRILIANI",
+    "KHANZA NURAENI","MEISYA FAKHRIYAH","MERLIN AZNIKA","MEYLAN MELIYANTI ANASTASYA SOFYAN",
+    "MUHAMMAD TAUFIQ ISMAIL","MUTIA ANITA SARI","NADIA FITRIANI","NURI MEITRI AENI",
+    "PUTRI INTAN NURAENI","QIANDRA KAIZAR NAHARI","QUINSYA RAHMANESA SOLEHA",
+    "RADIT KURNIAWAN","RATNA HANDAYANI","SECHAN KHALIFATUNNISA","SELVI SIFA URIZQI",
+    "SOPA ANIDATUL AISAH","WILDAN"
+  ]
+};
+
+function getRoster(subject, kelas){
+  if(subject === "kompis") return NAMA_LIST;
+  return NAMA_BY_KELAS[kelas] || [];
+}
+
 function getChapters() {
   return SUBJECTS[currentSubject].chapters;
 }
@@ -952,6 +1080,7 @@ function switchSubject(subject) {
   renderChapters();
   $("filter-subject").value = subject;
   $("recap-subject").value = subject;
+  $("penilaian-subject").value = subject;
   if(!$("guru-dashboard").classList.contains("hidden")){
     refreshGuruPanel();
   }
@@ -1175,14 +1304,26 @@ function fillKelasOptions(sel, subject){
   sel.value = opts.includes(cur) ? cur : "all";
 }
 
+function defaultKelasSelect(sel){
+  if(sel.value === "all" && sel.options.length > 1){
+    sel.value = sel.options[1].value;
+  }
+}
+
 function switchGuruTab(tab){
   $("tab-pengerjaan-panel").classList.toggle("hidden", tab !== "pengerjaan");
   $("tab-nilai-panel").classList.toggle("hidden", tab !== "nilai");
+  $("tab-penilaian-panel").classList.toggle("hidden", tab !== "penilaian");
   document.querySelectorAll(".guru-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
   if(tab === "nilai"){
     fillKelasOptions($("recap-kelas"), $("recap-subject").value);
     updateRecapBab();
     loadRecapData();
+  } else if(tab === "penilaian"){
+    fillKelasOptions($("penilaian-kelas"), $("penilaian-subject").value);
+    defaultKelasSelect($("penilaian-kelas"));
+    updatePenilaianBab();
+    loadPenilaianData();
   } else {
     loadGuruData();
   }
@@ -1216,13 +1357,17 @@ function refreshGuruPanel(){
   const subject = $("filter-subject").value;
   fillKelasOptions($("filter-kelas"), subject);
   fillKelasOptions($("recap-kelas"), $("recap-subject").value);
+  fillKelasOptions($("penilaian-kelas"), $("penilaian-subject").value);
   updateFilterBab();
   updateRecapBab();
+  updatePenilaianBab();
   loadTimerSettings();
-  if($("tab-nilai-panel").classList.contains("hidden")){
-    loadGuruData();
-  } else {
+  if(!$("tab-nilai-panel").classList.contains("hidden")){
     loadRecapData();
+  } else if(!$("tab-penilaian-panel").classList.contains("hidden")){
+    loadPenilaianData();
+  } else {
+    loadGuruData();
   }
 }
 
@@ -1329,6 +1474,160 @@ function exportRecapCSV(){
   a.href = url; a.download = `rekap_nilai_siswa_bab${currentRecapBab}.csv`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+/* =========================================================
+   PENILAIAN MANUAL — Catatan/LK & Tugas
+   ========================================================= */
+let penilaianKat = "catatan";
+let penilaianSaved = {};
+
+function choosePenilaianKat(kat){
+  penilaianKat = kat;
+  document.querySelectorAll(".cat-btn").forEach(b => b.classList.toggle("active", b.dataset.kat === kat));
+  $("penilaian-kat-label").textContent = kat === "catatan" ? "Catatan / LK" : "Tugas";
+  loadPenilaianData();
+}
+
+function switchPenilaianSubject(){
+  fillKelasOptions($("penilaian-kelas"), $("penilaian-subject").value);
+  defaultKelasSelect($("penilaian-kelas"));
+  updatePenilaianBab();
+  loadPenilaianData();
+}
+
+function updatePenilaianBab(){
+  const sel = $("penilaian-bab");
+  const chapters = (SUBJECTS[$("penilaian-subject").value] || {}).chapters || [];
+  const cur = sel.value;
+  sel.innerHTML = "";
+  chapters.filter(c => c.active).forEach(ch => {
+    const opt = document.createElement("option");
+    opt.value = ch.num;
+    opt.textContent = "Bab " + ch.num + ": " + ch.title;
+    sel.appendChild(opt);
+  });
+  if(sel.options.length === 0){
+    sel.innerHTML = '<option value="">Belum ada bab aktif</option>';
+  } else if(![...sel.options].some(o => o.value === cur)){
+    sel.value = sel.options[0].value;
+  }
+}
+
+async function loadPenilaianData(){
+  const wrap = $("penilaian-table-wrap");
+  wrap.innerHTML = `<p class="subtle" style="padding:16px;">Memuat daftar siswa...</p>`;
+
+  const subject = $("penilaian-subject").value;
+  const kelas = $("penilaian-kelas").value;
+  const bab = parseInt($("penilaian-bab").value) || 1;
+  const roster = getRoster(subject, kelas);
+  if(roster.length === 0){
+    wrap.innerHTML = `<div class="empty-state">Tidak ada daftar siswa untuk kelas ini.</div>`;
+    return;
+  }
+
+  penilaianSaved = {};
+  if(_supabase){
+    try{
+      let q = _supabase.from('penilaian').select('*').eq('subject', subject).eq('bab', bab).eq('kategori', penilaianKat);
+      if(kelas !== "all") q = q.eq('kelas', kelas);
+      const { data, error } = await q;
+      if(!error && data){
+        data.forEach(r => {
+          penilaianSaved[(r.name || "").toLowerCase()] = { score: r.score, catatan: r.catatan || "" };
+        });
+      }
+    }catch(e){
+      console.warn("Gagal memuat penilaian:", e.message);
+    }
+  }
+
+  const rows = roster.map(name => ({ name, saved: penilaianSaved[name.toLowerCase()] || null }));
+  const dinilai = rows.filter(r => r.saved && r.saved.score !== null && r.saved.score !== undefined).length;
+  const scores = rows.map(r => (r.saved && r.saved.score !== null) ? r.saved.score : null).filter(s => s !== null);
+  const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+
+  $("penilaian-siswa").textContent = rows.length;
+  $("penilaian-dinilai").textContent = dinilai;
+  $("penilaian-belum").textContent = rows.length - dinilai;
+  $("penilaian-avg").textContent = avg !== null ? avg : "–";
+
+  let html = `<table class="report"><thead><tr>
+    <th>Nama</th><th>Nilai (0-100)</th><th>Catatan Guru</th><th>Status</th>
+  </tr></thead><tbody>`;
+  rows.forEach((r, idx) => {
+    const sv = r.saved || {};
+    const scoreVal = (sv.score !== null && sv.score !== undefined) ? sv.score : "";
+    const catVal = sv.catatan || "";
+    const has = (sv.score !== null && sv.score !== undefined);
+    html += `<tr>
+      <td class="penilaian-name">${titleCase(r.name)}</td>
+      <td><input class="score-input" type="number" min="0" max="100" data-name="${r.name}" data-idx="${idx}" value="${scoreVal}" placeholder="0-100"></td>
+      <td><input class="cat-input" type="text" data-name="${r.name}" data-idx="${idx}" value="${catVal}" placeholder="Catatan (opsional)"></td>
+      <td>${has ? '<span class="trend up">Sudah Dinilai</span>' : '<span class="trend pending">Belum Dinilai</span>'}</td>
+    </tr>`;
+  });
+  wrap.innerHTML = html + "</tbody></table>";
+
+  const btn = $("btn-save-penilaian");
+  btn.disabled = !_supabase;
+  btn.title = _supabase ? "" : "Supabase tidak tersedia";
+}
+
+async function savePenilaian(){
+  if(!_supabase){ alert("Supabase tidak tersedia."); return; }
+  const subject = $("penilaian-subject").value;
+  const kelas = $("penilaian-kelas").value;
+  const bab = parseInt($("penilaian-bab").value) || 1;
+  if(kelas === "all"){
+    alert("Silakan pilih kelas terlebih dahulu untuk menyimpan penilaian.");
+    return;
+  }
+  const btn = $("btn-save-penilaian");
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Menyimpan...`;
+
+  const map = {};
+  [...document.querySelectorAll('#penilaian-table-wrap input[data-idx]')].forEach(inp => {
+    const idx = inp.dataset.idx;
+    if(!map[idx]) map[idx] = { name: inp.dataset.name, score: null, catatan: "" };
+    if(inp.classList.contains("score-input")) map[idx].score = inp.value.trim();
+    if(inp.classList.contains("cat-input")) map[idx].catatan = inp.value.trim();
+  });
+  const rows = Object.values(map);
+
+  try{
+    for(const r of rows){
+      const score = r.score === "" ? null : Math.max(0, Math.min(100, parseInt(r.score) || 0));
+      const catatan = r.catatan || "";
+      const hasValue = score !== null || catatan !== "";
+      const hadSaved = !!penilaianSaved[(r.name || "").toLowerCase()];
+      if(hasValue){
+        const { error } = await _supabase.from('penilaian').upsert(
+          { subject, kelas, name: r.name, bab, kategori: penilaianKat, score, catatan, updated_at: new Date().toISOString() },
+          { onConflict: 'subject,kelas,name,bab,kategori' }
+        );
+        if(error) throw error;
+      } else if(hadSaved){
+        const { error } = await _supabase.from('penilaian').delete()
+          .eq('subject', subject).eq('kelas', kelas).eq('name', r.name)
+          .eq('bab', bab).eq('kategori', penilaianKat);
+        if(error) throw error;
+      }
+    }
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tersimpan!`;
+    setTimeout(() => {
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Penilaian`;
+      btn.disabled = false;
+    }, 1500);
+    await loadPenilaianData();
+  }catch(e){
+    console.error(e);
+    alert("Gagal menyimpan penilaian: " + e.message);
+    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Penilaian`;
+    btn.disabled = false;
+  }
 }
 let currentTimerSettings = {};
 

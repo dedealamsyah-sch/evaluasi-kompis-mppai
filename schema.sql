@@ -65,3 +65,35 @@ CREATE POLICY "Allow public read/write exam_settings"
 -- =========================================================
 UPDATE evaluasi_results SET subject = 'kompis' WHERE subject IS NULL OR subject = 'kompis';
 UPDATE exam_settings SET subject = 'kompis' WHERE subject IS NULL OR subject = 'kompis';
+
+-- =========================================================
+-- Tabel Penilaian Manual (Catatan/LK & Tugas)
+-- Menyimpan nilai yang diinput guru secara manual per siswa
+-- =========================================================
+CREATE TABLE penilaian (
+  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  subject     TEXT NOT NULL DEFAULT 'kompis',    -- Mapel: 'kompis' atau 'mppai'
+  kelas       TEXT NOT NULL DEFAULT '-',         -- Kelas siswa
+  name        TEXT NOT NULL,                      -- Nama peserta didik
+  bab         INTEGER NOT NULL,                   -- Nomor bab
+  kategori    TEXT NOT NULL CHECK (kategori IN ('catatan', 'tugas')),
+  score       INTEGER CHECK (score BETWEEN 0 AND 100),  -- Nilai manual
+  catatan     TEXT DEFAULT '',                    -- Catatan guru (opsional)
+  updated_at  TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(subject, kelas, name, bab, kategori)
+);
+
+-- Index untuk pencarian cepat
+CREATE INDEX idx_penilaian_subject_bab_kategori ON penilaian (subject, bab, kategori);
+CREATE INDEX idx_penilaian_kelas ON penilaian (kelas);
+
+-- Aktifkan RLS
+ALTER TABLE penilaian ENABLE ROW LEVEL SECURITY;
+
+-- Policy: izinkan semua operasi publik
+DROP POLICY IF EXISTS "Allow public read/write penilaian" ON penilaian;
+CREATE POLICY "Allow public read/write penilaian"
+  ON penilaian
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
