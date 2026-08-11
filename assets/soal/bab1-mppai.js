@@ -5,7 +5,7 @@ window.EXAM_CONFIG = {
   judul: "Kecerdasan Buatan (AI) dalam Desain",
   babLabel: "I",
   useKelas: true,
-  kelasOptions: ["XI DKV 1", "XI DKV 2", "XI DKV 3"],
+  kelasOptions: ["XI DKV 1", "XI DKV 2", "XI DKV 3", "XI DKV 4"],
   mediaKind: "svg",
   sumber: "Ilustrasi konsep - Materi Pertemuan 1: Pengenalan AI dalam Desain",
   media: {

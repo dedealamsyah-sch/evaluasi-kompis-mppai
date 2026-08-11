@@ -654,7 +654,7 @@
             <div class="sc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg></div>
             <div>
               <div class="sc-title">MPP AI</div>
-              <div class="sc-kelas">Kelas XI DKV 1 · 2 · 3</div>
+              <div class="sc-kelas">Kelas XI DKV 1 · 2 · 3 · 4</div>
             </div>
           </div>
           <p class="sc-desc">Memahami kecerdasan buatan untuk desain: AI Generatif, Diffusion Model, dan GAN dalam alur kerja kreatif.</p>
@@ -802,7 +802,7 @@
         <div class="adm-summary">
           <div class="adm-stat"><div class="n" id="adm-total">0</div><div class="l">Total Pengerjaan</div><div class="sub">semua bab & jenis</div></div>
           <div class="adm-stat"><div class="n" id="adm-avg-score">–</div><div class="l">Rata-rata Skor</div></div>
-          <div class="adm-stat"><div class="n" id="adm-siswa-count">0</div><div class="l">Siswa Aktif</div><div class="sub">dari 36 siswa</div></div>
+          <div class="adm-stat"><div class="n" id="adm-siswa-count">0</div><div class="l">Siswa Aktif</div><div class="sub" id="adm-siswa-total">–</div></div>
           <div class="adm-stat"><div class="n" id="adm-violations">0</div><div class="l">Total Pelanggaran</div><div class="sub">anti-cheat</div></div>
         </div>
 
@@ -1077,8 +1077,8 @@ const SUBJECTS = {
   mppai: {
     label: 'MPP AI',
     short: 'MPP AI',
-    kelas: 'XI DKV 1-3',
-    kelasOptions: ['XI DKV 1', 'XI DKV 2', 'XI DKV 3'],
+    kelas: 'XI DKV 1-4',
+    kelasOptions: ['XI DKV 1', 'XI DKV 2', 'XI DKV 3', 'XI DKV 4'],
     deskripsi: 'Uji pemahaman materi MPP AI setiap bab secara online.',
     chapters: [
       {
@@ -1306,9 +1306,12 @@ async function loadGuruData(){
   const totalViolations = allRows.reduce((s,r)=>s+(r.violations||0), 0);
   const uniqueStudents = new Set(allRows.map(r=>r.name.toLowerCase())).size;
 
+  const rosterTotal = (SUBJECTS[filterSubject] || {}).kelasOptions.reduce((n, k) => n + (window.getRoster(filterSubject, filterSubject==='kompis' ? null : k) || []).length, 0);
+
   $("adm-total").textContent = allRows.length;
   $("adm-avg-score").textContent = avgScore !== null ? avgScore : "–";
   $("adm-siswa-count").textContent = uniqueStudents;
+  $("adm-siswa-total").textContent = "dari " + rosterTotal + " siswa";
   $("adm-violations").textContent = totalViolations;
 
   if(allRows.length === 0){
