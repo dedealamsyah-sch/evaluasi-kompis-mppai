@@ -1090,6 +1090,15 @@ const SUBJECTS = {
         file: "bab1-mppai.html",
         active: true,
         soalCount: 31
+      },
+      {
+        num: 1,
+        title: "Diskusi Kelompok",
+        desc: "Lembar diskusi kelompok — bandingkan AI generatif (Leonardo, Firefly, Canva AI, Meta AI, ElevenLabs), isi tabel, kesimpulan & refleksi",
+        file: "diskusi-kelompok-mppai.html",
+        active: true,
+        handout: true,
+        soalCount: 0
       }
     ]
   }
@@ -1178,10 +1187,11 @@ function renderChapters(){
   const grid = $("chapters-grid");
   grid.innerHTML = "";
   const activeCount = chapters.filter(c=>c.active).length;
-  const totalSoal = chapters.filter(c=>c.active).reduce((s,c)=>s+c.soalCount, 0);
+  const examChapters = chapters.filter(c=>c.active && !c.handout);
+  const totalSoal = examChapters.reduce((s,c)=>s+c.soalCount, 0);
   $("stat-bab").textContent = activeCount;
   $("stat-soal").textContent = totalSoal || "—";
-  $("stat-aktif").textContent = activeCount > 0 ? activeCount * 2 : "—";
+  $("stat-aktif").textContent = examChapters.length > 0 ? examChapters.length * 2 : "—";
   $("bab-count").textContent = chapters.length + " Bab";
 
   chapters.forEach(ch=>{
@@ -1189,19 +1199,22 @@ function renderChapters(){
     div.className = "ch-card " + (ch.active ? "active" : "locked");
     if(ch.active) div.onclick = ()=> location.href = ch.file;
 
+    const tagText = !ch.active ? 'Segera Hadir' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal'));
+    const btnText = !ch.active ? 'Coming Soon' : (ch.handout ? 'Buka →' : 'Mulai →');
+
     div.innerHTML = `
       <div class="ch-num">${ch.num}</div>
       <div class="ch-info">
         <h3>Bab ${ch.num}: ${ch.title}</h3>
         <p>${ch.desc}</p>
         <div class="tags">
-          <span class="status-tag ${ch.active ? 'tag-available' : 'tag-soon'}">
-            ${ch.active ? (ch.soalCount + ' soal') : 'Segera Hadir'}
+          <span class="status-tag ${ch.active ? (ch.handout ? 'tag-soon' : 'tag-available') : 'tag-soon'}">
+            ${tagText}
           </span>
         </div>
       </div>
       <div class="ch-action">
-        <button class="btn-go">${ch.active ? 'Mulai →' : 'Coming Soon'}</button>
+        <button class="btn-go">${btnText}</button>
       </div>`;
     grid.appendChild(div);
   });
@@ -1449,7 +1462,7 @@ function updateRecapBab(){
   const chapters = (SUBJECTS[$("recap-subject").value] || {}).chapters || [];
   const cur = sel.value;
   sel.innerHTML = "";
-  chapters.filter(c => c.active).forEach(ch => {
+  chapters.filter(c => c.active && !c.handout).forEach(ch => {
     const opt = document.createElement("option");
     opt.value = ch.num;
     opt.textContent = "Bab " + ch.num + ": " + ch.title;
@@ -1614,7 +1627,7 @@ function updatePenilaianBab(){
   const chapters = (SUBJECTS[$("penilaian-subject").value] || {}).chapters || [];
   const cur = sel.value;
   sel.innerHTML = "";
-  chapters.filter(c => c.active).forEach(ch => {
+  chapters.filter(c => c.active && !c.handout).forEach(ch => {
     const opt = document.createElement("option");
     opt.value = ch.num;
     opt.textContent = "Bab " + ch.num + ": " + ch.title;
@@ -1763,7 +1776,7 @@ async function loadTimerSettings(){
 function renderTimerGrid(){
   const grid = $("timer-grid");
   grid.innerHTML = "";
-  const activeBabs = getChapters().filter(c=>c.active);
+  const activeBabs = getChapters().filter(c=>c.active && !c.handout);
   const types = [{val:'pretest',label:'Pretest'},{val:'posttest',label:'Posttest'}];
 
   activeBabs.forEach(ch=>{
@@ -1958,7 +1971,7 @@ function updateStatBab(){
   const chapters = (SUBJECTS[$("stat-subject").value] || {}).chapters || [];
   const cur = sel.value;
   sel.innerHTML = '<option value="all">Semua Bab</option>';
-  chapters.filter(c => c.active).forEach(ch => {
+  chapters.filter(c => c.active && !c.handout).forEach(ch => {
     const opt = document.createElement("option");
     opt.value = ch.num;
     opt.textContent = "Bab " + ch.num + ": " + ch.title;
@@ -2110,7 +2123,7 @@ function updateFilterBab(){
   const sel = $("filter-bab");
   const cur = sel.value;
   sel.innerHTML = '<option value="all">Semua Bab</option>';
-  getChapters().filter(c=>c.active).forEach(ch=>{
+  getChapters().filter(c=>c.active && !c.handout).forEach(ch=>{
     const opt = document.createElement("option");
     opt.value = ch.num;
     opt.textContent = "Bab " + ch.num + ": " + ch.title;

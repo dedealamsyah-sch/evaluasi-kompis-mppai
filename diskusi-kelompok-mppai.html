@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bab 1 — Diskusi Kelompok · MPP AI · Evaluasi Komputer Grafis & MPP AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/exam.css">
+<style>
+  .handout-app{max-width:880px;}
+  .h-actions{display:flex;justify-content:flex-end;margin:-4px 0 20px;gap:8px;}
+  .h-actions button{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 16px;border-radius:10px;border:none;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;
+    background:rgba(124,92,255,0.14);color:var(--violet-dim);
+    border:1px solid rgba(124,92,255,0.3);transition:all .15s ease;
+  }
+  .h-actions button:hover{background:rgba(124,92,255,0.24);}
+  .h-actions button svg{width:14px;height:14px;}
+
+  .h-head{text-align:center;padding:6px 0 4px;}
+  .h-head .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px;}
+  .h-head h1{font-size:30px;font-weight:700;letter-spacing:-0.02em;line-height:1.15;
+    background:linear-gradient(135deg,var(--paper) 30%,var(--teal) 75%,var(--violet-dim) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .h-head .h-sub{font-size:14px;color:var(--text-dim);margin:10px auto 0;line-height:1.65;max-width:560px;}
+  .h-kls{display:inline-flex;align-items:center;gap:7px;margin-top:16px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
+    padding:6px 14px;border-radius:20px;
+    background:rgba(45,212,191,0.1);border:1px solid rgba(45,212,191,0.25);color:var(--teal);}
+
+  .h-section{margin-bottom:18px;}
+  .h-sec-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;}
+  .h-sec-num{
+    width:42px;height:42px;flex:none;border-radius:13px;
+    background:rgba(124,92,255,0.14);border:1px solid rgba(124,92,255,0.32);color:var(--violet-dim);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+  }
+  .h-sec-head h2{font-size:17px;font-weight:600;line-height:1.3;}
+  .h-sec-head .h-sec-sub{font-size:12.5px;color:var(--text-dim);margin-top:4px;line-height:1.55;}
+
+  .q-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .q-list > li{display:flex;gap:14px;align-items:flex-start;background:var(--ink);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;}
+  .q-num{
+    flex:none;width:28px;height:28px;border-radius:8px;
+    background:linear-gradient(135deg,var(--violet),#5f3dff);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;margin-top:1px;
+  }
+  .q-list p{margin:1px 0 0;font-size:14.5px;line-height:1.6;}
+  .q-list .q-sub{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;}
+  .q-list .q-sub li{background:transparent;border:none;padding:0;border-radius:0;gap:8px;align-items:center;}
+  .q-list .q-sub li::before{content:"→";color:var(--violet-dim);font-family:'JetBrains Mono',monospace;font-size:12px;}
+  .q-list .q-again{margin-top:10px;}
+
+  .cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);}
+  table.cmp{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px;}
+  table.cmp th, table.cmp td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  table.cmp thead th{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--violet-dim);background:var(--ink);}
+  table.cmp tbody th{font-weight:600;white-space:nowrap;color:var(--paper);font-family:'Inter',sans-serif;font-size:12.5px;}
+  table.cmp tbody tr:nth-child(even) td{background:rgba(247,245,240,0.015);}
+  table.cmp td.muted{color:var(--text-muted);font-size:11px;font-style:italic;}
+  .cmp-note{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-muted);margin-top:10px;text-align:center;letter-spacing:.03em;}
+
+  .line-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+  .line-list li{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px dashed var(--line);}
+  .line-list li .ln-num{flex:none;width:24px;height:24px;border-radius:7px;background:rgba(247,245,240,0.07);color:var(--text-dim);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;}
+  .line-list li .ln-line{flex:1;border-bottom:1px dashed var(--line);height:22px;}
+  .line-list li .ln-label{font-size:12.5px;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
+
+  .reflect-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+  .reflect-list li{display:flex;gap:14px;align-items:flex-start;background:var(--ink);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;flex-wrap:wrap;}
+  .reflect-list .r-ico{
+    flex:none;width:28px;height:28px;border-radius:8px;
+    background:rgba(255,182,39,0.14);color:var(--amber);
+    display:flex;align-items:center;justify-content:center;margin-top:1px;
+  }
+  .reflect-list .r-ico svg{width:14px;height:14px;}
+  .reflect-list p{margin:1px 0 0;font-size:14.5px;line-height:1.6;flex:1 1 260px;}
+  .reflect-list .r-line{flex:1 1 100%;border-bottom:1px dashed var(--line);height:22px;}
+
+  @media print{
+    body{background:#fff!important;padding:0;color:#111;}
+    .h-actions,.brand{display:none;}
+    .h-head h1{-webkit-text-fill-color:#111;background:none;color:#111;}
+    .card{box-shadow:none;border-color:#ccc;background:#fff;border-radius:8px;}
+    .h-sec-num{background:#eee;border-color:#bbb;color:#222;}
+    .q-list>li,.reflect-list li{background:#fff;border-color:#ccc;}
+    .q-num{background:#444;color:#fff;-webkit-print-color-adjust:exact;}
+    table.cmp th,table.cmp td{border-color:#ccc;}
+    table.cmp thead th{background:#f2f2f2;color:#222;}
+    .q-list .q-sub li::before{color:#555;}
+    a{-webkit-print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="app handout-app">
+
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 42 42" fill="none">
+      <path d="M6 32 C 14 8, 22 40, 36 10" stroke="#7c5cff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <circle cx="6" cy="32" r="3.4" fill="#ffb627"/>
+      <circle cx="36" cy="10" r="3.4" fill="#2dd4bf"/>
+      <circle cx="21" cy="24" r="2.6" fill="#7c5cff"/>
+    </svg>
+    <div class="brand-text">
+      <div class="eyebrow">MPP AI · Kelas XI DKV 1 · 2 · 3 · 4</div>
+      <h1>Bab 1 — Diskusi Kelompok</h1>
+    </div>
+  </div>
+
+  <div class="h-actions">
+    <button onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Cetak / PDF
+    </button>
+    <button onclick="location.href='index.html'" style="background:rgba(45,212,191,0.1);color:var(--teal);border-color:rgba(45,212,191,0.3);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      ← Beranda
+    </button>
+  </div>
+
+  <div class="h-head">
+    <div class="eyebrow">Lembar Kerja Diskusi Kelompok</div>
+    <h1>Membandingkan Platform AI Generatif</h1>
+    <p class="h-sub">Berkolaborasilah dalam kelompok untuk mendiskusikan pertanyaan berikut, mengisi tabel perbandingan, menarik kesimpulan, lalu selesaikan refleksi individu masing-masing. Setelah seluruh kelompok selesai, lakukan presentasi.</p>
+    <div class="h-kls">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      MPP AI · SMKN 9 Garut
+    </div>
+  </div>
+
+  <!-- PERTANYAAN DISKUSI -->
+  <section class="card h-section">
+    <div class="h-sec-head">
+      <span class="h-sec-num">01</span>
+      <div>
+        <h2>Diskusikan Pertanyaan Berikut</h2>
+        <p class="h-sec-sub">Diskusikan bersama kelompok, catat pendapat kalian, dan siapkan untuk presentasi di depan kelas.</p>
+      </div>
+    </div>
+    <ol class="q-list">
+      <li><span class="q-num">1</span><p>Mengapa <b>hasil gambar berbeda</b> padahal <b>prompt yang digunakan sama</b>?</p></li>
+      <li><span class="q-num">2</span><p>Menurut kelompok, <b>AI mana yang paling realistis</b>? Mengapa?</p></li>
+      <li><span class="q-num">3</span><p><b>AI mana yang paling mudah digunakan</b>?</p></li>
+      <li>
+        <span class="q-num">4</span>
+        <div>
+          <p>Platform mana yang paling cocok untuk:</p>
+          <ul class="q-sub">
+            <li>Desain Poster</li>
+            <li>Branding</li>
+            <li>Media Sosial</li>
+            <li>Ilustrasi</li>
+            <li>Fotografi Produk</li>
+          </ul>
+          <p class="q-again">Berikan alasannya.</p>
+        </div>
+      </li>
+      <li><span class="q-num">5</span><p>Apakah <b>AI dapat menggantikan desainer</b>? Berikan pendapat kelompok.</p></li>
+    </ol>
+  </section>
+
+  <!-- TABEL PERBANDINGAN -->
+  <section class="card h-section">
+    <div class="h-sec-head">
+      <span class="h-sec-num">02</span>
+      <div>
+        <h2>Tabel Perbandingan Antar Kelompok</h2>
+        <p class="h-sec-sub">Bandingkan setiap platform AI yang telah dicoba pada praktikum, lalu isi setiap sel dengan hasil diskusi kelompok kalian.</p>
+      </div>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th>Aspek</th>
+            <th>Leonardo</th>
+            <th>Firefly</th>
+            <th>Canva AI</th>
+            <th>Meta AI</th>
+            <th>ElevenLabs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>Realisme</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Detail</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Warna</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Komposisi</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Kecepatan</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Kemudahan</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Banyaknya Fitur</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+          <tr><th>Gratis/Berbayar</th><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td><td class="muted">Isi hasil diskusi…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-note">Leonardo · Firefly · Canva AI · Meta AI · ElevenLabs</p>
+  </section>
+
+  <!-- KESIMPULAN -->
+  <section class="card h-section">
+    <div class="h-sec-head">
+      <span class="h-sec-num">03</span>
+      <div>
+        <h2>Kesimpulan</h2>
+        <p class="h-sec-sub">Tuliskan minimal 5 kesimpulan dari hasil praktikum kalian.</p>
+      </div>
+    </div>
+    <ol class="line-list">
+      <li><span class="ln-num">1</span><span class="ln-line"></span></li>
+      <li><span class="ln-num">2</span><span class="ln-line"></span></li>
+      <li><span class="ln-num">3</span><span class="ln-line"></span></li>
+      <li><span class="ln-num">4</span><span class="ln-line"></span></li>
+      <li><span class="ln-num">5</span><span class="ln-line"></span></li>
+      <li><span class="ln-num">6</span><span class="ln-line"></span></li>
+    </ol>
+  </section>
+
+  <!-- REFLEKSI INDIVIDU -->
+  <section class="card h-section">
+    <div class="h-sec-head">
+      <span class="h-sec-num">04</span>
+      <div>
+        <h2>Refleksi Individu</h2>
+        <p class="h-sec-sub">Jawablah pertanyaan berikut secara mandiri berdasarkan pengalaman praktikum kalian.</p>
+      </div>
+    </div>
+    <ol class="reflect-list">
+      <li>
+        <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+        <p>AI apa yang menurut Anda paling menarik?</p>
+        <span class="r-line"></span>
+      </li>
+      <li>
+        <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+        <p>Apa fitur favorit Anda?</p>
+        <span class="r-line"></span>
+      </li>
+      <li>
+        <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span>
+        <p>Apa kelemahan AI yang Anda gunakan?</p>
+        <span class="r-line"></span>
+      </li>
+      <li>
+        <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></span>
+        <p>Apa manfaat AI bagi seorang desainer DKV?</p>
+        <span class="r-line"></span>
+      </li>
+      <li>
+        <span class="r-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <p>Jika menjadi seorang <b>Content Creator</b> atau <b>Graphic Designer</b>, AI mana yang akan Anda gunakan? Mengapa?</p>
+        <span class="r-line"></span>
+      </li>
+    </ol>
+  </section>
+
+  <div class="footer-link"><a href="index.html">← Kembali ke Beranda</a></div>
+
+</div>
+</body>
+</html>
