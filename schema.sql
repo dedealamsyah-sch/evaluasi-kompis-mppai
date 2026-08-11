@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS evaluasi_results (
   correct     INTEGER NOT NULL,                   -- Jumlah jawaban benar
   total       INTEGER NOT NULL,                   -- Total soal
   violations  INTEGER DEFAULT 0,                  -- Jumlah pelanggaran terdeteksi
+  detail      JSONB DEFAULT NULL,                 -- Detail jawaban per soal (opsional)
   submitted_at TIMESTAMPTZ DEFAULT NOW()          -- Waktu pengumpulan
 );
 
@@ -60,6 +61,9 @@ CREATE POLICY "Allow public read/write exam_settings"
   FOR ALL
   USING (true)
   WITH CHECK (true);
+
+-- Migration: tambahkan kolom detail (jika tabel sudah ada lebih dulu)
+ALTER TABLE evaluasi_results ADD COLUMN IF NOT EXISTS detail JSONB DEFAULT NULL;
 
 -- =========================================================
 -- Migration: update data lama dengan subject='kompis'

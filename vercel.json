@@ -1,6 +1,12 @@
 {
   "rewrites": [
     { "source": "/bab1-kompis", "destination": "/bab1-kompis.html" },
+    { "source": "/bab2-kompis", "destination": "/bab2-kompis.html" },
+    { "source": "/bab3-kompis", "destination": "/bab3-kompis.html" },
+    { "source": "/bab4-kompis", "destination": "/bab4-kompis.html" },
+    { "source": "/bab5-kompis", "destination": "/bab5-kompis.html" },
+    { "source": "/bab6-kompis", "destination": "/bab6-kompis.html" },
+    { "source": "/bab7-kompis", "destination": "/bab7-kompis.html" },
     { "source": "/bab1-mppai", "destination": "/bab1-mppai.html" }
   ],
   "headers": [
