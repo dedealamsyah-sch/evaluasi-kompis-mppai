@@ -410,6 +410,8 @@
   .subtle{color:var(--text-dim);font-size:13px;line-height:1.55;}
   #admin-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);}
   #admin-table-wrap table{margin-top:0;}
+  #recap-table-wrap, #penilaian-table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);}
+  #recap-table-wrap table, #penilaian-table-wrap table{margin-top:0;}
 
   .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
   .filter-bar label{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--text-dim);letter-spacing:.06em;}
@@ -725,7 +727,7 @@
         <div class="icon teal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="info">
           <span class="n" id="stat-aktif">—</span>
-          <span class="l">Pretest / Posttest</span>
+          <span class="l">Sesi Ujian (Pre + Post)</span>
         </div>
       </div>
     </div>
@@ -1159,6 +1161,10 @@ function switchSubject(subject) {
   $("filter-subject").value = subject;
   $("recap-subject").value = subject;
   $("penilaian-subject").value = subject;
+  $("stat-subject").value = subject;
+  $("filter-type").value = "all";
+  $("filter-search").value = "";
+  lastReportRows = [];
   if(!$("guru-dashboard").classList.contains("hidden")){
     refreshGuruPanel();
   }
@@ -1175,7 +1181,7 @@ function renderChapters(){
   const totalSoal = chapters.filter(c=>c.active).reduce((s,c)=>s+c.soalCount, 0);
   $("stat-bab").textContent = activeCount;
   $("stat-soal").textContent = totalSoal || "—";
-  $("stat-aktif").textContent = activeCount > 0 ? activeCount + " Bab" : "—";
+  $("stat-aktif").textContent = activeCount > 0 ? activeCount * 2 : "—";
   $("bab-count").textContent = chapters.length + " Bab";
 
   chapters.forEach(ch=>{
@@ -1373,6 +1379,8 @@ async function resetStudentResult(id, displayName, babLabel, typeLabel){
 
 function exportCSV(){
   if(!lastReportRows.length){ alert("Tidak ada data untuk diunduh."); return; }
+  const subject = $("filter-subject").value;
+  const fname = subject === "mppai" ? "rekap_evaluasi_mpp_ai.csv" : "rekap_evaluasi_komputer_grafis.csv";
   let csv = "Nama,Kelas,Bab,Jenis,Skor,Benar,Total,Pelanggaran,Waktu\n";
   lastReportRows.forEach(r=>{
     csv += `"${titleCase(r.name)}","${r.kelas||''}",${r.bab||'?'},${r.type==='pretest'?'Pretest':'Posttest'},${r.score},${r.correct},${r.total},${r.violations||0},"${new Date(r.submitted_at).toLocaleString('id-ID')}"\n`;
@@ -1380,7 +1388,7 @@ function exportCSV(){
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = "rekap_evaluasi_komputer_grafis.csv";
+  a.href = url; a.download = fname;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
@@ -1459,6 +1467,7 @@ function refreshGuruPanel(){
   fillKelasOptions($("filter-kelas"), subject);
   fillKelasOptions($("recap-kelas"), $("recap-subject").value);
   fillKelasOptions($("penilaian-kelas"), $("penilaian-subject").value);
+  defaultKelasSelect($("penilaian-kelas"));
   updateFilterBab();
   updateRecapBab();
   updatePenilaianBab();
@@ -2099,6 +2108,7 @@ async function loadStatistik(){
    ========================================================= */
 function updateFilterBab(){
   const sel = $("filter-bab");
+  const cur = sel.value;
   sel.innerHTML = '<option value="all">Semua Bab</option>';
   getChapters().filter(c=>c.active).forEach(ch=>{
     const opt = document.createElement("option");
@@ -2106,6 +2116,7 @@ function updateFilterBab(){
     opt.textContent = "Bab " + ch.num + ": " + ch.title;
     sel.appendChild(opt);
   });
+  if(![...sel.options].some(o => o.value === cur)) sel.value = "all";
 }
 
 // Set initial state: tampilkan landing page

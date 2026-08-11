@@ -639,10 +639,10 @@ function buildPathSVG(){
   var svg = $("path-svg");
   var n = currentQuiz.length;
   var w = 700, h = 46, pad = 18;
-  var step = (w - pad*2) / (n - 1);
+  var step = n > 1 ? (w - pad*2) / (n - 1) : 0;
   var pts = [];
   for(var i = 0; i < n; i++){
-    var x = pad + step*i;
+    var x = n > 1 ? pad + step*i : w/2;
     var y = 23 + Math.sin(i*0.9)*10;
     pts.push([x, y]);
   }
@@ -660,7 +660,7 @@ function updatePathProgress(){
   var n = currentQuiz.length;
   var segEl = $("seg-done");
   var len = parseFloat($("path-svg").dataset.len);
-  var frac = state.index / (n - 1);
+  var frac = n > 1 ? state.index / (n - 1) : 1;
   segEl.style.strokeDashoffset = len - len*frac;
   for(var i = 0; i < n; i++){
     var node = $("node-" + i);
