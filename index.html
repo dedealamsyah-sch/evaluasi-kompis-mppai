@@ -1109,6 +1109,15 @@ const SUBJECTS = {
         active: true,
         materi: true,
         soalCount: 0
+      },
+      {
+        num: 1,
+        title: "LKPD: Hak Cipta AI dalam Desain",
+        desc: "Lembar kerja diskusi kelompok: pemantik, 4 studi kasus 'Sidang DKV', 3 hukum emas, dan pakta kelas",
+        file: "lkpd-hak-cipta-mppai.html",
+        active: true,
+        lkpd: true,
+        soalCount: 0
       }
     ]
   }
@@ -1209,14 +1218,14 @@ function renderChapters(){
     div.className = "ch-card " + (ch.active ? "active" : "locked");
     if(ch.active) div.onclick = ()=> location.href = ch.file;
 
-    const tagText = !ch.active ? 'Segera Hadir' : (ch.materi ? 'Materi Bacaan' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal')));
-    const btnText = !ch.active ? 'Coming Soon' : (ch.materi ? 'Baca Materi →' : (ch.handout ? 'Buka →' : 'Mulai →'));
-    const tagCls = !ch.active ? 'tag-soon' : (ch.materi ? 'tag-materi' : (ch.handout ? 'tag-soon' : 'tag-available'));
+    const tagText = !ch.active ? 'Segera Hadir' : (ch.lkpd ? 'LKPD' : (ch.materi ? 'Materi Bacaan' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal'))));
+    const btnText = !ch.active ? 'Coming Soon' : (ch.lkpd ? 'Buka LKPD →' : (ch.materi ? 'Baca Materi →' : (ch.handout ? 'Buka →' : 'Mulai →')));
+    const tagCls = !ch.active ? 'tag-soon' : ((ch.lkpd || ch.materi) ? 'tag-materi' : (ch.handout ? 'tag-soon' : 'tag-available'));
 
     div.innerHTML = `
       <div class="ch-num">${ch.num}</div>
       <div class="ch-info">
-        <h3>${ch.materi ? 'Materi Bacaan:' : 'Bab ' + ch.num + ':'} ${ch.title}</h3>
+        <h3>${ch.lkpd ? 'LKPD:' : (ch.materi ? 'Materi Bacaan:' : 'Bab ' + ch.num + ':')} ${ch.title}</h3>
         <p>${ch.desc}</p>
         <div class="tags">
           <span class="status-tag ${tagCls}">

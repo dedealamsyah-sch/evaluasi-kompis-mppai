@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LKPD — Hak Cipta AI dalam Desain · DKV SMK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1F3B;
+    --ink-soft:#3A3F63;
+    --parchment:#F5F0E6;
+    --paper-dark:#EAE0C9;
+    --line:#D8CCA8;
+    --stamp-red:#A9382C;
+    --stamp-green:#3F6B4A;
+    --gold:#B8862B;
+    --ai:#5B4FCF;
+    --ai-soft:#EDEBFB;
+    --white:#FFFDF8;
+    --shadow: 0 10px 30px rgba(27,31,59,.12);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--parchment);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(27,31,59,.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{font-family:'Fraunces', serif; margin:0 0 .4em; color:var(--ink);}
+  .wrap{max-width:900px; margin:0 auto; padding:0 22px;}
+  ::selection{background:var(--ai); color:#fff;}
+
+  /* ===== HEADER ===== */
+  .cover{
+    background:var(--ink); color:var(--parchment); padding:46px 0 56px;
+    position:relative; overflow:hidden; border-bottom:6px solid var(--gold);
+  }
+  .cover::before{
+    content:""; position:absolute; inset:0;
+    background:repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 2px, transparent 2px 40px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono',monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+    color:#C9C4E8; border:1px solid rgba(255,255,255,.25); padding:6px 12px; border-radius:999px; margin-bottom:18px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+  .cover h1{font-size:clamp(1.7rem,4.5vw,2.6rem); color:#fff; max-width:740px; font-weight:700; margin-bottom:8px;}
+  .cover .subtitle{font-size:.98rem; color:#D9D6F0; max-width:600px;}
+  .meta-strip{
+    margin-top:24px; display:flex; flex-wrap:wrap; gap:10px 24px;
+    font-family:'JetBrains Mono',monospace; font-size:.76rem; color:#B7B2DE;
+  }
+  .meta-strip span b{color:#fff; font-weight:600;}
+  .file-stamp{
+    position:absolute; right:24px; top:30px;
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.7rem; letter-spacing:.08em;
+    color:var(--gold); border:2px solid var(--gold); border-radius:6px;
+    padding:7px 11px; transform:rotate(6deg); opacity:.85;
+  }
+
+  /* ===== TOOLBAR ===== */
+  .toolbar{
+    max-width:900px; margin:0 auto; padding:14px 22px 0;
+    display:flex; justify-content:flex-end; gap:8px; flex-wrap:wrap;
+  }
+  .tbtn{
+    font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;
+    padding:8px 14px; border-radius:8px; cursor:pointer; transition:.15s;
+    display:inline-flex; align-items:center; gap:7px;
+  }
+  .tbtn.primary{background:var(--ink); color:var(--parchment); border:1px solid var(--ink); text-decoration:none;}
+  .tbtn.primary:hover{background:var(--ai);}
+  .tbtn.ghost{background:transparent; color:var(--ink); border:1.5px solid var(--ink);}
+  .tbtn.ghost:hover{background:var(--ink); color:var(--parchment);}
+
+  /* ===== SHEET ===== */
+  .sheet{
+    max-width:900px; margin:0 auto; padding:26px 0 60px;
+  }
+  .section{
+    background:var(--white); border:1px solid var(--line); border-radius:6px;
+    box-shadow:var(--shadow); margin-bottom:22px; padding:26px 28px;
+  }
+  .kicker{
+    font-family:'JetBrains Mono',monospace; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--gold); font-weight:700; display:block; margin-bottom:6px;
+  }
+  .section h2{font-size:1.25rem; margin-bottom:4px;}
+  .section .sub{font-size:.9rem; color:var(--ink-soft); margin:0 0 16px;}
+  .section p, .section li{font-size:.95rem;}
+  .num-list{list-style:none; counter-reset:num; padding:0; margin:0;}
+  .num-list > li{
+    counter-increment:num; position:relative; padding:12px 6px 12px 44px;
+    border-bottom:1px dashed var(--line); font-size:.95rem;
+  }
+  .num-list > li:last-child{border-bottom:none;}
+  .num-list > li::before{
+    content:counter(num, decimal-leading-zero);
+    position:absolute; left:0; top:12px; width:30px; height:30px; border-radius:6px;
+    background:var(--ai-soft); color:var(--ai); font-family:'JetBrains Mono',monospace;
+    font-size:.72rem; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+  .num-list li b{color:var(--ink);}
+
+  /* ===== KASUS CARDS ===== */
+  .kasus-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:6px;}
+  @media(max-width:700px){.kasus-grid{grid-template-columns:1fr;}}
+  .k-card{
+    border:1.5px solid var(--line); border-radius:6px; padding:16px 18px; background:var(--parchment);
+    cursor:pointer; transition:.15s; position:relative;
+  }
+  .k-card:hover{border-color:var(--gold); transform:translateY(-2px);}
+  .k-card.sel{border-color:var(--ai); background:var(--ai-soft); box-shadow:0 0 0 3px rgba(91,79,207,.15);}
+  .k-card .k-tag{
+    font-family:'JetBrains Mono',monospace; font-size:.64rem; text-transform:uppercase; letter-spacing:.08em;
+    padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:10px; background:#EAF0E7; color:var(--stamp-green);
+  }
+  .k-card .k-tag.amber{background:rgba(184,134,43,.14); color:var(--gold);}
+  .k-card .k-tag.red{background:#F3E3E0; color:var(--stamp-red);}
+  .k-card .k-tag.ai{background:var(--ai-soft); color:var(--ai);}
+  .k-card h4{font-size:1rem; margin:0 0 4px;}
+  .k-card .k-meta{font-size:.78rem; color:var(--ink-soft); font-family:'JetBrains Mono',monospace; margin-bottom:8px;}
+  .k-card p{font-size:.86rem; color:var(--ink-soft); margin:0 0 10px;}
+  .k-card .k-q{
+    font-size:.85rem; background:var(--white); border-radius:5px; padding:10px 12px;
+    border-left:3px solid var(--ai); margin:10px 0 12px; color:var(--ink);
+  }
+  .k-card .k-q b{display:block; font-size:.68rem; font-family:'JetBrains Mono',monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--ai); margin-bottom:3px;}
+  .k-card.selected-hint{font-size:.72rem; color:var(--ink-soft);}
+
+  /* ===== isi garis / reflektif ===== */
+  .fill-line{
+    display:block; border-bottom:1.5px solid var(--ink); width:100%; height:1px; margin:14px 0 0;
+  }
+  .write{
+    width:100%; min-height:66px; background:transparent; border:none; border-bottom:1.5px solid var(--line);
+    font-family:'Space Grotesk',sans-serif; font-size:.95rem; color:var(--ink); padding:6px 2px; resize:vertical;
+    outline:none; margin-top:10px;
+  }
+  .write:focus{border-bottom-color:var(--ai);}
+  .blank-row{margin:20px 0;}
+  .blank-row .label{
+    font-family:'JetBrains Mono',monospace; font-size:.64rem; text-transform:uppercase; letter-spacing:.1em; color:var(--gold);
+  }
+
+  /* ===== PAKTA ===== */
+  .pakta-list{list-style:none; padding:0; margin:10px 0 0;}
+  .pakta-list li{padding:9px 0; border-bottom:1px dashed var(--line); font-size:.93rem; display:flex; gap:12px; align-items:flex-start;}
+  .pakta-list li:last-child{border-bottom:none;}
+  .pakta-list input[type=checkbox]{
+    width:20px; height:20px; margin-top:2px; accent-color:var(--stamp-green); cursor:pointer; flex:none;
+  }
+  .pakta-list label b{color:var(--stamp-green);}
+
+  /* Refleksi + TTD */
+  .refleksi{
+    background:var(--ink); color:var(--parchment); border-radius:6px; padding:20px 22px; margin-top:8px;
+  }
+  .refleksi .kicker{color:var(--gold);}
+  .refleksi h3{color:#fff; font-size:1rem; margin-bottom:8px;}
+  .refleksi .write{border-bottom-color:rgba(245,240,230,.4); color:var(--parchment);}
+  .ttd-row{display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:34px;}
+  @media(max-width:560px){.ttd-row{grid-template-columns:1fr;}}
+  .ttd-col p{margin:0; font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft);}
+  .ttd-space{height:74px;}
+  .ttd-line{border-top:1.5px solid var(--ink);}
+
+  /* kotak hasil kesimpulan */
+  .hukum-box{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:8px 0 6px;
+  }
+  @media(max-width:700px){.hukum-box{grid-template-columns:1fr;}}
+  .hukum-item{
+    border:1.5px solid var(--line); border-radius:6px; padding:14px;
+    background:var(--parchment); font-size:.86rem;
+  }
+  .hukum-item .h-label{
+    font-family:'JetBrains Mono',monospace; font-size:.64rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ai); font-weight:700; display:block; margin-bottom:8px;
+  }
+
+  footer{padding:8px 0 44px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--ink-soft);}
+
+  /* ===== PRINT ===== */
+  @media print{
+    body{background:#fff; background-image:none;}
+    .toolbar, .cover::before, .file-stamp{display:none;}
+    .cover{background:var(--ink)!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    .section, .k-card{box-shadow:none;}
+    .k-card.sel{box-shadow:none;}
+    .refleksi{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+    .sheet{padding-bottom:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="wrap" style="position:relative;">
+    <div class="file-stamp">LEMBAR KERJA T-3</div>
+    <span class="eyebrow"><span class="dot"></span> Mata Pelajaran Pilihan (MPP) AI — Konsentrasi DKV</span>
+    <h1>LKPD — Hak Cipta AI dalam Desain</h1>
+    <p class="subtitle">Diskusi kelompok untuk memahami etika, risiko, dan aturan penggunaan AI dalam karya desain — dan bagaimana menerapkannya sebagai desainer yang jujur dan bertanggung jawab.</p>
+    <div class="meta-strip">
+      <span>Kelas <b>XI DKV</b> · Kelompok <b>………</b></span>
+      <span>Nama Anggota: <b>1) ……… 2) ……… 3) ……… 4) ………</b></span>
+      <span>SMKN 9 Garut · T.P. <b>2026/2027</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <a class="tbtn primary" href="materi-hak-cipta-ai-desain.html">↩ Kembali ke Materi</a>
+  <button class="tbtn ghost" onclick="window.print()">🖨 Cetak / PDF</button>
+</div>
+
+<div class="sheet">
+
+  <!-- ============ TUJUAN ============ -->
+  <div class="section">
+    <span class="kicker">Tujuan Pembelajaran</span>
+    <h2>Setelah diskusi ini, kamu diharapkan dapat:</h2>
+    <ul>
+      <li>Menjelaskan <b>etika</b>, <b>risiko hukum</b>, dan <b>aturan</b> penggunaan AI dalam karya desain;</li>
+      <li>Mengidentifikasi kapan sebuah karya (termasuk yang berbantuan AI) bisa dilindungi hak cipta;</li>
+      <li>Bersikap jujur dan profesional di hadapan klien, teman, dan guru ketika memakai AI.</li>
+    </ul>
+  </div>
+
+  <!-- ============ A. PEMANTIK ============ -->
+  <div class="section">
+    <span class="kicker">Bagian A</span>
+    <h2>Pemantik Diskusi</h2>
+    <p class="sub">Jawab di buku/kertas secara individu sebelum diskusi kelompok. (2 menit per soal — lalu bandingkan dengan teman.)</p>
+    <ol class="num-list">
+      <li>Menurutmu, boleh&nbsp;gak <b>jual hasil desain AI mentah-mentah</b> ke klien? Alasannya?</li>
+      <li>Kalau <b>gaya gambar kamu ditiru AI</b>, kamu rugi apa untung?</li>
+      <li>Apa bedanya <b>"desainer pake AI"</b> dengan <b>"AI yang ngedesain"</b>?</li>
+    </ol>
+    <div class="blank-row">
+      <span class="label">Ruang menulis (jika ingin dicatat di lembar ini)</span>
+      <textarea class="write" placeholder="Tulis jawaban individu atau catatan hasil diskusi di sini..."></textarea>
+    </div>
+  </div>
+
+  <!-- ============ B. STUDI KASUS ============ -->
+  <div class="section">
+    <span class="kicker">Bagian B</span>
+    <h2>Studi Kasus "Sidang DKV"</h2>
+    <p class="sub">Pilih <b>satu</b> kasus bersama kelompok. Diskusikan <b>10 menit</b>, lalu presentasikan ke teman satu kelas. Klik kartu untuk menandai kasus pilihan kelompokmu.</p>
+
+    <div class="kasus-grid" id="kasus-grid">
+
+      <div class="k-card" data-kasus="TIM AGENCY">
+        <span class="k-tag red">Kasus 1 · Dunia Kerja</span>
+        <h4>Tim Agency</h4>
+        <div class="k-meta">BRIEF: 10 LOGO · DEADLINE 1 JAM</div>
+        <p>Klien meminta 10 logo dalam 1 jam. Kamu menyelesaikannya pakai AI + edit 20%, lalu menagih <b>Rp5.000.000</b> tanpa menjelaskan peran AI.</p>
+        <div class="k-q"><b>Pertanyaan</b>Etis atau tidak? Resiko hukumnya apa?</div>
+      </div>
+
+      <div class="k-card" data-kasus="TIM ILUSTRATOR">
+        <span class="k-tag amber">Kasus 2 · Pekerja Kreatif</span>
+        <h4>Tim Ilustrator</h4>
+        <div class="k-meta">GAYA KHAS · 2 TAHUN DIBANGUN</div>
+        <p>Selama 2 tahun kamu membangun gaya ilustrasi khas. Tiba-tiba ada AI yang bisa membuat karya bergaya <b>mirip 90%</b> dengan gaya kamu.</p>
+        <div class="k-q"><b>Pertanyaan</b>Bisa menuntut&nbsp;gak? Harus ngapain biar gaya kamu aman?</div>
+      </div>
+
+      <div class="k-card" data-kasus="TIM LOMBA">
+        <span class="k-tag ai">Kasus 3 · Kompetisi</span>
+        <h4>Tim Lomba</h4>
+        <div class="k-meta">POSTER · JUARA 1</div>
+        <p>Kamu juara 1 lomba poster. Ternyata karyamu <b>100% hasil AI tanpa edit</b>. Panitia memutuskan mendiskualifikasi kamu.</p>
+        <div class="k-q"><b>Pertanyaan</b>Setuju atau tidak? Aturan lomba yang ideal seperti apa?</div>
+      </div>
+
+      <div class="k-card" data-kasus="TIM GURU">
+        <span class="k-tag" style="background:var(--ai-soft); color:var(--ai);">Kasus 4 · Sekolah</span>
+        <h4>Tim Guru</h4>
+        <div class="k-meta">TUGAS: MASKOT SEKOLAH</div>
+        <p>Guru memberi tugas membuat maskot. Murid mengumpulkan hasil AI <b>tanpa diapa-apain</b> — tidak diedit, tidak dikembangkan idenya.</p>
+        <div class="k-q"><b>Pertanyaan</b>Nilainya berapa? Tugas susulan apa yang cocok?</div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:18px;">
+      <span id="kasus-status" class="kicker">Belum ada kasus terpilih — klik salah satu kartu.</span>
+    </div>
+  </div>
+
+  <!-- ============ C. KESIMPULAN ============ -->
+  <div class="section">
+    <span class="kicker">Bagian C</span>
+    <h2>Kesimpulan — "3 Hukum Emas Desainer AI"</h2>
+    <p class="sub">Lengkapi setelah diskusi. Gunakan materi bacaan <i>Hak Cipta &amp; Etika AI Generatif dalam Desain</i> untuk memandu jawaban kelompokmu.</p>
+
+    <div class="hukum-box">
+      <div class="hukum-item">
+        <span class="h-label">HUKUM DATA</span>
+        <span>AI di Indonesia belum diatur rinci, tapi etika desainer wajib tahu sumber: ………………………………………………………………</span>
+      </div>
+      <div class="hukum-item">
+        <span class="h-label">HUKUM OUTPUT</span>
+        <span>Yang bisa dilindungi hak cipta = hasil yang kamu edit ±80% + ada ide orisinalmu: ………………………………………</span>
+      </div>
+      <div class="hukum-item">
+        <span class="h-label">HUKUM ETIKA</span>
+        <span>Jujur soal peran AI di hadapan klien &amp; karya orang lain: ……………………………………………………………………</span>
+      </div>
+    </div>
+
+    <div class="blank-row">
+      <span class="label">Kesimpulan lengkap kelompok (3 kalimat)</span>
+      <textarea class="write" style="min-height:90px;" placeholder="Tuliskan kesimpulan kelompokmu di sini..."></textarea>
+    </div>
+  </div>
+
+  <!-- ============ D. PAKTA ============ -->
+  <div class="section">
+    <span class="kicker">Bagian D</span>
+    <h2>Pakta Kelas DKV</h2>
+    <p class="sub">Berikan tanda centang pada pernyataan yang <b>kamu sanggupi</b>. Ini adalah komitmen pribadi — bukan nilai, tapi integritas.</p>
+    <ul class="pakta-list">
+      <li>
+        <input type="checkbox" id="pakta1">
+        <label for="pakta1"><b>Saya akan jujur</b> jika karya saya dibantu AI.</label>
+      </li>
+      <li>
+        <input type="checkbox" id="pakta2">
+        <label for="pakta2"><b>Saya akan edit minimal 70%</b> hasil AI sebelum dijual atau dikumpulkan.</label>
+      </li>
+      <li>
+        <input type="checkbox" id="pakta3">
+        <label for="pakta3"><b>Saya akan menghargai karya teman</b> dan tidak jiplak prompt.</label>
+      </li>
+    </ul>
+
+    <div class="refleksi">
+      <span class="kicker">Refleksi — 1 Kalimat</span>
+      <h3>"Sebagai desainer, saya akan menggunakan AI untuk ..."</h3>
+      <textarea class="write" style="min-height:52px;" placeholder="Lengkapi kalimatnya dengan jujur..."></textarea>
+    </div>
+
+    <div class="ttd-row">
+      <div class="ttd-col">
+        <div class="ttd-space"></div>
+        <div class="ttd-line"></div>
+        <p>Nama &amp; Tanda Tangan Siswa</p>
+      </div>
+      <div class="ttd-col">
+        <div class="ttd-space"></div>
+        <div class="ttd-line"></div>
+        <p>Nama &amp; Tanda Tangan Guru</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  LKPD · Mata Pelajaran Pilihan (MPP) AI · Konsentrasi DKV · SMK Negeri 9 Garut · T.P. 2026/2027<br>
+  Disusun oleh Dede Alamsyah, S.Pd.
+</footer>
+
+<script>
+const cards = document.querySelectorAll('.k-card');
+const status = document.getElementById('kasus-status');
+cards.forEach(c=>{
+  c.addEventListener('click', ()=>{
+    const chosen = c.classList.contains('sel');
+    cards.forEach(x=>x.classList.remove('sel'));
+    if(!chosen){
+      c.classList.add('sel');
+      status.textContent = 'Kasus terpilih: ' + c.dataset.kasus + ' — diskusikan 10 menit, siapkan presentasi kelompok.';
+    } else {
+      status.textContent = 'Belum ada kasus terpilih — klik salah satu kartu.';
+    }
+  });
+});
+</script>
+</body>
+</html>
