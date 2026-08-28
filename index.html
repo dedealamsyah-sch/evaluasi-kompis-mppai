@@ -293,6 +293,7 @@
   }
   .tag-available{background:rgba(45,212,191,0.14);color:var(--teal);}
   .tag-soon{background:rgba(255,182,39,0.12);color:var(--amber);}
+  .tag-materi{background:rgba(124,92,255,0.14);color:var(--violet-dim);}
   .ch-action{flex:none;}
   .ch-action .btn-go{
     padding:10px 20px;border-radius:var(--radius-sm);border:none;cursor:pointer;
@@ -1099,6 +1100,15 @@ const SUBJECTS = {
         active: true,
         handout: true,
         soalCount: 0
+      },
+      {
+        num: 1,
+        title: "Hak Cipta & Etika AI Generatif dalam Desain",
+        desc: "Materi bacaan: kasus Getty v. Stability AI, Andersen v. Stability AI, regulasi & prinsip etis penggunaan AI untuk desainer",
+        file: "materi-hak-cipta-ai-desain.html",
+        active: true,
+        materi: true,
+        soalCount: 0
       }
     ]
   }
@@ -1199,16 +1209,17 @@ function renderChapters(){
     div.className = "ch-card " + (ch.active ? "active" : "locked");
     if(ch.active) div.onclick = ()=> location.href = ch.file;
 
-    const tagText = !ch.active ? 'Segera Hadir' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal'));
-    const btnText = !ch.active ? 'Coming Soon' : (ch.handout ? 'Buka →' : 'Mulai →');
+    const tagText = !ch.active ? 'Segera Hadir' : (ch.materi ? 'Materi Bacaan' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal')));
+    const btnText = !ch.active ? 'Coming Soon' : (ch.materi ? 'Baca Materi →' : (ch.handout ? 'Buka →' : 'Mulai →'));
+    const tagCls = !ch.active ? 'tag-soon' : (ch.materi ? 'tag-materi' : (ch.handout ? 'tag-soon' : 'tag-available'));
 
     div.innerHTML = `
       <div class="ch-num">${ch.num}</div>
       <div class="ch-info">
-        <h3>Bab ${ch.num}: ${ch.title}</h3>
+        <h3>${ch.materi ? 'Materi Bacaan:' : 'Bab ' + ch.num + ':'} ${ch.title}</h3>
         <p>${ch.desc}</p>
         <div class="tags">
-          <span class="status-tag ${ch.active ? (ch.handout ? 'tag-soon' : 'tag-available') : 'tag-soon'}">
+          <span class="status-tag ${tagCls}">
             ${tagText}
           </span>
         </div>
