@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berkas Kasus: Hak Cipta &amp; Etika AI Generatif dalam Desain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1F3B;
+    --ink-soft:#3A3F63;
+    --parchment:#F5F0E6;
+    --paper-dark:#EAE0C9;
+    --line:#D8CCA8;
+    --stamp-red:#A9382C;
+    --stamp-green:#3F6B4A;
+    --gold:#B8862B;
+    --ai:#5B4FCF;
+    --ai-soft:#EDEBFB;
+    --white:#FFFDF8;
+    --shadow: 0 10px 30px rgba(27,31,59,.12);
+    --radius: 4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--parchment);
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(27,31,59,.05) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3,h4{font-family:'Fraunces', serif; margin:0 0 .4em; color:var(--ink);}
+  a{color:inherit;}
+  .wrap{max-width:980px; margin:0 auto; padding:0 22px;}
+  ::selection{background:var(--ai); color:#fff;}
+
+  /* ===== HEADER / DOSSIER COVER ===== */
+  .cover{
+    background: var(--ink);
+    color: var(--parchment);
+    padding: 54px 0 70px;
+    position:relative;
+    overflow:hidden;
+    border-bottom: 6px solid var(--gold);
+  }
+  .cover::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 2px, transparent 2px 40px);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+    color:#C9C4E8; border:1px solid rgba(255,255,255,.25);
+    padding:6px 12px; border-radius:999px; margin-bottom:22px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+  .cover h1{
+    font-size:clamp(2rem, 5vw, 3.1rem);
+    color:#fff; max-width:820px; font-weight:700;
+  }
+  .cover .subtitle{
+    font-size:1.05rem; color:#D9D6F0; max-width:640px; margin-top:10px;
+  }
+  .meta-strip{
+    margin-top:30px; display:flex; flex-wrap:wrap; gap:10px 26px;
+    font-family:'JetBrains Mono', monospace; font-size:.78rem; color:#B7B2DE;
+  }
+  .meta-strip span b{color:#fff; font-weight:600;}
+  .file-stamp{
+    position:absolute; right:26px; top:38px;
+    font-family:'JetBrains Mono', monospace; font-weight:700; font-size:.72rem;
+    letter-spacing:.08em; color:var(--gold);
+    border:2px solid var(--gold); border-radius:6px;
+    padding:8px 12px; transform:rotate(6deg); opacity:.85;
+  }
+
+  /* ===== TAB NAV ===== */
+  .tabbar-outer{position:sticky; top:0; z-index:50; background:var(--parchment); border-bottom:1px solid var(--line);}
+  .tabbar{
+    display:flex; gap:2px; overflow-x:auto; padding:10px 0;
+    scrollbar-width:thin;
+  }
+  .tabbar::-webkit-scrollbar{height:5px;}
+  .tabbar::-webkit-scrollbar-thumb{background:var(--line); border-radius:4px;}
+  .tabbar a{
+    flex:0 0 auto; text-decoration:none;
+    font-family:'JetBrains Mono', monospace; font-size:.72rem; letter-spacing:.03em;
+    text-transform:uppercase; color:var(--ink-soft);
+    padding:9px 14px; border-radius:999px; border:1px solid transparent;
+    white-space:nowrap; transition:.15s;
+  }
+  .tabbar a:hover{border-color:var(--line); background:var(--white);}
+  .tabbar a.active{background:var(--ink); color:var(--parchment);}
+
+  section{padding:56px 0;}
+  section + section{border-top:1px dashed var(--line);}
+  .kicker{
+    font-family:'JetBrains Mono', monospace; font-size:.72rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:10px;
+    display:block;
+  }
+  .lead{font-size:1.06rem; color:var(--ink-soft); max-width:720px;}
+
+  /* ===== CARD BASICS ===== */
+  .card{
+    background:var(--white); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+
+  /* ===== APERSEPSI ===== */
+  .scenario-box{
+    margin-top:26px; padding:26px; background:var(--white);
+    border-left:4px solid var(--ai); border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+  .scenario-box p{margin:.4em 0;}
+  .scenario-box .role{font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ai); text-transform:uppercase; letter-spacing:.08em;}
+  .poll{
+    margin-top:22px; display:grid; gap:10px; grid-template-columns:1fr 1fr; max-width:640px;
+  }
+  @media(max-width:560px){.poll{grid-template-columns:1fr;}}
+  .poll button{
+    font-family:'Space Grotesk', sans-serif; font-size:.92rem; text-align:left;
+    padding:14px 16px; border:1.5px solid var(--ink); background:var(--white);
+    border-radius:var(--radius); cursor:pointer; transition:.15s; color:var(--ink);
+  }
+  .poll button:hover{background:var(--ink); color:var(--parchment);}
+  .poll-result{
+    margin-top:16px; padding:16px; background:var(--ai-soft); border-radius:var(--radius);
+    display:none; font-size:.95rem; border-left:4px solid var(--ai);
+  }
+  .poll-result.show{display:block;}
+
+  /* ===== ANALOGI ===== */
+  .analogy-grid{
+    margin-top:28px; display:grid; grid-template-columns:1fr auto 1fr; gap:18px; align-items:center;
+  }
+  @media(max-width:700px){.analogy-grid{grid-template-columns:1fr;}}
+  .analogy-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:24px; box-shadow:var(--shadow);
+  }
+  .analogy-card h4{font-size:1.15rem;}
+  .analogy-card .tag{
+    font-family:'JetBrains Mono',monospace; font-size:.68rem; text-transform:uppercase;
+    letter-spacing:.08em; padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:12px;
+  }
+  .analogy-card.human .tag{background:#EAF0E7; color:var(--stamp-green);}
+  .analogy-card.ai .tag{background:var(--ai-soft); color:var(--ai);}
+  .versus{
+    font-family:'Fraunces', serif; font-weight:700; font-size:1.4rem; color:var(--gold);
+    text-align:center;
+  }
+  .analogy-note{
+    margin-top:20px; padding:16px 20px; background:var(--paper-dark); border-radius:var(--radius);
+    font-size:.92rem; color:var(--ink-soft);
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline{
+    margin-top:34px; position:relative; padding-left:26px;
+    border-left:2px dotted var(--gold);
+  }
+  .t-item{position:relative; padding-bottom:30px; cursor:pointer;}
+  .t-item:last-child{padding-bottom:0;}
+  .t-item::before{
+    content:""; position:absolute; left:-32px; top:4px; width:12px; height:12px;
+    border-radius:50%; background:var(--white); border:2.5px solid var(--gold);
+  }
+  .t-item .t-date{font-family:'JetBrains Mono',monospace; font-size:.74rem; color:var(--gold); font-weight:700;}
+  .t-item h4{font-size:1rem; margin:.2em 0; display:flex; align-items:center; gap:8px;}
+  .t-item .t-arrow{transition:.2s; font-size:.8em; color:var(--ink-soft);}
+  .t-item.open .t-arrow{transform:rotate(90deg);}
+  .t-body{
+    max-height:0; overflow:hidden; transition:max-height .25s ease; font-size:.92rem; color:var(--ink-soft);
+  }
+  .t-item.open .t-body{max-height:200px; margin-top:8px;}
+
+  /* ===== CASE FILE CARDS ===== */
+  .case{
+    margin-top:30px; background:var(--white); border:1px solid var(--line);
+    border-radius:6px; box-shadow:var(--shadow); overflow:hidden; position:relative;
+  }
+  .case-head{
+    padding:24px 26px; border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; align-items:flex-start;
+  }
+  .case-head h3{font-size:1.4rem; max-width:520px;}
+  .case-parties{font-size:.9rem; color:var(--ink-soft); margin-top:6px;}
+  .case-meta{font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ink-soft); margin-top:10px;}
+  .stamp{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.72rem; letter-spacing:.06em;
+    text-transform:uppercase; border:2.5px solid; border-radius:8px; padding:8px 12px;
+    transform:rotate(-6deg); white-space:nowrap; flex:0 0 auto;
+  }
+  .stamp.red{color:var(--stamp-red); border-color:var(--stamp-red);}
+  .stamp.amber{color:var(--gold); border-color:var(--gold);}
+  .accordion{border-top:1px solid var(--line);}
+  .acc-item + .acc-item{border-top:1px solid var(--line);}
+  .acc-trigger{
+    width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    padding:16px 26px; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:.98rem;
+    display:flex; justify-content:space-between; align-items:center; color:var(--ink);
+  }
+  .acc-trigger .plus{font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:1.1rem; transition:.2s;}
+  .acc-item.open .plus{transform:rotate(45deg);}
+  .acc-panel{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .acc-panel-inner{padding:0 26px 20px; font-size:.94rem; color:var(--ink-soft);}
+  .acc-panel-inner p{margin:.5em 0;}
+
+  /* ===== COMPARISON TABLE ===== */
+  .compare-wrap{margin-top:16px; overflow-x:auto;}
+  table.compare{width:100%; border-collapse:collapse; min-width:560px; background:var(--white); box-shadow:var(--shadow); border-radius:6px; overflow:hidden;}
+  table.compare th, table.compare td{padding:13px 16px; border-bottom:1px solid var(--line); text-align:left; font-size:.9rem; vertical-align:top;}
+  table.compare thead th{background:var(--ink); color:var(--parchment); font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em;}
+  table.compare tbody tr:nth-child(even){background:var(--parchment);}
+  table.compare td:first-child{font-weight:600; color:var(--ink); width:150px;}
+
+  /* ===== INDONESIA / 4-STEP ===== */
+  .steps4{margin-top:30px; display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media(max-width:800px){.steps4{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.steps4{grid-template-columns:1fr;}}
+  .step-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:20px 16px;
+    cursor:pointer; box-shadow:var(--shadow); transition:.15s; position:relative;
+  }
+  .step-card:hover{transform:translateY(-3px);}
+  .step-card .num{
+    font-family:'Fraunces',serif; font-weight:700; font-size:1.7rem; color:var(--ai); opacity:.35;
+  }
+  .step-card h4{font-size:.95rem; margin-top:4px;}
+  .step-detail{
+    font-size:.85rem; color:var(--ink-soft); max-height:0; overflow:hidden; transition:max-height .25s;
+  }
+  .step-card.open .step-detail{max-height:200px; margin-top:8px;}
+
+  /* ===== PRINCIPLES ===== */
+  .principles{margin-top:30px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px;}
+  .flip{perspective:1200px; height:190px;}
+  .flip-inner{
+    position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;
+    cursor:pointer;
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:6px;
+    padding:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; justify-content:center;
+  }
+  .flip-front{background:var(--ink); color:var(--parchment);}
+  .flip-front .fnum{font-family:'JetBrains Mono',monospace; font-size:.7rem; color:var(--gold); letter-spacing:.08em; text-transform:uppercase;}
+  .flip-front h4{color:#fff; font-size:1.15rem; margin-top:8px;}
+  .flip-front .hint{font-size:.75rem; color:#B7B2DE; margin-top:auto; font-family:'JetBrains Mono',monospace;}
+  .flip-back{background:var(--ai); color:#fff; transform:rotateY(180deg); font-size:.88rem;}
+
+  /* ===== GLOSSARY ===== */
+  .glossary{margin-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--white);}
+  @media(max-width:640px){.glossary{grid-template-columns:1fr;}}
+  .g-item{padding:16px 20px; border-bottom:1px solid var(--line);}
+  .g-item:nth-child(odd){border-right:1px solid var(--line);}
+  @media(max-width:640px){.g-item:nth-child(odd){border-right:none;}}
+  .g-item dt{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:.85rem; color:var(--gold);}
+  .g-item dd{margin:4px 0 0; font-size:.87rem; color:var(--ink-soft);}
+
+  /* ===== QUIZ ===== */
+  .quiz-card{
+    margin-top:26px; background:var(--white); border:1px solid var(--line); border-radius:6px;
+    box-shadow:var(--shadow); padding:26px;
+  }
+  .q-progress{font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ink-soft); margin-bottom:14px;}
+  .q-block{display:none;}
+  .q-block.active{display:block;}
+  .q-block h4{font-size:1.05rem;}
+  .q-options{margin-top:14px; display:grid; gap:10px;}
+  .q-options button{
+    text-align:left; padding:12px 16px; border:1.5px solid var(--line); background:var(--parchment);
+    border-radius:var(--radius); cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:.9rem;
+    transition:.15s;
+  }
+  .q-options button:hover{border-color:var(--ai);}
+  .q-options button.correct{background:#E4EEE4; border-color:var(--stamp-green); color:var(--stamp-green); font-weight:600;}
+  .q-options button.wrong{background:#F3E3E0; border-color:var(--stamp-red); color:var(--stamp-red); font-weight:600;}
+  .q-feedback{margin-top:14px; padding:12px 14px; border-radius:var(--radius); font-size:.87rem; display:none; background:var(--ai-soft); border-left:4px solid var(--ai);}
+  .q-feedback.show{display:block;}
+  .q-nav{margin-top:18px; display:flex; justify-content:flex-end;}
+  .q-nav button{
+    font-family:'JetBrains Mono',monospace; font-size:.78rem; text-transform:uppercase; letter-spacing:.05em;
+    padding:10px 18px; background:var(--ink); color:var(--parchment); border:none; border-radius:999px;
+    cursor:pointer; opacity:.4; pointer-events:none; transition:.15s;
+  }
+  .q-nav button.enabled{opacity:1; pointer-events:auto;}
+  .q-nav button:hover.enabled{background:var(--gold);}
+  .q-result{display:none; text-align:center; padding:20px 0;}
+  .q-result.show{display:block;}
+  .q-result .score{font-family:'Fraunces',serif; font-size:2.6rem; color:var(--gold); font-weight:700;}
+  .q-result .verdict{font-size:.95rem; color:var(--ink-soft); margin-top:6px;}
+  .q-restart{
+    margin-top:16px; font-family:'JetBrains Mono',monospace; font-size:.78rem; text-transform:uppercase;
+    background:none; border:1.5px solid var(--ink); color:var(--ink); padding:9px 16px; border-radius:999px; cursor:pointer;
+  }
+
+  .discuss-box{
+    margin-top:34px; padding:24px 26px; background:var(--ink); color:var(--parchment); border-radius:6px;
+  }
+  .discuss-box .kicker{color:var(--gold);}
+  .discuss-box ol{padding-left:20px; font-size:.92rem; color:#D9D6F0;}
+  .discuss-box li{margin-bottom:8px;}
+
+  footer{padding:34px 0 60px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="wrap" style="position:relative;">
+    <div class="file-stamp">BERKAS G.5</div>
+    <span class="eyebrow"><span class="dot"></span> Mata Pelajaran Pilihan (MPP) AI — Konsentrasi DKV</span>
+    <h1>Hak Cipta &amp; Etika Penggunaan AI Generatif dalam Desain</h1>
+    <p class="subtitle">Dua sengketa hukum internasional, satu pertanyaan besar: ketika mesin belajar meniru jutaan karya manusia, di manakah batas hak cipta berada — dan apa artinya itu bagi kamu sebagai calon desainer?</p>
+    <div class="meta-strip">
+      <span>Fase <b>F</b> · Kelas <b>XI</b></span>
+      <span>Topik: <b>Pengenalan AI dalam Desain</b></span>
+      <span>Pertemuan <b>1–2</b></span>
+      <span>SMKN 9 Garut · T.P. <b>2026/2027</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="tabbar-outer">
+  <div class="wrap">
+    <nav class="tabbar" id="tabbar">
+      <a href="#apersepsi" class="active">01 Apersepsi</a>
+      <a href="#analogi">02 Analogi</a>
+      <a href="#garis-waktu">03 Garis Waktu</a>
+      <a href="#kasus-1">04 Kasus Getty</a>
+      <a href="#kasus-2">05 Kasus Andersen</a>
+      <a href="#kasus-indonesia">06 Sorotan Indonesia</a>
+      <a href="#indonesia">07 Regulasi Indonesia</a>
+      <a href="#prinsip">08 Prinsip Etis</a>
+      <a href="#glosarium">09 Glosarium</a>
+      <a href="#latihan">10 Latihan</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ================= APERSEPSI ================= -->
+<section id="apersepsi">
+  <div class="wrap">
+    <span class="kicker">01 — Apersepsi</span>
+    <h2>Deadline satu jam, dan sebuah prompt.</h2>
+    <p class="lead">Sebelum masuk ke teori, mari mulai dari situasi yang mungkin sudah pernah kamu alami.</p>
+
+    <div class="scenario-box">
+      <p class="role">Skenario</p>
+      <p>Kamu mendapat pesanan mendadak: sebuah kedai kopi lokal butuh poster promosi, dan harus selesai dalam satu jam. Kamu membuka aplikasi AI generatif, mengetik prompt <em>"poster kopi, gaya lukisan cat minyak seperti Van Gogh, warna hangat"</em> — dan dalam hitungan detik, muncul lima ilustrasi yang nyaris siap pakai.</p>
+      <p>Kamu pilih satu, poles sedikit warnanya, lalu kirim ke klien. Klien senang. Deadline aman.</p>
+    </div>
+
+    <p style="margin-top:24px; font-weight:600;">Menurutmu, apakah ada pihak yang dirugikan dalam proses ini?</p>
+    <div class="poll" id="poll">
+      <button data-ans="a">Tidak ada — AI hanya alat bantu, sama seperti Photoshop</button>
+      <button data-ans="b">Mungkin — tergantung dari mana model AI itu "belajar" membuat gaya lukisan tersebut</button>
+      <button data-ans="c">Ada — pelukis aslinya dirugikan karena gayanya ditiru</button>
+      <button data-ans="d">Belum tahu — perlu informasi lebih lanjut</button>
+    </div>
+    <div class="poll-result" id="poll-result"></div>
+  </div>
+</section>
+
+<!-- ================= ANALOGI ================= -->
+<section id="analogi">
+  <div class="wrap">
+    <span class="kicker">02 — Analogi</span>
+    <h2>Bayangkan dua murid di galeri seni.</h2>
+    <p class="lead">Untuk memahami mengapa AI generatif memunculkan sengketa hukum, bandingkan dulu dengan proses belajar yang lebih familiar.</p>
+
+    <div class="analogy-grid">
+      <div class="analogy-card human">
+        <span class="tag">Murid Manusia</span>
+        <h4>Belajar dari galeri</h4>
+        <p style="font-size:.92rem; color:var(--ink-soft);">Seorang murid desain menghabiskan bertahun-tahun mengunjungi galeri, mengamati ribuan lukisan, lalu berlatih meniru sapuan kuas gurunya sampai akhirnya menemukan gaya khasnya sendiri. Ia paham norma sosial: meniru gaya orang lain secara persis dan menjualnya sebagai karya sendiri dianggap tidak etis.</p>
+      </div>
+      <div class="versus">VS</div>
+      <div class="analogy-card ai">
+        <span class="tag">Model AI Generatif</span>
+        <h4>Belajar dari dataset</h4>
+        <p style="font-size:.92rem; color:var(--ink-soft);">Sebuah model AI "melihat" jutaan gambar sekaligus — dikumpulkan otomatis dari internet dalam hitungan minggu — lalu mempelajari pola statistik dari warna, komposisi, dan gaya. Ia tidak tahu, dan tidak bisa tahu, gambar mana yang berhak cipta dan mana yang bebas dipakai.</p>
+      </div>
+    </div>
+
+    <div class="analogy-note">
+      <b>Titik kritisnya:</b> Baik murid maupun AI sama-sama "belajar dengan meniru". Yang membedakan adalah <em>skala</em> (jutaan karya vs. ratusan), <em>izin</i> (dataset dikumpulkan tanpa persetujuan pemilik karya), dan <em>kesadaran etis</em> (murid bisa memilih untuk tidak meniru gaya tertentu; model AI tidak punya kesadaran semacam itu — keputusan etisnya ada di tangan <em>manusia</em> yang menggunakannya). Inilah akar dari dua sengketa hukum yang akan kita bahas berikutnya.
+    </div>
+  </div>
+</section>
+
+<!-- ================= GARIS WAKTU ================= -->
+<section id="garis-waktu">
+  <div class="wrap">
+    <span class="kicker">03 — Garis Waktu</span>
+    <h2>Dari gugatan hingga putusan</h2>
+    <p class="lead">Klik setiap titik untuk membuka rangkuman peristiwanya. Dua kasus ini akan dibahas lebih dalam pada bagian berikutnya.</p>
+
+    <div class="timeline" id="timeline">
+      <div class="t-item">
+        <div class="t-date">Januari 2023</div>
+        <h4><span class="t-arrow">▸</span> Dua gugatan besar diajukan hampir bersamaan</h4>
+        <div class="t-body">Getty Images menggugat Stability AI di Inggris. Di saat yang sama, tiga seniman visual (Andersen, McKernan, Ortiz) mengajukan gugatan class action di California terhadap Stability AI, Midjourney, dan DeviantArt.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Pertengahan 2023 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> Kontroversi ilustrasi AI pada iklan produk mie instan</h4>
+        <div class="t-body">Sebuah poster iklan produk mie instan ternama di Indonesia diunggah di media sosial resmi dengan ilustrasi yang diduga dibuat AI generatif — memicu kecurigaan warganet dan komunitas ilustrator lokal.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Oktober 2023</div>
+        <h4><span class="t-arrow">▸</span> Sebagian gugatan Andersen dicabut</h4>
+        <div class="t-body">Hakim Orrick mencabut sebagian besar klaim terhadap Midjourney dan DeviantArt, tetapi klaim langsung Andersen terhadap Stability AI diizinkan berlanjut.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Akhir 2023–2024 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> Tagar #TolakGambarAI menggema di media sosial</h4>
+        <div class="t-body">Ilustrator dan seniman Indonesia menyuarakan penolakan terhadap normalisasi gambar AI lewat gerakan akar rumput yang sempat menjadi trending topic di platform X.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Jan–Feb 2024 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> Ilustrasi AI generatif dipakai dalam kampanye Pilpres</h4>
+        <div class="t-body">Materi kampanye salah satu pasangan calon presiden-wakil presiden memakai ilustrasi bergaya "gemoy" hasil AI untuk baliho dan poster di berbagai kota, memicu kritik luas dari pekerja seni.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Agustus 2024</div>
+        <h4><span class="t-arrow">▸</span> Klaim DMCA dicabut, klaim inti berlanjut</h4>
+        <div class="t-body">Klaim terkait penghapusan informasi manajemen hak cipta (DMCA §1202) dicabut permanen; klaim inti pelanggaran hak cipta lanjut ke tahap pembuktian (discovery).</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">4 November 2025</div>
+        <h4><span class="t-arrow">▸</span> UK High Court menjatuhkan putusan Getty v. Stability AI</h4>
+        <div class="t-body">Pengadilan menolak sebagian besar klaim hak cipta Getty, tetapi mengabulkan sebagian klaim merek dagang karena watermark Getty masih muncul di beberapa keluaran gambar.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">17 November 2025 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> DJKI memperkenalkan "Uji 4 Langkah"</h4>
+        <div class="t-body">Dalam webinar OKE KI, DJKI memperkenalkan kerangka penilaian orisinalitas karya berbasis AI sebagai rujukan kebijakan di Indonesia.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">Februari 2026</div>
+        <h4><span class="t-arrow">▸</span> Amandemen ketiga gugatan Andersen</h4>
+        <div class="t-body">Kasus Andersen v. Stability AI masih terus diamandemen dan berproses di pengadilan hingga saat ini — belum ada putusan akhir.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">11–12 Maret 2026 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> Baleg DPR RI setujui revisi UU Hak Cipta</h4>
+        <div class="t-body">Badan Legislasi DPR menyetujui RUU perubahan UU No. 28/2014, memperluas definisi "ciptaan" agar mengakomodasi karya yang dibuat dengan atau tanpa bantuan AI, sekaligus menetapkan kriteria dan standar etika penggunaannya.</div>
+      </div>
+      <div class="t-item">
+        <div class="t-date">23–25 Maret 2026 🇮🇩</div>
+        <h4><span class="t-arrow">▸</span> Poster tata tertib kunjungan IKN viral karena diduga hasil AI</h4>
+        <div class="t-body">Papan informasi resmi di kawasan IKN viral bukan karena isinya, melainkan lambang Garuda yang tampak tidak proporsional — diduga hasil AI generatif tanpa kurasi desainer profesional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KASUS 1: GETTY ================= -->
+<section id="kasus-1">
+  <div class="wrap">
+    <span class="kicker">04 — Studi Kasus 1</span>
+    <h2>Getty Images v. Stability AI</h2>
+    <p class="lead">Kasus pertama di Inggris yang secara khusus memutus isu hak cipta pada pelatihan model AI generatif.</p>
+
+    <div class="case">
+      <div class="case-head">
+        <div>
+          <h3>Getty Images vs. Stability AI</h3>
+          <div class="case-parties">Getty Images (agensi foto stok global) melawan Stability AI (pengembang Stable Diffusion)</div>
+          <div class="case-meta">YURISDIKSI: UK HIGH COURT · DIAJUKAN JAN 2023 · DIPUTUS 4 NOV 2025</div>
+        </div>
+        <div class="stamp red">Klaim Hak Cipta<br>Ditolak Sebagian</div>
+      </div>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-trigger">Kronologi Singkat <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Getty menggugat Stability AI dengan tuduhan Stable Diffusion dilatih memakai lebih dari 12 juta foto, keterangan, dan metadata Getty tanpa izin. Klaimnya mencakup pelanggaran hak cipta primer (proses scraping &amp; pelatihan), pelanggaran hak cipta sekunder (model sebagai "salinan pelanggaran"), pelanggaran hak basis data, merek dagang, dan passing off. Sebagian klaim — termasuk soal proses pelatihan dan keluaran gambar — kemudian ditarik Getty selama persidangan berjalan.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Argumen Utama &amp; Putusan <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Argumen paling menonjol Getty: model Stable Diffusion, sebagai "article" yang bisa diimpor ke Inggris, semestinya dianggap "salinan pelanggaran" dari karya-karya yang melatihnya.</p>
+            <p>Pengadilan tidak sependapat — bobot model (model weights) dinilai tidak memenuhi syarat sebagai "salinan" menurut hukum hak cipta Inggris, karena tidak menyimpan reproduksi karya asli yang dapat dikenali. Namun pengadilan tetap menemukan bahwa data pelatihannya memang mengandung karya berhak cipta Getty, dan mengabulkan sebagian klaim merek dagang karena beberapa keluaran gambar masih menampilkan watermark Getty yang dapat dikenali.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Signifikansi bagi Industri Kreatif <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Ini menjadi rujukan hukum pertama di Inggris soal hak cipta dalam pelatihan AI generatif. Meski klaim hak cipta utama ditolak, pengadilan mengakui data pelatihan mengandung karya berhak cipta, dan keluaran AI yang menampilkan tanda pengenal pihak lain (watermark) tetap bisa melanggar hukum merek dagang. Getty telah memperoleh izin untuk mengajukan banding.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KASUS 2: ANDERSEN ================= -->
+<section id="kasus-2">
+  <div class="wrap">
+    <span class="kicker">05 — Studi Kasus 2</span>
+    <h2>Andersen v. Stability AI, Midjourney &amp; DeviantArt</h2>
+    <p class="lead">Gugatan class action pertama yang memicu belasan gugatan serupa oleh seniman dan penulis lain di seluruh dunia.</p>
+
+    <div class="case">
+      <div class="case-head">
+        <div>
+          <h3>Andersen, McKernan &amp; Ortiz vs. Stability AI dkk.</h3>
+          <div class="case-parties">Tiga ilustrator/seniman visual melawan Stability AI, Midjourney, dan DeviantArt</div>
+          <div class="case-meta">YURISDIKSI: N.D. CALIFORNIA (HAKIM WILLIAM ORRICK) · DIAJUKAN JAN 2023 · MASIH BERPROSES</div>
+        </div>
+        <div class="stamp amber">Status:<br>Berlangsung (2026)</div>
+      </div>
+      <div class="accordion">
+        <div class="acc-item">
+          <button class="acc-trigger">Kronologi Singkat <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Tiga seniman visual mengajukan gugatan class action mewakili kelas pencipta yang karyanya diduga dipakai tanpa izin untuk melatih Stable Diffusion, Midjourney, dan DreamUp (milik DeviantArt) — semuanya melalui dataset LAION yang berisi miliaran gambar dari internet.</p>
+            <p>Para penggugat juga mendalilkan bahwa AI bisa menghasilkan karya "bergaya" (in the style of) senimannya — yang mereka anggap sebagai ciptaan turunan yang melanggar hak cipta.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Perkembangan Putusan <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Okt 2023: sebagian besar gugatan terhadap Midjourney &amp; DeviantArt dicabut, tetapi klaim langsung Andersen terhadap Stability AI diizinkan berlanjut (dengan syarat melengkapi bukti pendaftaran hak cipta).</p>
+            <p>Agu 2024: klaim DMCA §1202 dicabut permanen; klaim inti pelanggaran hak cipta lanjut ke tahap pembuktian (discovery). Amandemen ketiga gugatan diajukan Feb 2026 — kasus masih berproses hingga kini.</p>
+          </div></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-trigger">Signifikansi bagi Industri Kreatif <span class="plus">+</span></button>
+          <div class="acc-panel"><div class="acc-panel-inner">
+            <p>Kasus ini menunjukkan pengadilan menganggap serius keluhan pencipta karya tentang penggunaan karyanya untuk melatih AI tanpa izin — meski membuktikan pelanggaran hak cipta pada teknologi AI ternyata rumit secara hukum, misalnya sulit membuktikan bahwa keluaran AI "bergaya" seorang seniman benar-benar salinan/turunan dari karya spesifik. Kasus ini terus menjadi rujukan bagi gugatan serupa di berbagai negara.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:44px; font-size:1.15rem;">Perbandingan Ringkas Dua Kasus</h3>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead><tr><th>Aspek</th><th>Getty v. Stability AI</th><th>Andersen v. Stability AI dkk.</th></tr></thead>
+        <tbody>
+          <tr><td>Penggugat</td><td>Agensi foto stok (perusahaan)</td><td>Seniman individual (class action)</td></tr>
+          <tr><td>Yurisdiksi</td><td>UK High Court</td><td>N.D. California, AS</td></tr>
+          <tr><td>Status</td><td>Sudah diputus (banding diizinkan)</td><td>Masih berproses / discovery</td></tr>
+          <tr><td>Isu inti</td><td>Model weights = "salinan pelanggaran"?</td><td>Meniru "gaya" seniman = turunan melanggar?</td></tr>
+          <tr><td>Hasil kunci</td><td>Klaim hak cipta ditolak, merek dagang dikabulkan sebagian</td><td>Klaim langsung ke Stability AI berlanjut</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KASUS INDONESIA ================= -->
+<section id="kasus-indonesia">
+  <div class="wrap">
+    <span class="kicker">06 — Sorotan Indonesia</span>
+    <h2>Empat Kontroversi AI Generatif di Indonesia</h2>
+    <p class="lead">Belum ada putusan pengadilan seperti Getty atau Andersen di Indonesia — tetapi empat peristiwa berikut menunjukkan bahwa ketegangan yang sama sudah terjadi di industri kreatif dalam negeri, mulai dari desain resmi pemerintah hingga kampanye politik. Klik "Lihat detail" pada tiap kartu.</p>
+
+    <div class="steps4" id="id-cases" style="grid-template-columns:1fr 1fr; margin-top:28px;">
+
+      <div class="step-card" style="cursor:default;">
+        <span class="tag" style="background:#F3E3E0; color:var(--stamp-red); font-family:'JetBrains Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:10px;">Viral &amp; Dikritik</span>
+        <h4 style="font-size:1.02rem;">Poster Tata Tertib Kunjungan IKN</h4>
+        <p style="font-size:.85rem; color:var(--ink-soft); margin:8px 0 0;">Maret 2026 — papan informasi resmi di kawasan Ibu Kota Nusantara viral bukan karena isinya, melainkan desainnya yang dinilai janggal oleh warganet.</p>
+        <button class="id-toggle" style="margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; background:none; border:1.5px solid var(--ink); color:var(--ink); padding:7px 14px; border-radius:999px; cursor:pointer;">Lihat detail</button>
+        <div class="step-detail" style="font-size:.86rem;">
+          <p style="margin:10px 0 0;">Menjelang libur Lebaran 2026, sebuah papan informasi tata tertib kunjungan di kawasan IKN ramai dibicarakan di media sosial. Sorotan tertuju pada bagian lambang Garuda yang tampak tidak proporsional dan dianggap "aneh" — diduga hasil generate AI tanpa melalui proses desain dan revisi yang matang. Salah satu warganet menyindir lewat unggahan: <em>"IKN pakai AI untuk generate poster tata tertib kunjungan. Mahal kah jasa desain poster di Indo?"</em></p>
+          <p><b>Kaitan dengan prinsip etis:</b> kasus ini menyoroti pentingnya <em>kontribusi kreatif manusia</em> dan <em>tanggung jawab atas hasil akhir</em> — terutama saat AI dipakai untuk simbol resmi negara tanpa kurasi desainer profesional.</p>
+        </div>
+      </div>
+
+      <div class="step-card" style="cursor:default;">
+        <span class="tag" style="background:var(--ai-soft); color:var(--ai); font-family:'JetBrains Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:10px;">Kontroversi Publik</span>
+        <h4 style="font-size:1.02rem;">Promosi Wisata oleh Akun Resmi IKN</h4>
+        <p style="font-size:.85rem; color:var(--ink-soft); margin:8px 0 0;">Akun media sosial resmi @ikn_id memakai gambar AI generatif untuk promosi destinasi wisata, memicu respons negatif publik.</p>
+        <button class="id-toggle" style="margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; background:none; border:1.5px solid var(--ink); color:var(--ink); padding:7px 14px; border-radius:999px; cursor:pointer;">Lihat detail</button>
+        <div class="step-detail" style="font-size:.86rem;">
+          <p style="margin:10px 0 0;">Akun X resmi IKN Nusantara pernah mengunggah materi promosi destinasi wisata di kawasan IKN menggunakan gambar buatan AI generatif. Alih-alih mendapat sambutan positif, unggahan tersebut memunculkan banyak respons negatif dari masyarakat yang mempertanyakan keaslian dan kredibilitas visual yang dipakai lembaga publik.</p>
+          <p><b>Kaitan dengan prinsip etis:</b> menyoroti pentingnya <em>transparansi</em> ketika lembaga publik memakai AI generatif untuk komunikasi resmi — termasuk risiko hilangnya kepercayaan publik bila representasi visual dianggap tidak akurat atau tidak jujur.</p>
+        </div>
+      </div>
+
+      <div class="step-card" style="cursor:default;">
+        <span class="tag" style="background:#EAF0E7; color:var(--stamp-green); font-family:'JetBrains Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:10px;">Debat Publik</span>
+        <h4 style="font-size:1.02rem;">Ilustrasi AI dalam Kampanye Pilpres 2024</h4>
+        <p style="font-size:.85rem; color:var(--ink-soft); margin:8px 0 0;">Ilustrasi bergaya "gemoy" hasil AI dipakai untuk baliho dan poster kampanye, memicu kritik luas dari pekerja seni.</p>
+        <button class="id-toggle" style="margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; background:none; border:1.5px solid var(--ink); color:var(--ink); padding:7px 14px; border-radius:999px; cursor:pointer;">Lihat detail</button>
+        <div class="step-detail" style="font-size:.86rem;">
+          <p style="margin:10px 0 0;">Menjelang Pilpres 2024, tim kampanye salah satu pasangan calon presiden-wakil presiden memakai ilustrasi AI generatif bergaya menggemaskan ("gemoy") untuk baliho dan poster yang tersebar di berbagai kota di Indonesia. Sejumlah ilustrator, salah satunya Jemima (24), menilai praktik ini memperlihatkan betapa tidak dihargainya pekerja seni — sebab jasa ilustrator lokal dilewati demi kecepatan dan biaya murah AI generatif.</p>
+          <p><b>Kaitan dengan prinsip etis:</b> menegaskan pentingnya <em>penghormatan terhadap karya orang lain</em> dan dampak ekonomi nyata bagi profesi desainer/ilustrator ketika AI generatif dipakai secara massal tanpa melibatkan pekerja kreatif lokal.</p>
+        </div>
+      </div>
+
+      <div class="step-card" style="cursor:default;">
+        <span class="tag" style="background:var(--paper-dark); color:var(--gold); font-family:'JetBrains Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; padding:3px 9px; border-radius:999px; display:inline-block; margin-bottom:10px;">Gerakan Akar Rumput</span>
+        <h4 style="font-size:1.02rem;">Gerakan #TolakGambarAI</h4>
+        <p style="font-size:.85rem; color:var(--ink-soft); margin:8px 0 0;">Tagar #TolakGambarAI sempat menjadi trending topic di X, disuarakan komunitas ilustrator dan seniman Indonesia.</p>
+        <button class="id-toggle" style="margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:.72rem; text-transform:uppercase; background:none; border:1.5px solid var(--ink); color:var(--ink); padding:7px 14px; border-radius:999px; cursor:pointer;">Lihat detail</button>
+        <div class="step-detail" style="font-size:.86rem;">
+          <p style="margin:10px 0 0;">Dipicu rentetan kontroversi — termasuk dugaan pemakaian ilustrasi AI pada iklan produk komersial dan kampanye politik "gemoy" — tagar #TolakGambarAI digaungkan ilustrator dan seniman Indonesia untuk memerangi normalisasi dan komersialisasi gambar AI tanpa penghargaan terhadap karya asli. Komunitas seperti Aliansi Ilustrator Indonesia turut mendorong transparansi data pelatihan AI dan standar harga yang layak bagi karya lokal.</p>
+          <p><b>Kaitan dengan prinsip etis:</b> menjadi contoh nyata bagaimana pekerja kreatif Indonesia mengorganisir diri untuk menuntut <em>kepatuhan terhadap ketentuan &amp; hukum</em> yang lebih jelas, sembari menunggu regulasi resmi rampung.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= INDONESIA ================= -->
+<section id="indonesia">
+  <div class="wrap">
+    <span class="kicker">07 — Regulasi Indonesia</span>
+    <h2>UU Hak Cipta &amp; "Uji 4 Langkah" DJKI</h2>
+    <p class="lead">Berbeda dari Inggris dan AS yang menyelesaikan sengketa lewat litigasi atas karya yang sudah beredar, Indonesia menitikberatkan kejelasan syarat pendaftaran karya berbasis AI sejak awal.</p>
+
+    <div class="scenario-box" style="border-left-color:var(--gold); margin-top:26px;">
+      <p>Berdasarkan <b>UU No. 28 Tahun 2014 tentang Hak Cipta</b>, pencipta didefinisikan sebagai <b>manusia</b>. Karya yang dihasilkan sepenuhnya secara otonom oleh AI tanpa kontribusi kreatif manusia <b>tidak dapat</b> memperoleh perlindungan hak cipta. DJKI menerapkan kebijakan transisi: karya murni buatan AI tidak dicatatkan sebagai ciptaan, sementara karya kolaboratif (AI sebagai alat bantu) tetap bisa dilindungi selama ada kontribusi intelektual manusia yang signifikan.</p>
+    </div>
+
+    <h4 style="margin-top:32px; font-size:1rem;">Klik tiap langkah untuk melihat penjelasannya</h4>
+    <div class="steps4" id="steps4">
+      <div class="step-card">
+        <div class="num">01</div>
+        <h4>Identifikasi Peran AI</h4>
+        <div class="step-detail">Menilai sejauh mana AI dilibatkan: sekadar alat bantu teknis, atau menghasilkan keseluruhan karya secara otonom.</div>
+      </div>
+      <div class="step-card">
+        <div class="num">02</div>
+        <h4>Telusuri Kontribusi Manusia</h4>
+        <div class="step-detail">Memeriksa jejak keputusan kreatif manusia: penyusunan prompt, kurasi, penyuntingan, dan pengarahan konsep.</div>
+      </div>
+      <div class="step-card">
+        <div class="num">03</div>
+        <h4>Uji Signifikansi Kontribusi</h4>
+        <div class="step-detail">Menilai apakah kontribusi manusia tersebut cukup substansial untuk dianggap sebagai "ciptaan", bukan sekadar menyalin keluaran mentah AI.</div>
+      </div>
+      <div class="step-card">
+        <div class="num">04</div>
+        <h4>Putuskan Status Orisinalitas</h4>
+        <div class="step-detail">Menentukan apakah karya berhak dicatatkan sebagai ciptaan yang dilindungi, berdasarkan hasil tiga langkah sebelumnya.</div>
+      </div>
+    </div>
+
+    <div class="analogy-note" style="margin-top:28px;">
+      Selain itu, DJKI bersama kementerian terkait memperkuat penegakan hukum di ruang digital — lebih dari seribu situs pembajakan ditutup sepanjang Januari 2025–Mei 2026 — sembari merevisi UU Hak Cipta agar lebih responsif terhadap AI generatif, dan memperjuangkan tata kelola AI global yang berkeadilan lewat WIPO, ASEAN, dan G20.
+      <br><br>
+      <b>Benang merah dari Inggris, AS, dan Indonesia:</b> ketiganya menegaskan prinsip yang sama — kontribusi dan tanggung jawab manusia tetap menjadi inti dari perlindungan hak cipta, walau AI digunakan sebagai alat bantu.
+    </div>
+
+    <div class="scenario-box" style="border-left-color:var(--stamp-green); margin-top:24px;">
+      <p class="role">Perkembangan Terbaru — 11–12 Maret 2026</p>
+      <p>Badan Legislasi (Baleg) DPR RI menyetujui Rancangan Undang-Undang (RUU) perubahan atas UU No. 28 Tahun 2014 tentang Hak Cipta. Dalam revisi ini, definisi <b>"ciptaan"</b> diperluas agar mengakomodasi karya yang dihasilkan dengan atau tanpa bantuan AI, sekaligus menetapkan kriteria, syarat, dan standar etika dalam penggunaannya — salah satu pembaruan paling signifikan dalam rezim hak cipta digital Indonesia sejauh ini. Meski begitu, selama regulasi ini masih dalam proses, para kreator (termasuk kamu sebagai calon desainer) tetap disarankan mengambil langkah pencegahan sejak sekarang, misalnya mendokumentasikan proses kreatif dan menyimpan bukti kontribusi manusia pada setiap karya berbantuan AI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRINSIP ETIS ================= -->
+<section id="prinsip">
+  <div class="wrap">
+    <span class="kicker">08 — Prinsip Etis</span>
+    <h2>Lima Prinsip Penggunaan AI dalam Desain</h2>
+    <p class="lead">Bukan pedoman baku — melainkan bahan rujukan untuk kamu rumuskan sendiri pada LKPD 2. Klik tiap kartu untuk membalik.</p>
+
+    <div class="principles" id="principles">
+      <div class="flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><span class="fnum">Prinsip 01</span><h4>Transparansi</h4><span class="hint">klik untuk membalik</span></div>
+          <div class="flip-face flip-back">Menyatakan secara jujur ketika suatu karya dibuat dengan bantuan AI, terutama dalam konteks komersial.</div>
+        </div>
+      </div>
+      <div class="flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><span class="fnum">Prinsip 02</span><h4>Kontribusi Kreatif Manusia</h4><span class="hint">klik untuk membalik</span></div>
+          <div class="flip-face flip-back">Memastikan ada penyusunan prompt, kurasi, dan penyuntingan yang substansial — bukan sekadar menyalin keluaran mentah AI.</div>
+        </div>
+      </div>
+      <div class="flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><span class="fnum">Prinsip 03</span><h4>Penghormatan Karya Orang Lain</h4><span class="hint">klik untuk membalik</span></div>
+          <div class="flip-face flip-back">Menghindari penggunaan AI untuk meniru gaya personal seniman tertentu secara sengaja tanpa izin, apalagi untuk kepentingan komersial.</div>
+        </div>
+      </div>
+      <div class="flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><span class="fnum">Prinsip 04</span><h4>Kepatuhan Ketentuan &amp; Hukum</h4><span class="hint">klik untuk membalik</span></div>
+          <div class="flip-face flip-back">Memahami lisensi penggunaan tiap aplikasi AI dan ketentuan hak cipta yang berlaku di Indonesia.</div>
+        </div>
+      </div>
+      <div class="flip">
+        <div class="flip-inner">
+          <div class="flip-face flip-front"><span class="fnum">Prinsip 05</span><h4>Tanggung Jawab atas Hasil Akhir</h4><span class="hint">klik untuk membalik</span></div>
+          <div class="flip-face flip-back">Pengguna AI tetap bertanggung jawab secara etis dan hukum atas karya yang dipublikasikan atau dikomersialkan — tanggung jawab tidak bisa diserahkan ke AI.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GLOSARIUM ================= -->
+<section id="glosarium">
+  <div class="wrap">
+    <span class="kicker">09 — Glosarium</span>
+    <h2>Istilah Penting</h2>
+    <dl class="glossary">
+      <div class="g-item"><dt>Hak Cipta (Copyright)</dt><dd>Hak eksklusif pencipta atas ciptaannya, timbul otomatis berdasarkan prinsip deklaratif (UU No. 28/2014).</dd></div>
+      <div class="g-item"><dt>AI Generatif</dt><dd>Sistem AI yang mampu menghasilkan konten baru (gambar, teks, audio, dll.) berdasarkan data yang dipelajarinya.</dd></div>
+      <div class="g-item"><dt>Data Pelatihan (Training Data)</dt><dd>Kumpulan data yang dipakai melatih model AI agar mengenali pola dan menghasilkan keluaran baru.</dd></div>
+      <div class="g-item"><dt>Model Weights (Bobot Model)</dt><dd>Parameter numerik hasil pelatihan, "otak" suatu model AI — berbeda dari salinan langsung data pelatihan.</dd></div>
+      <div class="g-item"><dt>Watermark</dt><dd>Tanda pengenal (logo/teks) pada gambar untuk menandai kepemilikan atau sumbernya.</dd></div>
+      <div class="g-item"><dt>Class Action</dt><dd>Gugatan yang diajukan satu/beberapa pihak yang mewakili kepentingan kelompok besar dengan kepentingan hukum sama.</dd></div>
+      <div class="g-item"><dt>DMCA</dt><dd>Digital Millennium Copyright Act — UU hak cipta digital AS, salah satunya mengatur informasi manajemen hak cipta (§1202).</dd></div>
+      <div class="g-item"><dt>DJKI</dt><dd>Direktorat Jenderal Kekayaan Intelektual — lembaga pemerintah RI yang menangani pendaftaran &amp; perlindungan kekayaan intelektual.</dd></div>
+      <div class="g-item"><dt>RUU</dt><dd>Rancangan Undang-Undang — draf peraturan yang sedang dibahas dan belum sah berlaku sampai disetujui DPR bersama Presiden.</dd></div>
+      <div class="g-item"><dt>Baleg DPR</dt><dd>Badan Legislasi DPR RI — alat kelengkapan DPR yang menyusun dan membahas rancangan undang-undang, termasuk revisi UU Hak Cipta.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ================= LATIHAN ================= -->
+<section id="latihan">
+  <div class="wrap">
+    <span class="kicker">10 — Latihan</span>
+    <h2>Uji Pemahamanmu</h2>
+    <p class="lead">Tujuh pertanyaan singkat berdasarkan materi di atas. Jawabanmu tidak disimpan ke server mana pun.</p>
+
+    <div class="quiz-card">
+      <div class="q-progress" id="q-progress">Soal 1 dari 7</div>
+
+      <div class="q-block active" data-q="0">
+        <h4>1. Mengapa UK High Court menolak sebagian besar klaim hak cipta Getty terhadap Stability AI?</h4>
+        <div class="q-options">
+          <button data-correct="false">Karena Getty tidak punya bukti kepemilikan foto</button>
+          <button data-correct="true">Karena model weights tidak memenuhi syarat sebagai "salinan" karya asli yang dapat dikenali</button>
+          <button data-correct="false">Karena Stability AI berhasil membuktikan tidak pernah memakai foto Getty</button>
+          <button data-correct="false">Karena kasusnya diajukan di yurisdiksi yang salah</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="1">
+        <h4>2. Klaim apa yang justru dikabulkan sebagian dalam kasus Getty v. Stability AI?</h4>
+        <div class="q-options">
+          <button data-correct="false">Pelanggaran hak basis data</button>
+          <button data-correct="true">Pelanggaran merek dagang, karena watermark Getty masih tampak di beberapa keluaran gambar</button>
+          <button data-correct="false">Pelanggaran hak cipta atas proses pelatihan model</button>
+          <button data-correct="false">Passing off atas identitas dagang Getty</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="2">
+        <h4>3. Apa isu inti dalam gugatan Andersen v. Stability AI, Midjourney, dan DeviantArt?</h4>
+        <div class="q-options">
+          <button data-correct="false">Perusahaan AI menjual data pribadi pengguna</button>
+          <button data-correct="true">Model dilatih dengan gambar seniman tanpa izin, dan mampu meniru "gaya" personal mereka</button>
+          <button data-correct="false">AI menghasilkan gambar dengan resolusi rendah</button>
+          <button data-correct="false">Perusahaan AI melanggar kontrak kerja dengan seniman</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="3">
+        <h4>4. Menurut UU No. 28 Tahun 2014, siapa yang dapat berstatus sebagai "pencipta"?</h4>
+        <div class="q-options">
+          <button data-correct="false">Perusahaan pengembang AI</button>
+          <button data-correct="false">Model AI itu sendiri, selama karyanya orisinal</button>
+          <button data-correct="true">Manusia — karya otonom AI tanpa kontribusi kreatif manusia tidak dilindungi hak cipta</button>
+          <button data-correct="false">Siapa pun yang pertama kali mempublikasikan karya</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="4">
+        <h4>5. Apa fungsi utama "Uji 4 Langkah" yang diperkenalkan DJKI?</h4>
+        <div class="q-options">
+          <button data-correct="false">Menentukan tarif royalti karya berbasis AI</button>
+          <button data-correct="true">Menilai orisinalitas karya berbasis AI, terutama besar kecilnya kontribusi kreatif manusia</button>
+          <button data-correct="false">Memutuskan apakah sebuah AI boleh dipasarkan di Indonesia</button>
+          <button data-correct="false">Menetapkan jenis lisensi open-source untuk model AI</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="5">
+        <h4>6. Seorang desainer memakai AI untuk membuat elemen visual, lalu mempublikasikannya sebagai karya "100% buatan sendiri" tanpa menyebut peran AI. Prinsip etis apa yang paling jelas dilanggar?</h4>
+        <div class="q-options">
+          <button data-correct="true">Transparansi</button>
+          <button data-correct="false">Kepatuhan terhadap ketentuan platform</button>
+          <button data-correct="false">Penghormatan terhadap karya orang lain</button>
+          <button data-correct="false">Kontribusi kreatif manusia</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="6">
+        <h4>7. Apa benang merah yang menghubungkan kontroversi poster tata tertib kunjungan IKN, promosi wisata @ikn_id, dan kampanye "gemoy" Pilpres 2024?</h4>
+        <div class="q-options">
+          <button data-correct="false">Ketiganya diputus bersalah oleh pengadilan Indonesia</button>
+          <button data-correct="true">Ketiganya menunjukkan penggunaan AI generatif untuk komunikasi publik/komersial di Indonesia yang memicu kritik soal kualitas, transparansi, atau penghargaan terhadap pekerja kreatif</button>
+          <button data-correct="false">Ketiganya terjadi sebelum tahun 2020</button>
+          <button data-correct="false">Ketiganya merupakan hasil kerja sama resmi dengan DJKI</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-nav"><button id="q-next-btn">Lanjut →</button></div>
+
+      <div class="q-result" id="q-result">
+        <div class="score" id="q-score">0/6</div>
+        <div class="verdict" id="q-verdict"></div>
+        <button class="q-restart" id="q-restart">Ulangi Kuis</button>
+      </div>
+    </div>
+
+    <div class="discuss-box">
+      <span class="kicker">Diskusi Kelompok — untuk LKPD 2</span>
+      <h3 style="color:#fff; font-size:1.1rem;">Rumuskan Pedomanmu Sendiri</h3>
+      <ol>
+        <li>Bandingkan pendekatan Inggris/AS (litigasi atas karya yang beredar) dengan Indonesia ("Uji 4 Langkah" sejak pendaftaran). Menurut kelompokmu, mana yang lebih adil bagi desainer pemula? Mengapa?</li>
+        <li>Rancang satu contoh kasus penggunaan AI generatif dalam pekerjaan DKV yang menurut kelompokmu <b>etis</b>, dan satu contoh yang <b>tidak etis</b> — kaitkan dengan lima prinsip pada bagian 07.</li>
+        <li>Jika kamu adalah desainer di posisi Getty (pemilik karya) sekaligus desainer yang memakai AI — bagaimana kamu menyeimbangkan dua kepentingan yang tampak bertentangan itu?</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Disusun oleh Dede Alamsyah, S.Pd — Tahun Pelajaran 2026/2027 · SMK Negeri 9 Garut · Lampiran G.5<br>
+  Sumber lengkap tersedia pada Daftar Pustaka dokumen materi ajar.
+</footer>
+
+<script>
+// --- tab active state on scroll ---
+const sections = document.querySelectorAll('section[id]');
+const tabLinks = document.querySelectorAll('#tabbar a');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      tabLinks.forEach(a=>a.classList.remove('active'));
+      const link = document.querySelector('#tabbar a[href="#'+e.target.id+'"]');
+      if(link) link.classList.add('active');
+    }
+  });
+}, {rootMargin:'-40% 0px -55% 0px'});
+sections.forEach(s=>io.observe(s));
+
+// --- apersepsi poll ---
+document.querySelectorAll('#poll button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#poll button').forEach(b=>b.style.opacity='.5');
+    btn.style.opacity='1';
+    btn.style.background='var(--ink)'; btn.style.color='var(--parchment)';
+    const result = document.getElementById('poll-result');
+    result.classList.add('show');
+    result.innerHTML = "<b>Semua jawaban di atas punya alasan.</b> Jawaban paling akurat adalah opsi B: dampaknya memang tergantung dari data pelatihan model AI tersebut. Itulah yang membuat dua sengketa hukum di bagian berikutnya begitu penting untuk dipahami — silakan lanjut ke bagian Analogi.";
+  }, {once:false});
+});
+
+// --- timeline accordion ---
+document.querySelectorAll('.t-item').forEach(item=>{
+  item.addEventListener('click', ()=> item.classList.toggle('open'));
+});
+
+// --- case accordion ---
+document.querySelectorAll('.acc-trigger').forEach(trigger=>{
+  trigger.addEventListener('click', ()=>{
+    const item = trigger.closest('.acc-item');
+    const panel = item.querySelector('.acc-panel');
+    const isOpen = item.classList.contains('open');
+    // close siblings within same accordion
+    item.parentElement.querySelectorAll('.acc-item').forEach(i=>{
+      i.classList.remove('open');
+      i.querySelector('.acc-panel').style.maxHeight = null;
+    });
+    if(!isOpen){
+      item.classList.add('open');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    }
+  });
+});
+
+// --- 4 step cards (Uji 4 Langkah) ---
+document.querySelectorAll('#steps4 .step-card').forEach(card=>{
+  card.addEventListener('click', ()=> card.classList.toggle('open'));
+});
+
+// --- Indonesia case cards (button-triggered, not whole-card) ---
+document.querySelectorAll('#id-cases .id-toggle').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const card = btn.closest('.step-card');
+    const opening = !card.classList.contains('open');
+    card.classList.toggle('open');
+    btn.textContent = opening ? 'Sembunyikan detail' : 'Lihat detail';
+  });
+});
+
+// --- principle flip cards ---
+document.querySelectorAll('.flip').forEach(f=>{
+  f.addEventListener('click', ()=> f.classList.toggle('flipped'));
+});
+
+// --- QUIZ ---
+const qBlocks = Array.from(document.querySelectorAll('.q-block'));
+const qProgress = document.getElementById('q-progress');
+const nextBtn = document.getElementById('q-next-btn');
+let current = 0;
+let score = 0;
+let answered = false;
+
+function showBlock(i){
+  qBlocks.forEach(b=>b.classList.remove('active'));
+  qBlocks[i].classList.add('active');
+  qProgress.textContent = 'Soal ' + (i+1) + ' dari ' + qBlocks.length;
+  nextBtn.textContent = (i === qBlocks.length-1) ? 'Lihat Hasil →' : 'Lanjut →';
+  nextBtn.classList.remove('enabled');
+  answered = false;
+}
+
+qBlocks.forEach((block, idx)=>{
+  const buttons = block.querySelectorAll('.q-options button');
+  const feedback = block.querySelector('.q-feedback');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(answered) return;
+      answered = true;
+      const isCorrect = btn.dataset.correct === 'true';
+      buttons.forEach(b=>{
+        b.disabled = true;
+        if(b.dataset.correct === 'true') b.classList.add('correct');
+        else if(b === btn) b.classList.add('wrong');
+      });
+      feedback.classList.add('show');
+      feedback.textContent = isCorrect
+        ? '✓ Tepat! Jawaban ini sesuai dengan materi.'
+        : '✗ Belum tepat — jawaban yang benar ditandai hijau. Coba tinjau kembali bagian terkait di atas.';
+      if(isCorrect) score++;
+      nextBtn.classList.add('enabled');
+    });
+  });
+});
+
+nextBtn.addEventListener('click', ()=>{
+  if(current < qBlocks.length - 1){
+    current++;
+    showBlock(current);
+  } else {
+    document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav').forEach(el=>el.style.display='none');
+    document.getElementById('q-progress').style.display='none';
+    const resultBox = document.getElementById('q-result');
+    resultBox.classList.add('show');
+    document.getElementById('q-score').textContent = score + '/' + qBlocks.length;
+    let verdict = '';
+    if(score === qBlocks.length) verdict = 'Sempurna! Kamu memahami kedua studi kasus dan konteks regulasi Indonesia dengan sangat baik.';
+    else if(score >= qBlocks.length - 2) verdict = 'Bagus! Pemahamanmu cukup kuat — tinjau kembali bagian yang masih keliru.';
+    else verdict = 'Masih perlu latihan — coba baca ulang bagian Studi Kasus dan Konteks Indonesia, lalu ulangi kuis ini.';
+    document.getElementById('q-verdict').textContent = verdict;
+  }
+});
+
+document.getElementById('q-restart').addEventListener('click', ()=>{
+  score = 0; current = 0;
+  qBlocks.forEach(block=>{
+    block.querySelectorAll('.q-options button').forEach(b=>{
+      b.disabled = false; b.classList.remove('correct','wrong');
+    });
+    block.querySelector('.q-feedback').classList.remove('show');
+  });
+  document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav').forEach(el=>el.style.display='');
+  document.getElementById('q-progress').style.display='';
+  document.getElementById('q-result').classList.remove('show');
+  showBlock(0);
+});
+
+showBlock(0);
+</script>
+</body>
+</html>
