@@ -376,6 +376,117 @@
     padding:13px 22px; border-radius:999px; transition:.15s; box-shadow:0 8px 24px -10px rgba(184,134,43,.6);
   }
   .lkpd-cta a:hover{transform:translateY(-2px); background:#d19a34;}
+
+  /* ===== KALKULATOR STATUS KARYA ===== */
+  .stk-box{
+    margin-top:36px; background:var(--ink); color:var(--parchment); border-radius:6px;
+    padding:26px 28px; box-shadow:var(--shadow);
+  }
+  .stk-box .kicker{color:var(--gold);}
+  .stk-box h3{color:#fff; font-size:1.2rem;}
+  .stk-box .stk-sub{font-size:.92rem; color:#D9D6F0; margin-top:4px;}
+  .stk-step{margin-top:20px; display:none;}
+  .stk-step.show{display:block;}
+  .stk-step .stk-q-num{font-family:'JetBrains Mono',monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--gold);}
+  .stk-q-text{font-size:1.04rem; font-weight:600; color:#fff; margin:6px 0 12px;}
+  .stk-options{display:flex; flex-direction:column; gap:8px;}
+  .stk-options button{
+    text-align:left; padding:12px 15px; border:1.5px solid rgba(245,240,230,.25);
+    background:rgba(255,255,255,.04); color:var(--parchment); border-radius:var(--radius);
+    cursor:pointer; font-family:'Space Grotesk',sans-serif; font-size:.9rem; transition:.15s;
+  }
+  .stk-options button:hover{border-color:var(--gold);}
+  .stk-options button.sel{background:var(--gold); color:var(--ink); border-color:var(--gold); font-weight:600;}
+  .stk-options button:disabled{opacity:.45; cursor:default; border-color:var(--gold);}
+  .stk-progress{display:flex; gap:8px; margin-top:22px;}
+  .stk-dot{width:10px;height:10px;border-radius:50%;background:rgba(245,240,230,.25);transition:.2s;}
+  .stk-dot.on{background:var(--gold);}
+  .stk-result{margin-top:22px;}
+  .stk-verdict{
+    padding:20px 22px; border-radius:6px; display:none;
+    font-size:.95rem; line-height:1.65;
+  }
+  .stk-verdict.show{display:block; animation:pop .3s ease;}
+  @keyframes pop{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+  .stk-verdict .stk-badge{
+    display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace;
+    font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:700; margin-bottom:10px;
+    padding:6px 12px; border-radius:999px; border:2px solid;
+  }
+  .stk-verdict .stk-sc{font-size:.85rem; color:var(--ink-soft); margin-top:12px; font-family:'JetBrains Mono',monospace;}
+  .stk-verdict.sutradara{background:var(--parchment); color:var(--ink); border-left:6px solid var(--stamp-green);}
+  .stk-verdict.sutradara .stk-badge{border-color:var(--stamp-green); color:var(--stamp-green);}
+  .stk-verdict.asisten{background:var(--paper-dark); color:var(--ink); border-left:6px solid var(--gold);}
+  .stk-verdict.asisten .stk-badge{border-color:var(--gold); color:var(--gold);}
+  .stk-verdict.penonton{background:#F3E3E0; color:var(--ink); border-left:6px solid var(--stamp-red);}
+  .stk-verdict.penonton .stk-badge{border-color:var(--stamp-red); color:var(--stamp-red);}
+  .stk-reset{
+    margin-top:16px; font-family:'JetBrains Mono',monospace; font-size:.74rem; text-transform:uppercase;
+    background:none; border:1.5px solid rgba(245,240,230,.4); color:var(--parchment); padding:9px 16px;
+    border-radius:999px; cursor:pointer; display:none;
+  }
+  .stk-reset.show{display:inline-block;}
+  .stk-reset:hover{background:rgba(245,240,230,.1);}
+
+  /* ===== MATCHING GAME GLOSARIUM ===== */
+  .glos-game{
+    margin-top:30px; background:var(--white); border:1px solid var(--line); border-radius:6px;
+    box-shadow:var(--shadow); padding:22px 24px;
+  }
+  .glos-game .gg-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;}
+  .glos-game h3{font-size:1.05rem;}
+  .gg-score{font-family:'JetBrains Mono',monospace; font-size:.8rem; color:var(--gold); font-weight:700;}
+  .gg-terms{display:flex; flex-direction:column; gap:8px; margin-top:16px;}
+  .gg-term button{
+    width:100%; text-align:left; padding:11px 13px; border:1.5px solid var(--line);
+    background:var(--parchment); border-radius:var(--radius); cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-size:.88rem; color:var(--ink); transition:.15s;
+  }
+  .gg-term button:hover{border-color:var(--ai);}
+  .gg-term button.sel{border-color:var(--ai); background:var(--ai-soft);}
+  .gg-term button.done{background:#E4EEE4; border-color:var(--stamp-green); color:var(--stamp-green); cursor:default; opacity:.7;}
+  .gg-defs{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;}
+  @media(max-width:560px){.gg-defs{grid-template-columns:1fr;}}
+  .gg-def{
+    text-align:left; padding:11px 13px; border:1.5px solid var(--line); background:var(--white);
+    border-radius:var(--radius); cursor:pointer; font-family:'Space Grotesk',sans-serif;
+    font-size:.82rem; color:var(--ink-soft); transition:.15s;
+  }
+  .gg-def:hover{border-color:var(--ai);}
+  .gg-def.sel{border-color:var(--ai); background:var(--ai-soft); color:var(--ink);}
+  .gg-def.done{background:#E4EEE4; border-color:var(--stamp-green); color:var(--stamp-green); cursor:default; opacity:.7;}
+  .gg-feedback{margin-top:12px; padding:12px 14px; border-radius:var(--radius); font-size:.88rem; display:none;}
+  .gg-feedback.show{display:block;}
+  .gg-feedback.ok{background:#E4EEE4; color:var(--stamp-green); border-left:4px solid var(--stamp-green);}
+  .gg-feedback.wrong{background:#F3E3E0; color:var(--stamp-red); border-left:4px solid var(--stamp-red);}
+  .gg-win{display:none; margin-top:16px; padding:16px 18px; border-radius:6px; text-align:center; font-weight:600;}
+  .gg-win.show{display:block; background:var(--ai-soft); color:var(--ai); border:1.5px dashed var(--ai);}
+  .gg-reset{margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:.74rem; text-transform:uppercase; background:none; border:1.5px solid var(--ink); color:var(--ink); padding:8px 15px; border-radius:999px; cursor:pointer; display:none;}
+  .gg-reset.show{display:inline-block;}
+  .gg-reset:hover{background:var(--ink); color:var(--parchment);}
+
+  /* ===== PAKTA INTERAKTIF ===== */
+  .pacta-box{
+    margin-top:20px; background:var(--parchment); border:1.5px dashed var(--gold); border-radius:6px; padding:20px 22px;
+  }
+  .pacta-box h3{font-size:1.02rem;}
+  .pacta-box .pp-sub{font-size:.87rem; color:var(--ink-soft); margin:4px 0 12px;}
+  .pp-item{display:flex; gap:12px; align-items:flex-start; padding:9px 0; border-bottom:1px dashed var(--line); font-size:.92rem;}
+  .pp-item:last-of-type{border-bottom:none;}
+  .pp-item input{width:19px; height:19px; margin-top:2px; accent-color:var(--stamp-green); cursor:pointer; flex:none;}
+  .pp-item label b{color:var(--ink);}
+  .pp-item.trap label b{color:var(--stamp-red);}
+  .pacta-stamp{
+    margin-top:16px; text-align:center; border:3px solid var(--stamp-green); color:var(--stamp-green);
+    border-radius:8px; padding:14px; font-family:'JetBrains Mono',monospace; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase; transform:rotate(-2deg); display:none;
+  }
+  .pacta-stamp.show{display:block; animation:pop .35s ease;}
+  .pacta-trap{
+    margin-top:12px; padding:11px 14px; border-radius:6px; background:#F3E3E0; border-left:4px solid var(--stamp-red);
+    color:var(--stamp-red); font-size:.88rem; display:none;
+  }
+  .pacta-trap.show{display:block; animation:pop .3s ease;}
 </style>
 </head>
 <body>
@@ -517,6 +628,67 @@
           <p>Desainer yang sehat memperlakukan AI sebagai asisten: memakainya untuk mempercepat, bereksplorasi, dan menguatkan ide, lalu terbuka soal perannya dalam penawaran dan kontrak.</p>
           <div class="hk-verdict"><span class="v-label">Kesimpulan</span><b>Jujur soal peran AI di hadapan klien.</b> Harga yang kamu pasang harus mewakili nilai kerja dan kreativitasmu — makin besar tagihanmu, makin besar pula kontribusimu.</div>
         </div></div>
+      </div>
+    </div>
+
+    <!-- KALKULATOR STATUS KARYA -->
+    <div class="stk-box" id="stk-box">
+      <span class="kicker">Coba Sekarang · Interaktif</span>
+      <h3>Kalkulator Status Karya: "Sutradara, Asisten, atau Penonton?"</h3>
+      <p class="stk-sub">Jawab tiga pertanyaan cepat tentang cara kamu berproduksi. Kalkulator ini akan menaksir posisimu menurut Hukum Output — dan menegur jika Hukum Etika terlompati.</p>
+
+      <div class="stk-step" data-step="0">
+        <span class="stk-q-num">Pertanyaan 1 / 3 — Hukum Output</span>
+        <div class="stk-q-text">Berapa banyak yang kamu olah dari keluaran AI sebelum jadi karya final?</div>
+        <div class="stk-options">
+          <button data-val="0">Langsung pakai — biarkan mentah-mentah</button>
+          <button data-val="1">Diedit kecil (crop, ganti warna, rapikan)</button>
+          <button data-val="2">Diedit banyak (±50–80%): komposisi, elemen, teks</button>
+          <button data-val="3">AI cuma inspirasi — saya bangun sendiri hampir dari nol</button>
+        </div>
+      </div>
+
+      <div class="stk-step" data-step="1">
+        <span class="stk-q-num">Pertanyaan 2 / 3 — Hukum Output</span>
+        <div class="stk-q-text">Idenya lahir dari mana?</div>
+        <div class="stk-options">
+          <button data-val="0">Dari AI 100% — saya hanya mengetik prompt</button>
+          <button data-val="1">Prompt dari saya, tapi arah &amp; konsep mengikuti saran AI</button>
+          <button data-val="2">Konsep &amp; ide orisinal dari saya, AI membantu eksekusi</button>
+        </div>
+      </div>
+
+      <div class="stk-step" data-step="2">
+        <span class="stk-q-num">Pertanyaan 3 / 3 — Hukum Klien</span>
+        <div class="stk-q-text">Apakah klien (guru / pemberi tugas / pembeli) tahu karya ini dibantu AI?</div>
+        <div class="stk-options">
+          <button data-val="0">Tidak — biar terkesan 100% kerja tangan saya</button>
+          <button data-val="1">Sebagian — saya cerita kalau ditanya saja</button>
+          <button data-val="2">Ya — terbuka sejak awal, sebelum deal</button>
+        </div>
+      </div>
+
+      <div class="stk-progress">
+        <span class="stk-dot" data-i="0"></span>
+        <span class="stk-dot" data-i="1"></span>
+        <span class="stk-dot" data-i="2"></span>
+      </div>
+
+      <div class="stk-result">
+        <div class="stk-verdict" id="stk-sutradara">
+          <span class="stk-badge">Posisi: SUTRADARA</span>
+          Karyamu berdiri di atas ide orisinal dan olahan kreatif yang substansial — posisi terbaik <b>Hukum Output</b>. Kondisi yang kamu pilih juga jujur bagi klien, selaras <b>Hukum Etika</b>. Lanjutkan, dan dokumentasikan prosesnya agar bukti kontribusimu kuat.
+        </div>
+        <div class="stk-verdict" id="stk-asisten">
+          <span class="stk-badge">Posisi: ASISTEN</span>
+          Kamu memberi peran, tapi belum penuh sebagai sutradara. Menurut <b>Hukum Output</b>, hasil yang diedit ±50–80% plus ide (sebagian) orisinal mulai layak dilindungi — tapi kuatkan lagi kurasi &amp; arah kreatifmu. Dan ingat <b>Hukum Klien</b>: bicarakan transparan soal peran AI.
+        </div>
+        <div class="stk-verdict" id="stk-penonton">
+          <span class="stk-badge">Posisi: PENONTON</span>
+          Kamu lebih banyak memilih daripada mencipta — posisi terlemah menurut <b>Hukum Output</b>, karena ciptaan butuh akal manusia yang substansial. Kalau hasil ini dijual mentah-mentah ke klien, kamu juga melanggar <b>Hukum Klien</b>. Mulai dari memperbanyak proses: prompt, kurasi banyak versi, lalu rework nyata.
+        </div>
+        <p class="stk-sc" id="stk-sc" style="display:none;"></p>
+        <button class="stk-reset" id="stk-reset">↺ Ulangi Kalkulator</button>
       </div>
     </div>
   </div>
@@ -742,6 +914,22 @@
       <div class="g-item"><dt>RUU</dt><dd>Rancangan Undang-Undang — draf peraturan yang sedang dibahas dan belum sah berlaku sampai disetujui DPR bersama Presiden.</dd></div>
       <div class="g-item"><dt>Baleg DPR</dt><dd>Badan Legislasi DPR RI — alat kelengkapan DPR yang menyusun dan membahas rancangan undang-undang, termasuk revisi UU Hak Cipta.</dd></div>
     </dl>
+
+    <!-- MATCHING GAME -->
+    <div class="glos-game" id="glos-game">
+      <div class="gg-head">
+        <div>
+          <h3>Pasangkan Istilah &amp; Definisi</h3>
+          <p style="font-size:.87rem; color:var(--ink-soft); margin:4px 0 0;">Pilih satu istilah di kiri, lalu cocokkan dengan definisi yang benar di kanan.</p>
+        </div>
+        <span class="gg-score" id="gg-score">0/4</span>
+      </div>
+      <div class="gg-terms" id="gg-terms"></div>
+      <div class="gg-defs" id="gg-defs"></div>
+      <div class="gg-feedback" id="gg-feedback"></div>
+      <div class="gg-win" id="gg-win">Sempurna! Kamu hafal istilah-istilah kunci. Sekarang lanjut ke LKPD untuk mempraktikkannya. 🎉</div>
+      <button class="gg-reset" id="gg-reset">↺ Acak Ulang</button>
+    </div>
   </div>
 </section>
 
@@ -763,6 +951,30 @@
         Buka LKPD →
       </a>
     </div>
+
+    <!-- PAKTA INTERAKTIF -->
+    <div class="pacta-box" id="pacta-box">
+      <h3>Cek Komitmenmu: "Siapkah Menjadi Desainer AI yang Jujur?"</h3>
+      <p class="pp-sub">Centang sikap yang benar — dan misi sih: jangan centang yang jebakan.</p>
+      <div class="pp-item">
+        <input type="checkbox" id="pp1">
+        <label for="pp1"><b>Jujur:</b> saya akan memberi tahu bila karya dibantu AI.</label>
+      </div>
+      <div class="pp-item">
+        <input type="checkbox" id="pp2">
+        <label for="pp2"><b>Olah:</b> saya akan mengedit &amp; mengembangkan minimal 70% hasil AI sebelum dijual/dikumpulkan.</label>
+      </div>
+      <div class="pp-item">
+        <input type="checkbox" id="pp3">
+        <label for="pp3"><b>Menghargai:</b> saya tidak akan meniru karya teman atau menyalin prompt orang lain tanpa izin.</label>
+      </div>
+      <div class="pp-item trap">
+        <input type="checkbox" id="pptrap">
+        <label for="pptrap"><b>Jebakan:</b> saya akan pakai hasil AI mentah-mentah karena lebih cepat — yang penting jadi.</label>
+      </div>
+      <div class="pacta-trap" id="pacta-trap">⚠ Eh, itu justru menuju posisi "penonton" dan melanggar Hukum Etika. Batalkan centangan itu, ya.</div>
+      <div class="pacta-stamp" id="pacta-stamp">SIAP — JADI DESAINER AI YANG JUJUR</div>
+    </div>
   </div>
 </section>
 
@@ -771,7 +983,7 @@
   <div class="wrap">
     <span class="kicker">10 — Latihan</span>
     <h2>Uji Pemahamanmu</h2>
-    <p class="lead">Tujuh pertanyaan singkat berdasarkan materi di atas. Jawabanmu tidak disimpan ke server mana pun.</p>
+    <p class="lead">Sepuluh pertanyaan singkat berdasarkan materi di atas. Jawabanmu tidak disimpan ke server mana pun.</p>
 
     <div class="quiz-card">
       <div class="q-progress" id="q-progress">Soal 1 dari 7</div>
@@ -928,16 +1140,78 @@ const io = new IntersectionObserver((entries)=>{
 sections.forEach(s=>io.observe(s));
 
 // --- apersepsi poll ---
+const POLL_FB = {
+  a: "<b>Wajar — banyak yang melihat AI seperti \"Photoshop pintar\".</b> Bedanya yang membuat kasus-kasus di bawah menarik: Photoshop tidak \"menelan\" ratusan juta karya orang lain sebagai makanan. Pertanyaan siapa yang dirugikan baru terlihat saat kita memeriksa data pelatihannya — itu inti <b>Hukum Data</b> di bagian 03.",
+  b: "<b>Jawaban paling akurat.</b> Dampaknya memang sangat tergantung dari data pelatihan model AI itu. Di bagian 03 kita akan membedahnya sebagai Hukum Data, Hukum Output, dan Hukum Klien — lengkap dengan kasus nyata di Indonesia.",
+  c: "<b>Arah pemikiranmu bagus!</b> Tapi \"dirugikan\" tidak otomatis berarti \"melanggar hukum\" — apalagi kalau yang ditiru hanya gaya, bukan karya spesifik. Kita akan lihat bagaimana pengadilan dan regulator menilai perbedaan itu di bagian 04 dan 05.",
+  d: "<b>Pilihan yang jujur.</b> Justru itulah tujuan materi ini: memberimu cukup informasi untuk menilai sendiri. Ikuti bagian 02 dan 03 untuk peta lengkapnya."
+};
 document.querySelectorAll('#poll button').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#poll button').forEach(b=>b.style.opacity='.5');
+    document.querySelectorAll('#poll button').forEach(b=>{ b.style.opacity='.5'; b.classList.remove('picked'); });
     btn.style.opacity='1';
-    btn.style.background='var(--ink)'; btn.style.color='var(--parchment)';
+    btn.classList.add('picked');
     const result = document.getElementById('poll-result');
     result.classList.add('show');
-    result.innerHTML = "<b>Semua jawaban di atas punya alasan.</b> Jawaban paling akurat adalah opsi B: dampaknya memang tergantung dari data pelatihan model AI tersebut (\"makanan\"-nya). Itulah kenapa kita perlu memahami hukum data, hukum output, dan kasus-kasus nyata di Indonesia — silakan lanjut ke bagian Analogi.";
-  }, {once:false});
+    result.innerHTML = POLL_FB[btn.dataset.ans];
+  });
 });
+
+// --- kalkulator status karya ---
+const stkSteps = Array.from(document.querySelectorAll('.stk-step'));
+const stkDots = Array.from(document.querySelectorAll('.stk-dot'));
+const stkVerdicts = Array.from(document.querySelectorAll('.stk-verdict'));
+let stkScores = [];
+stkSteps.forEach((step, idx)=>{
+  step.querySelectorAll('.stk-options button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(step.dataset.locked) return;
+      step.dataset.locked = '1';
+      step.querySelectorAll('.stk-options button').forEach(b=>{ b.disabled = true; });
+      btn.classList.add('sel');
+      stkScores[idx] = parseInt(btn.dataset.val, 10);
+      stkDots[idx].classList.add('on');
+      if(idx < stkSteps.length - 1){
+        stkSteps[idx + 1].classList.add('show');
+      } else {
+        stkCompute();
+      }
+    });
+  });
+});
+
+function stkCompute(){
+  const hc = stkScores[0] + stkScores[1];
+  const ho = stkScores[2];
+  const id = hc <= 1 ? 'stk-penonton' : (hc <= 3 ? 'stk-asisten' : 'stk-sutradara');
+  stkVerdicts.forEach(v=>v.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
+  const note = ho === 0
+    ? 'Catatan Hukum Etika: kamu menyembunyikan peran AI dari klien — melanggar Hukum Klien. Batalkan sebelum deal.'
+    : ho === 1
+      ? 'Catatan Hukum Etika: transparansi setengah-setengah. Lebih baik terbuka penuh sejak awal.'
+      : 'Catatan Hukum Etika: transparansi penuh — nilai plus yang langka. Bagus!';
+  const sc = document.getElementById('stk-sc');
+  sc.style.display = 'block';
+  sc.textContent = 'Skor kontribusi manusia: ' + hc + '/5 · ' + note;
+  document.getElementById('stk-reset').classList.add('show');
+}
+
+document.getElementById('stk-reset').addEventListener('click', ()=>{
+  stkScores = [];
+  stkSteps.forEach((step, i)=>{
+    delete step.dataset.locked;
+    step.classList.remove('show');
+    step.querySelectorAll('button').forEach(b=>{ b.disabled = false; b.classList.remove('sel'); });
+    stkDots[i].classList.remove('on');
+  });
+  stkVerdicts.forEach(v=>v.classList.remove('show'));
+  const sc = document.getElementById('stk-sc'); sc.style.display = 'none';
+  document.getElementById('stk-reset').classList.remove('show');
+  stkSteps[0].classList.add('show');
+});
+
+stkSteps[0].classList.add('show');
 
 // --- timeline accordion ---
 document.querySelectorAll('.t-item').forEach(item=>{
@@ -986,6 +1260,96 @@ document.querySelectorAll('#id-cases .id-toggle').forEach(btn=>{
 // --- principle flip cards ---
 document.querySelectorAll('.flip').forEach(f=>{
   f.addEventListener('click', ()=> f.classList.toggle('flipped'));
+});
+
+// --- matching game glosarium ---
+const GG_PAIRS = [
+  {t:'Hak Cipta', d:'Hak eksklusif pencipta atas ciptaannya, timbul otomatis sejak karya diciptakan.'},
+  {t:'Data Pelatihan', d:'Kumpulan data (gambar/teks) yang dipakai melatih model AI agar mengenali pola.'},
+  {t:'Model Weights', d:'Parameter numerik \u201cotak\u201d model AI \u2014 hasil pelatihan, bukan salinan data asli.'},
+  {t:'DJKI', d:'Lembaga pemerintah RI yang mengurus pendaftaran & perlindungan kekayaan intelektual.'}
+];
+function shuffleArr(a){const arr=a.slice(); for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr;}
+let ggSel = null, ggMatched = new Set(), ggScore = 0;
+const ggFb = document.getElementById('gg-feedback');
+const ggWin = document.getElementById('gg-win');
+const ggReset = document.getElementById('gg-reset');
+
+function renderGlosGame(){
+  ggSel = null; ggMatched = new Set(); ggScore = 0;
+  ggWin.classList.remove('show'); ggReset.classList.remove('show'); ggFb.classList.remove('show');
+  const termsEl = document.getElementById('gg-terms');
+  const defsEl = document.getElementById('gg-defs');
+  termsEl.innerHTML = ''; defsEl.innerHTML = '';
+  GG_PAIRS.forEach((p, i)=>{
+    const b = document.createElement('button');
+    b.textContent = p.t;
+    b.addEventListener('click', ()=>{
+      if(ggMatched.has(i)) return;
+      ggSel = i;
+      document.querySelectorAll('#gg-terms button').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+      ggFb.classList.remove('show');
+    });
+    const w = document.createElement('div'); w.className = 'gg-term'; w.appendChild(b);
+    termsEl.appendChild(w);
+  });
+  shuffleArr(GG_PAIRS.map((p,i)=>i)).forEach(origIdx=>{
+    const b = document.createElement('button');
+    b.className = 'gg-def';
+    b.textContent = GG_PAIRS[origIdx].d;
+    b.addEventListener('click', ()=> onDefClick(origIdx, b));
+    defsEl.appendChild(b);
+  });
+  document.getElementById('gg-score').textContent = '0/' + GG_PAIRS.length;
+}
+
+function onDefClick(origIdx, btn){
+  if(ggMatched.has(origIdx)) return;
+  if(ggSel === null){
+    ggFb.textContent = 'Pilih dulu salah satu istilah di kolom kiri.';
+    ggFb.className = 'gg-feedback wrong show';
+    return;
+  }
+  if(ggSel === origIdx){
+    ggMatched.add(origIdx);
+    const termBtns = document.querySelectorAll('#gg-terms button');
+    termBtns[ggSel].classList.remove('sel'); termBtns[ggSel].classList.add('done');
+    btn.classList.remove('sel'); btn.classList.add('done');
+    ggScore++;
+    document.getElementById('gg-score').textContent = ggScore + '/' + GG_PAIRS.length;
+    ggFb.className = 'gg-feedback ok show';
+    ggFb.textContent = 'Cocok! "' + GG_PAIRS[origIdx].t + '" berhasil dipasangkan.';
+    ggSel = null;
+    if(ggScore === GG_PAIRS.length){ ggWin.classList.add('show'); ggReset.classList.add('show'); }
+  } else {
+    ggFb.className = 'gg-feedback wrong show';
+    ggFb.textContent = 'Belum cocok \u2014 definisi ini bukan pasangan "' + GG_PAIRS[ggSel].t + '". Coba lagi.';
+    document.querySelectorAll('#gg-terms button').forEach(x=>x.classList.remove('sel'));
+    ggSel = null;
+  }
+}
+
+ggReset.addEventListener('click', renderGlosGame);
+renderGlosGame();
+
+// --- pakta interaktif ---
+const pactaGood = ['pp1','pp2','pp3'];
+const pactaTrap = document.getElementById('pptrap');
+const pactaTrapNote = document.getElementById('pacta-trap');
+const pactaStamp = document.getElementById('pacta-stamp');
+function pactaUpdate(){
+  const good = pactaGood.every(id => document.getElementById(id).checked);
+  const trap = pactaTrap.checked;
+  pactaTrapNote.classList.toggle('show', trap);
+  pactaStamp.classList.toggle('show', good && !trap);
+}
+pactaGood.forEach(id=>document.getElementById(id).addEventListener('change', pactaUpdate));
+pactaTrap.addEventListener('change', ()=>{
+  if(pactaTrap.checked){
+    pactaGood.forEach(id=>{ document.getElementById(id).checked = false; });
+  }
+  pactaUpdate();
 });
 
 // --- QUIZ ---
