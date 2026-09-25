@@ -471,7 +471,7 @@ function updateViolationBadge(){
 }
 
 function showViolation(title, desc){
-  if(!state.examActive) return;
+  if(!state.examActive || isSubmitting) return;
   state.violations++;
   updateViolationBadge();
   $("violation-title").textContent = title;
@@ -523,6 +523,9 @@ function handleTouchStart(e){
     return;
   }
   clearTimeout(_touchTimer);
+  _touchTimer = null;
+  var target = e.target;
+  if(target && typeof target.closest === "function" && target.closest("button, .option")) return;
   _touchTimer = setTimeout(function(){
     if(state.examActive){
       showViolation("Sentuhan Lama Terdeteksi", "Sistem mendeteksi sentuhan layar dalam durasi panjang (long press). Gestur ini sering digunakan untuk mengambil screenshot. Kejadian ini tercatat sebagai pelanggaran.");
@@ -553,6 +556,9 @@ function setupProctor(){
 }
 function teardownProctor(){
   state.examActive = false;
+  clearTimeout(_touchTimer);
+  _touchTimer = null;
+  _touchStartCount = 0;
   stopTimer();
   document.removeEventListener("visibilitychange", handleVisibilityChange);
   document.removeEventListener("fullscreenchange", handleFullscreenChange);
@@ -735,6 +741,10 @@ function nextQuestion(){
 async function submitQuiz(){
   if(isSubmitting) return;
   isSubmitting = true;
+  clearTimeout(_touchTimer);
+  _touchTimer = null;
+  $("btn-next").disabled = true;
+  $("btn-next").textContent = "Mengirim...";
 
   var correct = 0;
   var detail = currentQuiz.map(function(q, i){
@@ -761,6 +771,7 @@ async function submitQuiz(){
     console.error("Gagal menyimpan hasil:", e);
     alert("Gagal mengirim jawaban. Periksa koneksi internet lalu coba kirim ulang.");
     isSubmitting = false;
+    renderQuestion();
     return;
   }
 
