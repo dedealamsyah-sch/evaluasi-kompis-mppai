@@ -62,6 +62,25 @@ CREATE POLICY "Allow public read/write exam_settings"
   USING (true)
   WITH CHECK (true);
 
+CREATE TABLE IF NOT EXISTS exam_app_settings (
+  key         TEXT PRIMARY KEY,
+  value       BOOLEAN NOT NULL,
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE exam_app_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read/write exam_app_settings" ON exam_app_settings;
+CREATE POLICY "Allow public read/write exam_app_settings"
+  ON exam_app_settings
+  FOR ALL
+  USING (true)
+  WITH CHECK (true);
+
+INSERT INTO exam_app_settings (key, value)
+VALUES ('proctor_enabled', false)
+ON CONFLICT (key) DO NOTHING;
+
 -- Migration: tambahkan kolom detail (jika tabel sudah ada lebih dulu)
 ALTER TABLE evaluasi_results ADD COLUMN IF NOT EXISTS detail JSONB DEFAULT NULL;
 

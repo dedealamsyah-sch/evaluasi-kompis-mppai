@@ -29,6 +29,7 @@
 var cfg = window.EXAM_CONFIG;
 if (!cfg) { document.body.innerHTML = '<p style="padding:40px;color:#ff6b6b;font-family:monospace;">Konfigurasi halaman tidak ditemukan (EXAM_CONFIG).</p>'; throw new Error('EXAM_CONFIG missing'); }
 var appCfg = window.APP_CONFIG || {};
+var proctorEnabled = appCfg.enableProctor === true;
 var app = {};
 
 var SUBJECT = cfg.subject;
@@ -184,13 +185,13 @@ function buildAppHTML(){
   <div id="screen-warning" class="hidden">
     <div class="card">
       <h2 style="font-size:19px;">Sebelum Memulai — Baca Aturan Ujian</h2>
-      <p class="subtle" style="margin-top:6px;">Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Selama mengerjakan, sistem memantau aktivitas pada perangkat Anda.</p>
+      <p class="subtle" id="proctor-intro" style="margin-top:6px;">${proctorEnabled ? 'Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Selama mengerjakan, sistem memantau aktivitas pada perangkat Anda.' : 'Pastikan Anda sudah siap dan akan mengerjakan ujian secara jujur dan mandiri.'}</p>
       <ul class="rule-list">
-        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian berlangsung.</span></li>
-        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai dikirim.</span></li>
-        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b> dalam bentuk apa pun.</span></li>
+        <li class="proctor-rule"><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>membuka atau berpindah aplikasi/tab lain</b> selama ujian berlangsung.</span></li>
+        <li class="proctor-rule"><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang <b>keluar dari mode layar penuh</b> sebelum ujian selesai dikirim.</span></li>
+        <li class="proctor-rule"><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang mengambil <b>screenshoot / tangkapan layar</b> dalam bentuk apa pun.</span></li>
         <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></span><span>Dilarang menggunakan <b>bantuan AI, internet, atau alat bantu lain</b> untuk menjawab soal.</span></li>
-        <li><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>Setiap pelanggaran di atas akan <b>terdeteksi otomatis</b> dan tercatat sebagai peringatan pada laporan guru.</span></li>
+        <li class="proctor-rule"><span class="ri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>Setiap pelanggaran di atas akan <b>terdeteksi otomatis</b> dan tercatat sebagai peringatan pada laporan guru.</span></li>
       </ul>
       <div class="agree-row">
         <input type="checkbox" id="agree-check" onchange="$('btn-confirm-start').disabled = !this.checked">
@@ -198,7 +199,7 @@ function buildAppHTML(){
       </div>
       <div class="btn-row">
         <button class="btn btn-ghost" onclick="backToStart()">← Batal</button>
-        <button class="btn btn-primary" style="margin-left:auto;" id="btn-confirm-start" onclick="confirmStartExam()" disabled>Mulai Sekarang (Layar Penuh) \u2192</button>
+        <button class="btn btn-primary" style="margin-left:auto;" id="btn-confirm-start" onclick="confirmStartExam()" disabled>${proctorEnabled ? 'Mulai Sekarang (Layar Penuh)' : 'Mulai Sekarang'} \u2192</button>
       </div>
     </div>
   </div>
@@ -215,9 +216,9 @@ function buildAppHTML(){
       <div class="qmeta">
         <span class="qnum mono" id="q-counter">Soal 1/30</span>
         <span class="qname" id="q-participant"></span>
-        <span class="violation-badge" id="violation-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Pelanggaran: 0</span>
+        <span class="violation-badge${proctorEnabled ? '' : ' hidden'}" id="violation-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Pelanggaran: 0</span>
       </div>
-      <div class="warning-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Tidak boleh screenshoot — terdeteksi otomatis</div>
+      <div class="warning-text${proctorEnabled ? '' : ' hidden'}" id="proctor-warning-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Tidak boleh screenshoot — terdeteksi otomatis</div>
       <div class="question-img-wrap hidden" id="q-img-wrap">
         <div>
           ${MEDIA_KIND === "svg"
@@ -328,6 +329,7 @@ function buildAppHTML(){
 }
 
 document.body.innerHTML = buildAppHTML();
+applyProctorUI();
 
 /* =========================================================
    UTIL
@@ -349,6 +351,25 @@ function showScreen(id){
     $(s).classList.toggle("hidden", s !== id);
   });
   window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function applyProctorUI(){
+  var intro = $("proctor-intro");
+  if(intro){
+    intro.innerHTML = proctorEnabled
+      ? 'Ujian akan berjalan dalam mode <b>layar penuh (full screen)</b>. Selama mengerjakan, sistem memantau aktivitas pada perangkat Anda.'
+      : 'Pastikan Anda sudah siap dan akan mengerjakan ujian secara jujur dan mandiri.';
+  }
+  var startBtn = $("btn-confirm-start");
+  if(startBtn) startBtn.textContent = (proctorEnabled ? "Mulai Sekarang (Layar Penuh)" : "Mulai Sekarang") + " \u2192";
+  var badge = $("violation-badge");
+  if(badge) badge.classList.toggle("hidden", !proctorEnabled);
+  var warningText = $("proctor-warning-text");
+  if(warningText) warningText.classList.toggle("hidden", !proctorEnabled);
+  document.querySelectorAll(".proctor-rule").forEach(function(el){
+    el.classList.toggle("hidden", !proctorEnabled);
+  });
+  if(!proctorEnabled) $("violation-overlay").classList.add("hidden");
 }
 
 /* =========================================================
@@ -410,6 +431,8 @@ async function startQuiz(){
   $("btn-start").disabled = true;
   $("btn-start").textContent = "Memeriksa...";
   try{
+    proctorEnabled = await fetchProctorSetting();
+    applyProctorUI();
     var existing = null;
     try{ existing = await db.getExisting(state.name, state.kelas, BAB_NUM, state.type); }catch(e){ existing = null; }
     if(existing){
@@ -446,16 +469,17 @@ function confirmStartExam(){
   state.answers = new Array(currentQuiz.length).fill(null);
   state.violations = 0;
   state.examActive = true;
-  updateViolationBadge();
+  if(proctorEnabled) updateViolationBadge();
   buildPathSVG();
-  requestExamFullscreen();
+  if(proctorEnabled) requestExamFullscreen();
   showScreen("screen-quiz");
   renderQuestion();
-  setupProctor();
+  if(proctorEnabled) setupProctor();
   fetchTimerSettings().then(function(dur){ startTimer(dur); });
 }
 
 function requestExamFullscreen(){
+  if(!proctorEnabled) return;
   var el = document.documentElement;
   var req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
   if(req){ req.call(el).catch(function(){}); }
@@ -471,7 +495,7 @@ function updateViolationBadge(){
 }
 
 function showViolation(title, desc){
-  if(!state.examActive || isSubmitting) return;
+  if(!proctorEnabled || !state.examActive || isSubmitting) return;
   state.violations++;
   updateViolationBadge();
   $("violation-title").textContent = title;
@@ -539,6 +563,7 @@ function handleGestureChange(e){ e.preventDefault(); }
 function handleGestureEnd(e){ e.preventDefault(); }
 
 function setupProctor(){
+  if(!proctorEnabled) return;
   document.addEventListener("visibilitychange", handleVisibilityChange);
   document.addEventListener("fullscreenchange", handleFullscreenChange);
   document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
@@ -576,6 +601,20 @@ function teardownProctor(){
   document.body.classList.remove("body-mobile");
   $("violation-overlay").classList.add("hidden");
   exitExamFullscreen();
+}
+
+async function fetchProctorSetting(){
+  if(!_supabase) return proctorEnabled;
+  try{
+    var res = await _supabase.from('exam_app_settings').select('value')
+      .eq('key', 'proctor_enabled').maybeSingle();
+    if(res.error) throw res.error;
+    if(res.data && typeof res.data.value === "boolean") return res.data.value;
+    return proctorEnabled;
+  }catch(e){
+    console.warn("Gagal memuat pengaturan deteksi pelanggaran:", e.message);
+    return proctorEnabled;
+  }
 }
 
 /* =========================================================

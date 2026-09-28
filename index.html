@@ -502,6 +502,27 @@
   }
   .btn-save-timer:hover{transform:translateY(-1px);}
   .btn-save-timer:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .proctor-settings .proctor-row{display:flex;align-items:center;justify-content:space-between;gap:18px;}
+  .proctor-settings .proctor-copy{min-width:0;}
+  .proctor-settings .proctor-state{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none;}
+  .proctor-settings .proctor-status{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:var(--text-dim);}
+  .proctor-settings .proctor-status.active{color:var(--teal);}
+  .proctor-settings .proctor-save-state{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-muted);}
+  .proctor-switch{position:relative;width:52px;height:28px;flex:none;cursor:pointer;}
+  .proctor-switch input{position:absolute;opacity:0;width:1px;height:1px;}
+  .proctor-slider{
+    position:absolute;inset:0;border-radius:20px;background:var(--ink-3);border:1px solid var(--line-strong);
+    transition:background .2s ease,border-color .2s ease;
+  }
+  .proctor-slider::before{
+    content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;
+    background:var(--text-dim);transition:transform .2s ease,background .2s ease;
+  }
+  .proctor-switch input:checked + .proctor-slider{background:rgba(45,212,191,.25);border-color:rgba(45,212,191,.55);}
+  .proctor-switch input:checked + .proctor-slider::before{transform:translateX(24px);background:var(--teal);}
+  .proctor-switch input:focus-visible + .proctor-slider{outline:2px solid var(--violet);outline-offset:2px;}
+  .proctor-switch input:disabled + .proctor-slider{opacity:.5;cursor:not-allowed;}
+  @media(max-width:600px){ .proctor-settings .proctor-row{align-items:flex-start;}.proctor-settings .proctor-state{align-items:flex-end;} }
 
   /* ---------- Statistik (Chart.js) ---------- */
   .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
@@ -838,6 +859,23 @@
           <p class="sub">Atur durasi ujian per bab dan jenis evaluasi. Siswa akan melihat hitung mundur dan otomatis mengirim jawaban saat waktu habis. Set 0 untuk tanpa batas waktu.</p>
           <div class="timer-grid" id="timer-grid"></div>
           <button class="btn-save-timer" id="btn-save-timer" onclick="saveTimerSettings()">Simpan Pengaturan Timer</button>
+        </div>
+
+        <div class="timer-settings proctor-settings" id="proctor-settings-section">
+          <div class="proctor-row">
+            <div class="proctor-copy">
+              <h3>Deteksi Pelanggaran</h3>
+              <p class="sub" style="margin-bottom:0;">Aktifkan atau nonaktifkan pemantauan aktivitas, layar penuh, dan pencatatan pelanggaran untuk seluruh ujian.</p>
+            </div>
+            <div class="proctor-state">
+              <span class="proctor-status" id="admin-proctor-status">Nonaktif</span>
+              <span class="proctor-save-state" id="admin-proctor-save-state">Tersimpan otomatis</span>
+            </div>
+            <label class="proctor-switch" title="Aktifkan atau nonaktifkan deteksi pelanggaran">
+              <input type="checkbox" id="admin-proctor-toggle" aria-label="Aktifkan deteksi pelanggaran" onchange="saveProctorSetting(this.checked)" disabled>
+              <span class="proctor-slider"></span>
+            </label>
+          </div>
         </div>
 
         <div class="admin-actions">
@@ -1506,6 +1544,7 @@ function refreshGuruPanel(){
   updatePenilaianBab();
   updateStatBab();
   loadTimerSettings();
+  loadProctorSetting();
   if(!$("tab-nilai-panel").classList.contains("hidden")){
     loadRecapData();
   } else if(!$("tab-penilaian-panel").classList.contains("hidden")){
@@ -1776,6 +1815,67 @@ async function savePenilaian(){
   }
 }
 let currentTimerSettings = {};
+let currentProctorEnabled = (window.APP_CONFIG && window.APP_CONFIG.enableProctor) === true;
+
+function renderProctorSetting(enabled, saveState){
+  const toggle = $("admin-proctor-toggle");
+  const status = $("admin-proctor-status");
+  const state = $("admin-proctor-save-state");
+  toggle.checked = enabled;
+  status.textContent = enabled ? "Aktif" : "Nonaktif";
+  status.classList.toggle("active", enabled);
+  state.textContent = saveState;
+}
+
+async function loadProctorSetting(){
+  const toggle = $("admin-proctor-toggle");
+  toggle.disabled = true;
+  if(!_supabase){
+    renderProctorSetting(currentProctorEnabled, "Supabase tidak tersedia");
+    return;
+  }
+  renderProctorSetting(currentProctorEnabled, "Memuat...");
+  try{
+    const { data, error } = await _supabase.from("exam_app_settings").select("value").eq("key", "proctor_enabled").maybeSingle();
+    if(error) throw error;
+    currentProctorEnabled = !!(data && data.value === true);
+    renderProctorSetting(currentProctorEnabled, "Tersimpan otomatis");
+  }catch(e){
+    console.warn("Gagal memuat pengaturan deteksi pelanggaran:", e.message);
+    renderProctorSetting(currentProctorEnabled, "Gagal memuat");
+  }finally{
+    toggle.disabled = false;
+  }
+}
+
+async function saveProctorSetting(enabled){
+  if(!_supabase){
+    renderProctorSetting(currentProctorEnabled, "Supabase tidak tersedia");
+    alert("Supabase tidak tersedia.");
+    return;
+  }
+  const previous = currentProctorEnabled;
+  const toggle = $("admin-proctor-toggle");
+  currentProctorEnabled = enabled === true;
+  toggle.disabled = true;
+  renderProctorSetting(currentProctorEnabled, "Menyimpan...");
+  try{
+    const { error } = await _supabase.from("exam_app_settings").upsert(
+      { key: "proctor_enabled", value: currentProctorEnabled, updated_at: new Date().toISOString() },
+      { onConflict: "key" }
+    );
+    if(error) throw error;
+    renderProctorSetting(currentProctorEnabled, "Tersimpan");
+    setTimeout(()=>renderProctorSetting(currentProctorEnabled, "Tersimpan otomatis"), 1500);
+  }catch(e){
+    console.error(e);
+    currentProctorEnabled = previous;
+    renderProctorSetting(currentProctorEnabled, "Gagal menyimpan");
+    alert("Gagal menyimpan pengaturan deteksi pelanggaran: " + e.message);
+  }finally{
+    toggle.disabled = false;
+  }
+}
 
 async function loadTimerSettings(){
   if(!_supabase) return;
