@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTS — Pengumpulan Projek Komputer Grafis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/exam.css">
+<style>
+  .asts-container { max-width: 650px; margin: 40px auto; }
+  .card { padding: 32px; }
+  .field { margin-bottom: 20px; }
+  .field-label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--violet-dim); margin-bottom: 8px; }
+  select, input[type="text"], input[type="url"] {
+    width: 100%; padding: 12px 16px; background: var(--ink); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--paper); font-family: 'Inter', sans-serif; font-size: 14px;
+  }
+  select:focus, input:focus { outline: 2px solid var(--violet); outline-offset: 1px; }
+  .btn-submit { margin-top: 10px; }
+  .subtle-info { font-size: 13px; color: var(--text-dim); line-height: 1.6; margin-bottom: 24px; }
+  .success-box { background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.3); color: var(--teal); padding: 16px; border-radius: var(--radius-sm); margin-top: 20px; display: none; text-align: center; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="app asts-container">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 42 42" fill="none">
+      <path d="M6 32 C 14 8, 22 40, 36 10" stroke="#7c5cff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <circle cx="6" cy="32" r="3.4" fill="#ffb627"/>
+      <circle cx="36" cy="10" r="3.4" fill="#2dd4bf"/>
+      <circle cx="21" cy="24" r="2.6" fill="#7c5cff"/>
+    </svg>
+    <div class="brand-text">
+      <div class="eyebrow">Pengumpulan Tugas · Komputer Grafis</div>
+      <h1>ASTS: Projek Desain Grafis</h1>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="subtle-info">Silakan pilih nama Anda dan tempelkan (paste) link postingan Blogger dari projek ASTS Komputer Grafis yang telah dipublikasikan.</p>
+
+    <div class="field">
+      <label class="field-label">Nama Peserta Didik</label>
+      <div class="select-wrap">
+        <select id="sel-nama">
+          <option value="">— Pilih nama Anda —</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Link Postingan Blogger</label>
+      <input type="url" id="inp-link" placeholder="https://nama-blog.blogspot.com/2026/09/asts-..." required>
+    </div>
+
+    <button class="btn btn-primary btn-block btn-submit" id="btn-submit" onclick="submitASTS()">Kirim Link Projek ASTS →</button>
+
+    <div class="success-box" id="success-box">
+      Link projek ASTS Anda berhasil dikumpulkan dan tersimpan!
+    </div>
+  </div>
+
+  <div class="footer-link" style="margin-top: 20px; text-align: center;">
+    <a href="index.html">← Kembali ke Beranda</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/config.js"></script>
+<script src="assets/data-siswa.js"></script>
+<script>
+  const $ = id => document.getElementById(id);
+  const SUBJECT = 'kompis';
+  const KELAS = 'XI DKV 4';
+
+  let _supabase = null;
+  try {
+    const cfg = window.APP_CONFIG || {};
+    _supabase = supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+  } catch(e) { console.warn("Supabase error:", e); }
+
+  function init() {
+    const sel = $("sel-nama");
+    const roster = window.getRoster(SUBJECT, KELAS) || [];
+    roster.forEach(n => {
+      const opt = document.createElement("option");
+      opt.value = n;
+      opt.textContent = n.toLowerCase().split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      sel.appendChild(opt);
+    });
+  }
+
+  async function submitASTS() {
+    const name = $("sel-nama").value;
+    const link = $("inp-link").value.trim();
+
+    if(!name) { alert("Pilih nama Anda terlebih dahulu."); return; }
+    if(!link || !link.startsWith("http")) { alert("Masukkan link URL yang valid (diawali http:// atau https://)."); return; }
+
+    const btn = $("btn-submit");
+    btn.disabled = true;
+    btn.textContent = "Mengirim...";
+
+    if(_supabase) {
+      try {
+        const { error } = await _supabase.from('penilaian').upsert(
+          { subject: SUBJECT, kelas: KELAS, name: name, bab: 8, kategori: 'tugas', score: null, catatan: link, updated_at: new Date().toISOString() },
+          { onConflict: 'subject,kelas,name,bab,kategori' }
+        );
+        if(error) throw error;
+      } catch(e) {
+        console.error(e);
+        alert("Gagal menyimpan ke database. Coba lagi.");
+        btn.disabled = false;
+        btn.textContent = "Kirim Link Projek ASTS →";
+        return;
+      }
+    }
+
+    $("success-box").style.display = "block";
+    btn.textContent = "Terikirim ✓";
+    setTimeout(() => {
+      $("success-box").style.display = "none";
+      btn.disabled = false;
+      btn.textContent = "Kirim Link Projek ASTS →";
+      $("inp-link").value = "";
+    }, 3000);
+  }
+
+  init();
+</script>
+</body>
+</html>
