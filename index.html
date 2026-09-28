@@ -1105,16 +1105,26 @@ const SUBJECTS = {
         active: true,
         soalCount: 35
       },
-      {
-        num: 7,
-        title: "Cetak & Eksport",
-        desc: "Print settings, export ke berbagai format, dan publish ke web",
-        file: "bab7-kompis.html",
-        active: true,
-        soalCount: 35
-      }
-    ]
-  },
+        {
+          num: 7,
+          title: "Cetak & Eksport",
+          desc: "Print settings, export ke berbagai format, dan publish ke web",
+          file: "bab7-kompis.html",
+          active: true,
+          soalCount: 35
+        },
+        {
+          num: 8,
+          title: "ASTS: Projek Desain Grafis",
+          desc: "Pengumpulan link postingan blog hasil projek ASTS",
+          file: "https://ladusingsingladu.blogspot.com/2026/09/asts-komputer-grafis-ladusing-xi-dkv-4.html",
+          active: true,
+          soalCount: 0,
+          isExternal: true
+        }
+      ]
+    },
+
   mppai: {
     label: 'MPP AI',
     short: 'MPP AI',
@@ -1251,14 +1261,21 @@ function renderChapters(){
   $("stat-aktif").textContent = examChapters.length > 0 ? examChapters.length * 2 : "—";
   $("bab-count").textContent = chapters.length + " Bab";
 
-  chapters.forEach(ch=>{
+    chapters.forEach(ch=>{
     const div = document.createElement("div");
     div.className = "ch-card " + (ch.active ? "active" : "locked");
-    if(ch.active) div.onclick = ()=> location.href = ch.file;
+    if(ch.active) {
+      if(ch.isExternal) {
+        div.onclick = ()=> window.open(ch.file, '_blank');
+      } else {
+        div.onclick = ()=> location.href = ch.file;
+      }
+    }
 
-    const tagText = !ch.active ? 'Segera Hadir' : (ch.lkpd ? 'LKPD' : (ch.materi ? 'Materi Bacaan' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal'))));
-    const btnText = !ch.active ? 'Coming Soon' : (ch.lkpd ? 'Buka LKPD →' : (ch.materi ? 'Baca Materi →' : (ch.handout ? 'Buka →' : 'Mulai →')));
+    const tagText = !ch.active ? 'Segera Hadir' : (ch.isExternal ? 'Link External' : (ch.lkpd ? 'LKPD' : (ch.materi ? 'Materi Bacaan' : (ch.handout ? 'Lembar Diskusi' : (ch.soalCount + ' soal')))));
+    const btnText = !ch.active ? 'Coming Soon' : (ch.isExternal ? 'Buka Link →' : (ch.lkpd ? 'Buka LKPD →' : (ch.materi ? 'Baca Materi →' : (ch.handout ? 'Buka →' : 'Mulai →'))));
     const tagCls = !ch.active ? 'tag-soon' : ((ch.lkpd || ch.materi) ? 'tag-materi' : (ch.handout ? 'tag-soon' : 'tag-available'));
+
 
     div.innerHTML = `
       <div class="ch-num">${ch.num}</div>
