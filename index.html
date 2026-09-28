@@ -1905,7 +1905,11 @@ async function loadProctorSetting(){
     currentProctorEnabled = !!(data && data.value === true);
     renderProctorSetting(currentProctorEnabled, "Tersimpan otomatis");
   }catch(e){
-    console.warn("Gagal memuat pengaturan deteksi pelanggaran:", e.message);
+    if(e.message && e.message.includes("Could not find the table")){
+      alert("Pengaturan anti‑pelanggaran belum tersedia di database. Silakan jalankan skema SQL (exam_app_settings) terlebih dahulu.");
+    }else{
+      console.warn("Gagal memuat pengaturan deteksi pelanggaran:", e.message);
+    }
     renderProctorSetting(currentProctorEnabled, "Gagal memuat");
   }finally{
     toggle.disabled = false;
@@ -1932,10 +1936,14 @@ async function saveProctorSetting(enabled){
     renderProctorSetting(currentProctorEnabled, "Tersimpan");
     setTimeout(()=>renderProctorSetting(currentProctorEnabled, "Tersimpan otomatis"), 1500);
   }catch(e){
-    console.error(e);
     currentProctorEnabled = previous;
     renderProctorSetting(currentProctorEnabled, "Gagal menyimpan");
-    alert("Gagal menyimpan pengaturan deteksi pelanggaran: " + e.message);
+    if(e.message && e.message.includes("Could not find the table")){
+      alert("Tabel exam_app_settings belum ada di database.\n\nJalankan perintah SQL ini di Supabase Dashboard → SQL Editor:\n\nCREATE TABLE IF NOT EXISTS exam_app_settings (\n  key TEXT PRIMARY KEY,\n  value BOOLEAN NOT NULL,\n  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()\n);\n\nALTER TABLE exam_app_settings ENABLE ROW LEVEL SECURITY;\n\nDROP POLICY IF EXISTS \"Allow public read/write exam_app_settings\" ON exam_app_settings;\nCREATE POLICY \"Allow public read/write exam_app_settings\"\n  ON exam_app_settings\n  FOR ALL\n  USING (true)\n  WITH CHECK (true);\n\nINSERT INTO exam_app_settings (key, value)\nVALUES ('proctor_enabled', false)\nON CONFLICT (key) DO NOTHING;");
+    } else {
+      console.error(e);
+      alert("Gagal menyimpan pengaturan deteksi pelanggaran: " + e.message);
+    }
   }finally{
     toggle.disabled = false;
   }
