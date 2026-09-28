@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS penilaian (
   subject     TEXT NOT NULL DEFAULT 'kompis',    -- Mapel: 'kompis' atau 'mppai'
   kelas       TEXT NOT NULL DEFAULT '-',         -- Kelas siswa
   name        TEXT NOT NULL,                      -- Nama peserta didik
-  bab         INTEGER NOT NULL,                   -- Nomor bab
+  bab         TEXT NOT NULL,                      -- Nomor bab (atau ID seperti 'ASTS')
   kategori    TEXT NOT NULL CHECK (kategori IN ('catatan', 'tugas')),
   score       INTEGER CHECK (score BETWEEN 0 AND 100),  -- Nilai manual
   catatan     TEXT DEFAULT '',                    -- Catatan guru (opsional)

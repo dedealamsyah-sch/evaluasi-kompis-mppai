@@ -105,7 +105,7 @@
     if(_supabase) {
       try {
         const { error } = await _supabase.from('penilaian').upsert(
-          { subject: SUBJECT, kelas: KELAS, name: name, bab: 8, kategori: 'tugas', score: null, catatan: link, updated_at: new Date().toISOString() },
+          { subject: SUBJECT, kelas: KELAS, name: name, bab: 'ASTS', kategori: 'tugas', score: null, catatan: link, updated_at: new Date().toISOString() },
           { onConflict: 'subject,kelas,name,bab,kategori' }
         );
         if(error) throw error;
