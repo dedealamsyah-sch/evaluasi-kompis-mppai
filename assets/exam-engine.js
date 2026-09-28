@@ -780,6 +780,7 @@ function nextQuestion(){
 async function submitQuiz(){
   if(isSubmitting) return;
   isSubmitting = true;
+  teardownProctor();
   clearTimeout(_touchTimer);
   _touchTimer = null;
   $("btn-next").disabled = true;
