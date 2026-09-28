@@ -961,6 +961,7 @@
 
         <div class="admin-actions">
           <button class="btn btn-ghost btn-sm" onclick="loadPenilaianData()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Muat Ulang</button>
+          <button class="btn btn-amber btn-sm" onclick="exportPenilaianCSV()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Unduh (Excel)</button>
           <button class="btn btn-primary btn-sm" id="btn-save-penilaian" onclick="savePenilaian()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Penilaian</button>
         </div>
 
@@ -1723,6 +1724,9 @@ async function loadPenilaianData(){
     return;
   }
 
+  // Store for export
+  window.lastPenilaianRows = roster.map(name => ({ name, saved: null }));
+
   penilaianSaved = {};
   if(_supabase){
     try{
@@ -1740,6 +1744,7 @@ async function loadPenilaianData(){
   }
 
   const rows = roster.map(name => ({ name, saved: penilaianSaved[name.toLowerCase()] || null }));
+  window.lastPenilaianRows = rows;
   const dinilai = rows.filter(r => r.saved && (r.saved.score !== null && r.saved.score !== undefined || r.saved.catatan !== "")).length;
   const scores = rows.map(r => (r.saved && r.saved.score !== null) ? r.saved.score : null).filter(s => s !== null);
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
@@ -1830,6 +1835,36 @@ async function savePenilaian(){
     btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Simpan Penilaian`;
     btn.disabled = false;
   }
+}
+
+function exportPenilaianCSV(){
+  if(!window.lastPenilaianRows || !window.lastPenilaianRows.length){
+    alert("Tidak ada data penilaian untuk diunduh.");
+    return;
+  }
+  const subject = $("penilaian-subject").value;
+  const kelas = $("penilaian-kelas").value;
+  const bab = $("penilaian-bab").value || '1';
+  
+  let csv = "\uFEFF"; // UTF-8 BOM for Excel compatibility
+  csv += "Nama,Kelas,Bab,Kategori,Nilai,Catatan / Link Blog\n";
+  
+  window.lastPenilaianRows.forEach(r => {
+    const sv = r.saved || {};
+    const scoreVal = (sv.score !== null && sv.score !== undefined) ? sv.score : "";
+    const catVal = (sv.catatan || "").replace(/"/g, '""');
+    csv += `"${titleCase(r.name)}","${kelas}","${bab}","${penilaianKat}","${scoreVal}","${catVal}"\n`;
+  });
+  
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `rekap_penilaian_${subject}_${kelas}_bab_${bab}_${penilaianKat}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 let currentTimerSettings = {};
 let currentProctorEnabled = (window.APP_CONFIG && window.APP_CONFIG.enableProctor) === true;
