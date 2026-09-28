@@ -1699,8 +1699,8 @@ function updatePenilaianBab(){
   sel.innerHTML = "";
   chapters.filter(c => c.active && !c.handout).forEach(ch => {
     const opt = document.createElement("option");
-    opt.value = ch.num;
-    opt.textContent = "Bab " + ch.num + ": " + ch.title;
+    opt.value = ch.asts ? 'ASTS' : ch.num;
+    opt.textContent = (ch.asts ? "ASTS: " : "Bab " + ch.num + ": ") + ch.title;
     sel.appendChild(opt);
   });
   if(sel.options.length === 0){
@@ -1716,7 +1716,7 @@ async function loadPenilaianData(){
 
   const subject = $("penilaian-subject").value;
   const kelas = $("penilaian-kelas").value;
-  const bab = parseInt($("penilaian-bab").value) || 1;
+  const bab = $("penilaian-bab").value || '1';
   const roster = window.getRoster(subject, kelas);
   if(roster.length === 0){
     wrap.innerHTML = `<div class="empty-state">Tidak ada daftar siswa untuk kelas ini.</div>`;
@@ -1740,7 +1740,7 @@ async function loadPenilaianData(){
   }
 
   const rows = roster.map(name => ({ name, saved: penilaianSaved[name.toLowerCase()] || null }));
-  const dinilai = rows.filter(r => r.saved && r.saved.score !== null && r.saved.score !== undefined).length;
+  const dinilai = rows.filter(r => r.saved && (r.saved.score !== null && r.saved.score !== undefined || r.saved.catatan !== "")).length;
   const scores = rows.map(r => (r.saved && r.saved.score !== null) ? r.saved.score : null).filter(s => s !== null);
   const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
 
@@ -1750,18 +1750,24 @@ async function loadPenilaianData(){
   $("penilaian-avg").textContent = avg !== null ? avg : "–";
 
   let html = `<table class="report"><thead><tr>
-    <th>Nama</th><th>Nilai (0-100)</th><th>Catatan Guru</th><th>Status</th>
+    <th>Nama</th><th>Nilai (0-100)</th><th>Catatan Guru / Link</th><th>Status</th>
   </tr></thead><tbody>`;
   rows.forEach((r, idx) => {
     const sv = r.saved || {};
     const scoreVal = (sv.score !== null && sv.score !== undefined) ? sv.score : "";
     const catVal = sv.catatan || "";
-    const has = (sv.score !== null && sv.score !== undefined);
+    const has = (sv.score !== null && sv.score !== undefined) || catVal !== "";
+    
+    let catDisplay = `<input class="cat-input" type="text" data-name="${r.name}" data-idx="${idx}" value="${catVal}" placeholder="Catatan (opsional)">`;
+    if (catVal.startsWith("http")) {
+      catDisplay += `<br><a href="${catVal}" target="_blank" style="color:var(--teal);font-size:11px;text-decoration:underline;display:inline-block;margin-top:4px;">Buka Link Blogger →</a>`;
+    }
+
     html += `<tr>
       <td class="penilaian-name">${titleCase(r.name)}</td>
       <td><input class="score-input" type="number" min="0" max="100" data-name="${r.name}" data-idx="${idx}" value="${scoreVal}" placeholder="0-100"></td>
-      <td><input class="cat-input" type="text" data-name="${r.name}" data-idx="${idx}" value="${catVal}" placeholder="Catatan (opsional)"></td>
-      <td>${has ? '<span class="trend up">Sudah Dinilai</span>' : '<span class="trend pending">Belum Dinilai</span>'}</td>
+      <td>${catDisplay}</td>
+      <td>${has ? '<span class="trend up">Sudah Mengumpulkan</span>' : '<span class="trend pending">Belum Mengumpulkan</span>'}</td>
     </tr>`;
   });
   wrap.innerHTML = html + "</tbody></table>";
@@ -1775,7 +1781,7 @@ async function savePenilaian(){
   if(!_supabase){ alert("Supabase tidak tersedia."); return; }
   const subject = $("penilaian-subject").value;
   const kelas = $("penilaian-kelas").value;
-  const bab = parseInt($("penilaian-bab").value) || 1;
+  const bab = $("penilaian-bab").value || '1';
   if(kelas === "all"){
     alert("Silakan pilih kelas terlebih dahulu untuk menyimpan penilaian.");
     return;
