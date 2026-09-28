@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   :root{
     --ink:#14151f;
@@ -1845,26 +1846,37 @@ function exportPenilaianCSV(){
   const subject = $("penilaian-subject").value;
   const kelas = $("penilaian-kelas").value;
   const bab = $("penilaian-bab").value || '1';
-  
-  let csv = "\uFEFF"; // UTF-8 BOM for Excel compatibility
-  csv += "Nama,Kelas,Bab,Kategori,Nilai,Catatan / Link Blog\n";
-  
-  window.lastPenilaianRows.forEach(r => {
+
+  const dataToExport = window.lastPenilaianRows.map((r, i) => {
     const sv = r.saved || {};
-    const scoreVal = (sv.score !== null && sv.score !== undefined) ? sv.score : "";
-    const catVal = (sv.catatan || "").replace(/"/g, '""');
-    csv += `"${titleCase(r.name)}","${kelas}","${bab}","${penilaianKat}","${scoreVal}","${catVal}"\n`;
+    return {
+      "No": i + 1,
+      "Nama Peserta Didik": titleCase(r.name),
+      "Kelas": kelas,
+      "Bab / Tugas": bab === 'ASTS' ? 'ASTS Projek' : 'Bab ' + bab,
+      "Kategori": penilaianKat === 'tugas' ? 'Tugas / Projek' : 'Catatan / LK',
+      "Nilai (0-100)": (sv.score !== null && sv.score !== undefined) ? sv.score : "",
+      "Link Postingan Blogger / Catatan": sv.catatan || ""
+    };
   });
-  
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `rekap_penilaian_${subject}_${kelas}_bab_${bab}_${penilaianKat}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+
+  const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+
+  // Styling column widths
+  worksheet['!cols'] = [
+    { wch: 5 },  // No
+    { wch: 30 }, // Nama
+    { wch: 15 }, // Kelas
+    { wch: 18 }, // Bab
+    { wch: 18 }, // Kategori
+    { wch: 15 }, // Nilai
+    { wch: 55 }  // Link
+  ];
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Penilaian");
+
+  XLSX.writeFile(workbook, `rekap_penilaian_${subject}_${kelas}_${bab}_${penilaianKat}.xlsx`);
 }
 let currentTimerSettings = {};
 let currentProctorEnabled = (window.APP_CONFIG && window.APP_CONFIG.enableProctor) === true;
