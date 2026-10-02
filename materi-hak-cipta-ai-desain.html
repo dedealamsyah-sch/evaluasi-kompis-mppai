@@ -278,6 +278,13 @@
   .q-progress{font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--ink-soft); margin-bottom:14px;}
   .q-block{display:none;}
   .q-block.active{display:block;}
+  .q-group{
+    display:none; margin:0 0 20px; padding:14px 16px; background:var(--ai-soft);
+    border-left:4px solid var(--ai); border-radius:var(--radius);
+  }
+  .q-group.visible{display:block;}
+  .q-group .kicker{display:block;}
+  .q-group p{margin:6px 0 0; font-size:.85rem; color:var(--ink-soft);}
   .q-block h4{font-size:1.05rem;}
   .q-options{margin-top:14px; display:grid; gap:10px;}
   .q-options button{
@@ -983,10 +990,10 @@
   <div class="wrap">
     <span class="kicker">10 — Latihan</span>
     <h2>Uji Pemahamanmu</h2>
-    <p class="lead">Sepuluh pertanyaan singkat berdasarkan materi di atas. Jawabanmu tidak disimpan ke server mana pun.</p>
+    <p class="lead">Dua puluh lima pertanyaan singkat — 10 tentang materi di atas dan 15 tentang projek ASTS "Personal Branding Creative Campaign". Jawabanmu tidak disimpan ke server mana pun.</p>
 
     <div class="quiz-card">
-      <div class="q-progress" id="q-progress">Soal 1 dari 7</div>
+      <div class="q-progress" id="q-progress">Soal 1 dari 25</div>
 
       <div class="q-block active" data-q="0">
         <h4>1. Mengapa UK High Court menolak sebagian besar klaim hak cipta Getty terhadap Stability AI?</h4>
@@ -1098,10 +1105,180 @@
         <div class="q-feedback"></div>
       </div>
 
+      <div class="q-group">
+        <span class="kicker">Bagian 2 — Projek ASTS: Personal Branding Creative Campaign Berbasis AI</span>
+        <p>Sepuluh pertanyaan berikut disusun dari lembar pengantar projek ASTS mata pelajaran AI dalam Desain. Baca kembali ketentuan projek sebelum menjawab.</p>
+      </div>
+
+      <div class="q-block" data-q="10">
+        <h4>11. Berdasarkan projek ASTS, dasar utama membangun identitas visual personal branding adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Nama sekolah dan nama wali kelas</button>
+          <button data-correct="true">Inisial nama, karakter diri, hobi/minat, dan bidang kreatif yang diminati</button>
+          <button data-correct="false">Logo yang diunduh dari internet lalu diberi nama sendiri</button>
+          <button data-correct="false">Karya desainer terkenal yang dijadikan acuan</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="11">
+        <h4>12. Ketentuan khusus yang wajib dipenuhi pada logo personal branding adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Warna dominan logo harus ungu</button>
+          <button data-correct="true">Logo wajib menyertakan tulisan "by Nama Siswa"</button>
+          <button data-correct="false">Logo harus berupa file PNG transparan</button>
+          <button data-correct="false">Logo wajib memuat nama sekolah</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="12">
+        <h4>13. Selain logo, output lain yang diminta pada bagian personal branding adalah...</h4>
+        <div class="q-options">
+          <button data-correct="true">Nama branding, tagline, dan deskripsi konsep branding minimal 100 kata</button>
+          <button data-correct="false">Nama branding, slogan, dan nomor kontak</button>
+          <button data-correct="false">Tagline, brief klien, dan daftar harga jasa</button>
+          <button data-correct="false">Nama branding dan logo versi warna hitam-putih saja</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="13">
+        <h4>14. Moodboard branding dalam projek ini WAJIB memuat...</h4>
+        <div class="q-options">
+          <button data-correct="false">Kumpulan foto produk jadi dan screenshot</button>
+          <button data-correct="true">Warna utama, typography, style visual, referensi desain, tone &amp; mood, elemen grafis, dan inspirasi visual</button>
+          <button data-correct="false">Hanya logo, warna utama, dan tagline</button>
+          <button data-correct="false">Daftar platform AI yang dipakai beserta link-nya</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="14">
+        <h4>15. Ketentuan mockup branding yang benar adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Membuat tepat satu mockup agar branding terlihat fokus</button>
+          <button data-correct="true">Membuat minimal 3 mockup pada minimal 3 media berbeda dari daftar (kaos, sticker, poster, kartu nama, packaging, social media feed, dan lainnya), resolusi tinggi, disertai penjelasan fungsi media</button>
+          <button data-correct="false">Membuat mockup pada tiga media, tetapi cukup menempel logo tanpa pengembangan visual lain</button>
+          <button data-correct="false">Membuat mockup berskala kecil karena ukurannya dikirim lewat Blogger</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="15">
+        <h4>16. Komponen yang wajib ada dalam naskah iklan komersial adalah...</h4>
+        <div class="q-options">
+          <button data-correct="true">Judul, Tema, Pesan Utama, Narasi/Dialog, dan Closing Tagline</button>
+          <button data-correct="false">Judul, Tema, Narasi, dan Daftar Prompt</button>
+          <button data-correct="false">Tema, Angle Kamera, dan Durasi</button>
+          <button data-correct="false">Naskah, Daftar Platform AI, dan Link Blogger</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="16">
+        <h4>17. Berapa minimal jumlah shot dalam shotlist, dan kolom apa yang harus tersedia?</h4>
+        <div class="q-options">
+          <button data-correct="false">Minimal 6 shot: No, Adegan, Angle, Durasi</button>
+          <button data-correct="true">Minimal 10 shot dengan kolom No, Adegan, Jenis Shot, Angle, Movement, Durasi, dan Deskripsi</button>
+          <button data-correct="false">Minimal 10 shot dengan kolom No, Tema, Narasi, dan Closing</button>
+          <button data-correct="false">Minimal 3 shot dengan kolom No, Adegan, dan Deskripsi</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="17">
+        <h4>18. Ketentuan minimum untuk storyboard yang dibuat dengan AI adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Minimal 10 scene dengan visual adegan dan narasi</button>
+          <button data-correct="false">Minimal 3 scene, cukup visual adegan dan angle kamera</button>
+          <button data-correct="true">Minimal 6 scene yang memuat visual adegan, keterangan shot, angle kamera, transisi, dan dialog atau narasi</button>
+          <button data-correct="false">Jumlah scene bebas, asalkan deskripsi adegan lengkap</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="18">
+        <h4>19. Struktur storyline video iklan komersial pada projek ini tersusun atas...</h4>
+        <div class="q-options">
+          <button data-correct="true">Pembukaan, Alur Cerita, Konflik/Fokus Visual, dan Penutup</button>
+          <button data-correct="false">Naskah Iklan, Moodboard, Mockup, dan Mascot</button>
+          <button data-correct="false">Logo, Tagline, Narasi, dan Credit</button>
+          <button data-correct="false">Tone &amp; Mood, Typography, Elemen Grafis, dan Inspirasi</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="19">
+        <h4>20. Pada bagian maskot karakter, peserta didik diminta untuk mengubah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Foto produk jadi menjadi ilustrasi</button>
+          <button data-correct="true">Foto dirinya sendiri menjadi karakter maskot, dengan pilihan style seperti Anime, Cartoon, Cyberpunk, Esport, 3D Character, Pixar Style, Futuristic Mascot, atau Street Style</button>
+          <button data-correct="false">Logo sekolah menjadi karakter maskot</button>
+          <button data-correct="false">Screenshot portofolio Blogger menjadi karakter maskot</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="20">
+        <h4>21. Tiga output yang wajib ada pada bagian maskot karakter adalah...</h4>
+        <div class="q-options">
+          <button data-correct="true">Mascot Full Body, Mascot Portrait, dan Mascot Bersama Logo Branding</button>
+          <button data-correct="false">Mascot Full Body, Mascot Close Up, dan Mascot Berwarna Hitam Putih</button>
+          <button data-correct="false">Mascot Portrait, Moodboard Maskot, dan Daftar Prompt</button>
+          <button data-correct="false">Mascot Full Body, Storyboard Maskot, dan Shotlist Maskot</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="21">
+        <h4>22. Manakah prompt yang paling tepat mengikuti formula prompt yang disarankan dalam projek?</h4>
+        <div class="q-options">
+          <button data-correct="false">"Buatkan logo yang bagus ya"</button>
+          <button data-correct="false">"Pakai warna biru, tapi yang modern dan keren"</button>
+          <button data-correct="true">"Logo lingkaran berisi inisial DA, style flat geometric, warna biru dan emas, mood profesional, lighting flat, detail vektor bersih, typography sans-serif modern, quality high resolution"</button>
+          <button data-correct="false">"Logo untuk tugas sekolah, tolong dibuat"</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="22">
+        <h4>23. Menurut ketentuan projek, setiap visual yang dihasilkan WAJIB dilengkapi dengan...</h4>
+        <div class="q-options">
+          <button data-correct="false">Caption atau deskripsi aesthetic</button>
+          <button data-correct="true">Prompt yang digunakan untuk membuat visual tersebut</button>
+          <button data-correct="false">Watermark nama sekolah</button>
+          <button data-correct="false">Password untuk membuka file</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="23">
+        <h4>24. Bukti utama pengumpulan projek ASTS adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Berkas ZIP berisi seluruh file gambar dan video</button>
+          <button data-correct="true">Link Blogger yang aktif dan dapat diakses, dengan seluruh hasil projek dipublikasikan pada satu postingan</button>
+          <button data-correct="false">Formulir yang diisi langsung di kelas tanpa publikasi karya</button>
+          <button data-correct="false">Screenshot hasil kerja pada aplikasi AI</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="24">
+        <h4>25. Tentang penggunaan platform AI dalam projek ini, sikap yang benar adalah...</h4>
+        <div class="q-options">
+          <button data-correct="false">Hanya boleh memakai satu platform yang ditentukan guru</button>
+          <button data-correct="false">Wajib memakai Midjourney karena hasilnya paling bagus</button>
+          <button data-correct="true">Bebas memakai platform AI yang relevan (misalnya Leonardo AI, Adobe Firefly, Canva AI, Ideogram, Midjourney, atau Gemini AI), selama hasil karyanya pengembangan ide pribadi</button>
+          <button data-correct="false">Dilarang memakai AI karena tugas ini menilai kemampuan gambar manual</button>
+        </div>
+        <div class="q-feedback"></div>
+      </div>
+
       <div class="q-nav"><button id="q-next-btn">Lanjut →</button></div>
 
       <div class="q-result" id="q-result">
-        <div class="score" id="q-score">0/6</div>
+        <div class="score" id="q-score">0/25</div>
         <div class="verdict" id="q-verdict"></div>
         <button class="q-restart" id="q-restart">Ulangi Kuis</button>
       </div>
@@ -1363,6 +1540,10 @@ let answered = false;
 function showBlock(i){
   qBlocks.forEach(b=>b.classList.remove('active'));
   qBlocks[i].classList.add('active');
+  const group = qBlocks[i].previousElementSibling;
+  const grp = (group && group.classList.contains('q-group')) ? group : null;
+  document.querySelectorAll('.q-group').forEach(g=>g.classList.remove('visible'));
+  if(grp) grp.classList.add('visible');
   qProgress.textContent = 'Soal ' + (i+1) + ' dari ' + qBlocks.length;
   nextBtn.textContent = (i === qBlocks.length-1) ? 'Lihat Hasil →' : 'Lanjut →';
   nextBtn.classList.remove('enabled');
@@ -1397,15 +1578,15 @@ nextBtn.addEventListener('click', ()=>{
     current++;
     showBlock(current);
   } else {
-    document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav').forEach(el=>el.style.display='none');
+    document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav, .q-group').forEach(el=>el.style.display='none');
     document.getElementById('q-progress').style.display='none';
     const resultBox = document.getElementById('q-result');
     resultBox.classList.add('show');
     document.getElementById('q-score').textContent = score + '/' + qBlocks.length;
     let verdict = '';
-    if(score === qBlocks.length) verdict = 'Sempurna! Kamu memahami hukum data, hukum output, kasus-kasus Indonesia, dan regulasinya dengan sangat baik.';
-    else if(score >= qBlocks.length - 2) verdict = 'Bagus! Pemahamanmu cukup kuat — tinjau kembali bagian yang masih keliru.';
-    else verdict = 'Masih perlu latihan — coba baca ulang bagian Tiga Hukum Emas dan Kasus Indonesia, lalu ulangi kuis ini.';
+    if(score === qBlocks.length) verdict = 'Sempurna! Kamu memahami hukum data, hukum output, kasus-kasus Indonesia, dan seluruh ketentuan projek ASTS dengan sangat baik.';
+    else if(score >= Math.ceil(qBlocks.length * 0.8)) verdict = 'Bagus! Pemahamanmu cukup kuat — tinjau kembali bagian yang masih keliru, terutama ketentuan projek ASTS.';
+    else verdict = 'Masih perlu latihan — coba baca ulang bagian Tiga Hukum Emas, Kasus Indonesia, dan lembar ketentuan projek ASTS, lalu ulangi kuis ini.';
     document.getElementById('q-verdict').textContent = verdict;
   }
 });
@@ -1418,7 +1599,7 @@ document.getElementById('q-restart').addEventListener('click', ()=>{
     });
     block.querySelector('.q-feedback').classList.remove('show');
   });
-  document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav').forEach(el=>el.style.display='');
+  document.querySelector('.quiz-card').querySelectorAll('.q-block, .q-nav, .q-group').forEach(el=>el.style.display='');
   document.getElementById('q-progress').style.display='';
   document.getElementById('q-result').classList.remove('show');
   showBlock(0);
